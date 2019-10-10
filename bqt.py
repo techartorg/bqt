@@ -39,8 +39,8 @@ elif platform.system().lower() == 'windows':
 else:
 	PREFS_FILEPATH = ''
 
-PREFS_KEY_ON_SCREEN = 'window_on_screen'
 PREFS_KEY_WINDOW_GEOMETRY = 'window_geometry'
+PREFS_KEY_WINDOW_MAXIMIZED = 'window_maximized'
 TEMP_ICON_FILEPATH = Path(tempfile.gettempdir()) / 'blender_icon.png'
 TICK = 1.0 / float(os.getenv('BQT_TICK_RATE', '30'))
 
@@ -139,16 +139,22 @@ class BlenderApplication(QApplication):
 			None
 		"""
 
-		# with suppress(FileNotFoundError, json.decoder.JSONDecodeError):
-		# 	settings = json.loads(PREFS_FILEPATH.read_text())
+		with suppress(FileNotFoundError, json.decoder.JSONDecodeError):
+			settings = json.loads(PREFS_FILEPATH.read_text())
 
-		# if settings:
-		# 	window_geometry = settings.get(PREFS_KEY_WINDOW_GEOMETRY)
-			# if window_geometry:
-			# 	self.blender_widget.setGeometry(*window_geometry)
-			# 	return
+		if settings:
+			window_maximized = settings.get(PREFS_KEY_WINDOW_MAXIMIZED)
+			if window_maximized:
+				self.blender_widget.showMaximized()
+				return
 
-		self.blender_widget.showMaximized() # This doesn't work if it is called on self._blender_window
+			window_geometry = settings.get(PREFS_KEY_WINDOW_GEOMETRY)
+			if window_geometry:
+				self.blender_widget.setGeometry(*window_geometry)
+				self.blender_widget.show()
+				return
+
+		self.blender_widget.showMaximized()
 
 
 	@staticmethod
@@ -241,11 +247,11 @@ class BlenderApplication(QApplication):
 			None
 		"""
 
-		#screen = self._blender_widget.screen() # This fails and halts this function from completing.
-		geometry = self.blender_widget.geometry()
+		geometry = self._blender_window.geometry()
+		maximized = self.blender_widget.isMaximized( )
 
-		settings = {#PREFS_KEY_ON_SCREEN : screen,
-						 PREFS_KEY_WINDOW_GEOMETRY : (geometry.x(), geometry.y(), geometry.width(), geometry.height())}
+		settings = { PREFS_KEY_WINDOW_GEOMETRY : (geometry.x(), geometry.y(), geometry.width(), geometry.height()),
+						 PREFS_KEY_WINDOW_MAXIMIZED : maximized}
 
 		PREFS_FILEPATH.write_text(json.dumps(settings))
 

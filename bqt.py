@@ -6,7 +6,6 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 import atexit
 from contextlib import suppress
-import json
 import os
 from pathlib import Path
 import platform
@@ -16,17 +15,17 @@ import tempfile
 
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QWindow
-from PySide2.QtCore import QByteArray, QEvent, QObject
+from PySide2.QtCore import QByteArray, QEvent, QObject, QRect, QSettings
 
 import bpy
 from bpy.app.handlers import persistent
 
+if platform.system().lower() == 'darwin':
+	# TODO: Need to point this to 'window_geometry_prefs.json' in the use's blender data folder (the folder with /config and /scripts)
+	pass
 if platform.system().lower() == 'linux':
 	# TODO: Need to point this to 'window_geometry_prefs.json' in the use's blender data folder (the folder with /config and /scripts)
-	PREFS_FILEPATH = ''
-elif platform.system().lower() == 'darwin':
-	# TODO: Need to point this to 'window_geometry_prefs.json' in the use's blender data folder (the folder with /config and /scripts)
-	PREFS_FILEPATH = ''
+	pass
 elif platform.system().lower() == 'windows':
 	import pywintypes
 	import win32con
@@ -35,12 +34,11 @@ elif platform.system().lower() == 'windows':
 	import win32process
 	import win32ui
 
-	PREFS_FILEPATH = Path(os.getenv('APPDATA')) / 'Blender Foundation' / 'Blender' / 'window_geometry_prefs.json'
-else:
-	PREFS_FILEPATH = ''
+SETTINGS_KEY_GEOMETRY = 'Geometry'
+SETTINGS_KEY_MAXIMIZED = 'IsMaximized'
+SETTINGS_KEY_FULL_SCREEN = 'IsFullScreen'
+SETTINGS_WINDOW_GROUP_NAME = 'MainWindow'
 
-PREFS_KEY_WINDOW_GEOMETRY = 'window_geometry'
-PREFS_KEY_WINDOW_MAXIMIZED = 'window_maximized'
 TEMP_ICON_FILEPATH = Path(tempfile.gettempdir()) / 'blender_icon.png'
 TICK = 1.0 / float(os.getenv('BQT_TICK_RATE', '30'))
 
@@ -67,14 +65,15 @@ class BlenderApplication(QApplication):
 		self._blender_window = QWindow.fromWinId(self._hwnd)
 		self.blender_widget = QWidget.createWindowContainer(self._blender_window)
 
-		if platform.system().lower() == 'windows':
-			self._get_application_icon_windows()
-		elif platform.system().lower() == 'darwin':
+		if platform.system().lower() == 'darwin':
 			self._get_application_icon_macintosh()
 		elif platform.system().lower() == 'linux':
 			self._get_application_icon_linux()
+		elif platform.system().lower() == 'windows':
+			self._get_application_icon_windows()
 
 		QApplication.setWindowIcon(QIcon(str(TEMP_ICON_FILEPATH)))
+
 		self._set_window_geometry()
 
 		self.focusObjectChanged.connect(self._on_focus_object_changed)
@@ -139,22 +138,21 @@ class BlenderApplication(QApplication):
 			None
 		"""
 
-		with suppress(FileNotFoundError, json.decoder.JSONDecodeError):
-			settings = json.loads(PREFS_FILEPATH.read_text())
+		settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
+		settings.beginGroup(SETTINGS_WINDOW_GROUP_NAME)
+		
+		if settings.value(SETTINGS_KEY_FULL_SCREEN, 'false').lower() == 'true':
+			self.blender_widget.showFullScreen()
+			return
 
-		if settings:
-			window_maximized = settings.get(PREFS_KEY_WINDOW_MAXIMIZED)
-			if window_maximized:
-				self.blender_widget.showMaximized()
-				return
+		if settings.value(SETTINGS_KEY_MAXIMIZED, 'false').lower() == 'true':
+			self.blender_widget.showMaximized()
+			return
 
-			window_geometry = settings.get(PREFS_KEY_WINDOW_GEOMETRY)
-			if window_geometry:
-				self.blender_widget.setGeometry(*window_geometry)
-				self.blender_widget.show()
-				return
+		self.blender_widget.setGeometry(settings.value(SETTINGS_KEY_GEOMETRY, QRect(0, 0, 640, 480)))
+		self.blender_widget.show()
 
-		self.blender_widget.showMaximized()
+		settings.endGroup()
 
 
 	@staticmethod
@@ -247,13 +245,12 @@ class BlenderApplication(QApplication):
 			None
 		"""
 
-		geometry = self._blender_window.geometry()
-		maximized = self.blender_widget.isMaximized( )
-
-		settings = { PREFS_KEY_WINDOW_GEOMETRY : (geometry.x(), geometry.y(), geometry.width(), geometry.height()),
-						 PREFS_KEY_WINDOW_MAXIMIZED : maximized}
-
-		PREFS_FILEPATH.write_text(json.dumps(settings))
+		settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
+		settings.beginGroup(SETTINGS_WINDOW_GROUP_NAME)
+		settings.setValue(SETTINGS_KEY_GEOMETRY, self.blender_widget.geometry())
+		settings.setValue(SETTINGS_KEY_MAXIMIZED, self.blender_widget.isMaximized())
+		settings.setValue(SETTINGS_KEY_FULL_SCREEN, self.blender_widget.isFullScreen())
+		settings.endGroup()
 
 
 
@@ -344,7 +341,7 @@ def on_update():
 
 
 @persistent
-def create_global_app(*args):
+def create_global_app(*_args):
 	"""
 	[description]
 

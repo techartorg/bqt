@@ -20,11 +20,11 @@ from PySide2.QtCore import QByteArray, QEvent, QObject, QRect, QSettings
 import bpy
 from bpy.app.handlers import persistent
 
-if platform.system().lower() == 'darwin':
-	# TODO: Need to point this to 'window_geometry_prefs.json' in the use's blender data folder (the folder with /config and /scripts)
+if platform.system().lower() == 'darwin':	
+	# TODO: Mac specific imports go here.
 	pass
 if platform.system().lower() == 'linux':
-	# TODO: Need to point this to 'window_geometry_prefs.json' in the use's blender data folder (the folder with /config and /scripts)
+	# TODO: Linux specific imports go here.
 	pass
 elif platform.system().lower() == 'windows':
 	import pywintypes

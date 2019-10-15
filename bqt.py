@@ -12,7 +12,6 @@ import platform
 import sys
 import tempfile
 
-
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QWindow
 from PySide2.QtCore import QByteArray, QEvent, QObject, QRect, QSettings
@@ -20,7 +19,7 @@ from PySide2.QtCore import QByteArray, QEvent, QObject, QRect, QSettings
 import bpy
 from bpy.app.handlers import persistent
 
-if platform.system().lower() == 'darwin':	
+if platform.system().lower() == 'darwin':
 	# TODO: Mac specific imports go here.
 	pass
 if platform.system().lower() == 'linux':
@@ -31,7 +30,6 @@ elif platform.system().lower() == 'windows':
 	import win32con
 	import win32api
 	import win32gui
-	import win32process
 	import win32ui
 
 SETTINGS_KEY_GEOMETRY = 'Geometry'
@@ -59,7 +57,7 @@ class BlenderApplication(QApplication):
 	def __init__(self, argv = None):
 		argv = [] if argv is None else argv
 		super().__init__(argv)
-		#self.setStyleSheet(<str>)
+		#self.setStyleSheet()
 		self.should_close = False
 		self._hwnd = win32gui.FindWindow(None, 'blender')
 		self._blender_window = QWindow.fromWinId(self._hwnd)
@@ -140,7 +138,7 @@ class BlenderApplication(QApplication):
 
 		settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
 		settings.beginGroup(SETTINGS_WINDOW_GROUP_NAME)
-		
+
 		if settings.value(SETTINGS_KEY_FULL_SCREEN, 'false').lower() == 'true':
 			self.blender_widget.showFullScreen()
 			return
@@ -209,25 +207,20 @@ class BlenderApplication(QApplication):
 			None
 		"""
 
-		for pid in win32process.EnumProcesses():
-			with suppress(pywintypes.error):
-				handle = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, False, pid)
-				exe = win32process.GetModuleFileNameEx(handle, 0)
-				if 'blender' in exe.lower():
-					hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
-					hbmp = win32ui.CreateBitmap()
-					ico_x = win32api.GetSystemMetrics(win32con.SM_CXICON)
-					ico_y = win32api.GetSystemMetrics(win32con.SM_CYICON)
-					hbmp.CreateCompatibleBitmap(hdc, ico_x, ico_y)
-					hdc = hdc.CreateCompatibleDC()
-					hdc.SelectObject(hbmp)
-					large, _small = win32gui.ExtractIconEx(exe, 0)
-					hdc.DrawIcon((0, 0), large[0])
-					bmpstr = hbmp.GetBitmapBits(True)
+		hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+		hbmp = win32ui.CreateBitmap()
+		ico_x = win32api.GetSystemMetrics(win32con.SM_CXICON)
+		ico_y = win32api.GetSystemMetrics(win32con.SM_CYICON)
+		hbmp.CreateCompatibleBitmap(hdc, ico_x, ico_y)
+		hdc = hdc.CreateCompatibleDC()
+		hdc.SelectObject(hbmp)
+		large, _small = win32gui.ExtractIconEx(bpy.app.binary_path, 0)
+		hdc.DrawIcon((0, 0), large[0])
+		bmpstr = hbmp.GetBitmapBits(True)
 
-					img = QImage()
-					img.loadFromData(QByteArray(bmpstr))
-					img.save(str(TEMP_ICON_FILEPATH), 'png')
+		img = QImage()
+		img.loadFromData(QByteArray(bmpstr))
+		img.save(str(TEMP_ICON_FILEPATH), 'png')
 
 
 	def _store_window_geometry(self):

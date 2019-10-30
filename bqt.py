@@ -37,6 +37,8 @@ SETTINGS_KEY_MAXIMIZED = 'IsMaximized'
 SETTINGS_KEY_FULL_SCREEN = 'IsFullScreen'
 SETTINGS_WINDOW_GROUP_NAME = 'MainWindow'
 
+STYLESHEET_FILEPATH = Path(__file__).parent / 'blender_stylesheet.qss'
+
 TEMP_ICON_FILEPATH = Path(tempfile.gettempdir()) / 'blender_icon.png'
 TICK = 1.0 / float(os.getenv('BQT_TICK_RATE', '30'))
 
@@ -57,7 +59,8 @@ class BlenderApplication(QApplication):
 	def __init__(self, argv = None):
 		argv = [] if argv is None else argv
 		super().__init__(argv)
-		#self.setStyleSheet()
+		if STYLESHEET_FILEPATH.exists():
+			self.setStyleSheet(STYLESHEET_FILEPATH.read_text())
 		self.should_close = False
 		self._hwnd = win32gui.FindWindow(None, 'blender')
 		self._blender_window = QWindow.fromWinId(self._hwnd)

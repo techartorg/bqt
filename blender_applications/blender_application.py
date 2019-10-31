@@ -76,7 +76,7 @@ class BlenderApplication(QApplication):
         Returns: None
 
         """
-        self.os_module.__on_focus_object_changed(focus_object)
+        return NotImplementedError
 
     def __set_window_geometry(self):
         """
@@ -110,7 +110,7 @@ class BlenderApplication(QApplication):
 
         Returns int: Handler Window ID
         """
-        return self.os_module.__get_application_hwnd()
+        return NotImplementedError
 
     def __get_application_icon(self):
         """
@@ -119,7 +119,7 @@ class BlenderApplication(QApplication):
 
         Returns QIcon: Application Icon
         """
-        return self.os_module.__get_application_icon()
+        return NotImplementedError
 
     def __store_window_geometry(self):
         """
@@ -133,22 +133,3 @@ class BlenderApplication(QApplication):
         settings.setValue(SETTINGS_KEY_MAXIMIZED, self.blender_widget.isMaximized())
         settings.setValue(SETTINGS_KEY_FULL_SCREEN, self.blender_widget.isFullScreen())
         settings.endGroup()
-
-    @staticmethod
-    def load_os_module():
-        """
-        Loads the correct OS platform Application Class
-
-        Returns: Instance of BlenderApplication
-
-        """
-        operating_system = sys.platform
-        if operating_system == 'darwin':
-            from .darwin_blender_application import DarwinBlenderApplication
-            return DarwinBlenderApplication
-        if operating_system in ['linux', 'linux2']:
-            # TODO: LINUX module
-            pass
-        elif operating_system == 'win32':
-            from .win32_blender_application import Win32BlenderApplication
-            return Win32BlenderApplication

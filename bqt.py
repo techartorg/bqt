@@ -46,6 +46,25 @@ class QOperator(bpy.types.Operator):
 
 # CORE FUNCTIONS ###
 
+def load_os_module():
+    """
+    Loads the correct OS platform Application Class
+
+    Returns: Instance of BlenderApplication
+
+    """
+    operating_system = sys.platform
+    if operating_system == 'darwin':
+        from blender_applications.darwin_blender_application import DarwinBlenderApplication
+        return DarwinBlenderApplication
+    if operating_system in ['linux', 'linux2']:
+        # TODO: LINUX module
+        pass
+    elif operating_system == 'win32':
+        from blender_applications.win32_blender_application import Win32BlenderApplication
+        return Win32BlenderApplication
+
+
 def instantiate_application() -> BlenderApplication:
     """
     Create an instance of Blender Application
@@ -55,7 +74,7 @@ def instantiate_application() -> BlenderApplication:
     """
     app = QApplication.instance()
     if not app:
-        app = BlenderApplication(sys.argv)
+        app = load_os_module()(sys.argv)
         bpy.app.timers.register(on_update, persistent=True)
 
     return app
@@ -133,3 +152,5 @@ if __name__ == '__main__':
         unregister()
     except (ValueError, TypeError) as e:
         print(f"Failed to unregister QOperator: {e}")
+
+    register()

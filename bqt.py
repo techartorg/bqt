@@ -12,7 +12,7 @@ import bpy
 
 from PySide2.QtWidgets import QApplication
 
-from .blender_applications import BlenderApplication
+from blender_applications import BlenderApplication
 
 
 # GLOBALS ###

@@ -3,10 +3,14 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+import os
+import sys
+sys.path.append(os.path.dirname(__file__))  # To ensure that the folder contents are in blenders python environment
 
 from bpy.types import AddonPreferences
+from bpy.utils import register_class, unregister_class
 
-from . import bqt
+import bqt
 
 bl_info = {
     "name": "bqt",
@@ -26,7 +30,7 @@ class BQTAddonPreferences(AddonPreferences):
     This must match the add-on name, use '__package__'
     when defining this in a submodule of a python package.
     """
-    bl_idname = __package__
+    bl_idname = "bqt"
 
     def draw(self, context):
         """
@@ -43,10 +47,14 @@ class BQTAddonPreferences(AddonPreferences):
 
 
 def register():
-    bpy.utils.register_class(BQTAddonPreferences)
+    register_class(BQTAddonPreferences)
     bqt.register()
 
 
 def unregister():
     bqt.unregister()
-    bpy.utils.unregister_class(BQTAddonPreferences)
+    unregister_class(BQTAddonPreferences)
+
+
+if __name__ == "__main__":
+    register()

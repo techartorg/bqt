@@ -5,7 +5,6 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
 from pathlib import Path
-import sys
 
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QWindow, QCloseEvent

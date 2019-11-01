@@ -36,7 +36,9 @@ class DarwinBlenderApplication(BlenderApplication):
         Returns: None
 
         """
-        return NotImplementedError
+        if focus_object is self.blender_widget:
+            # AppKit.NSApp.something(self._hwnd)
+            pass
 
     def __get_application_hwnd(self):
         """

@@ -25,6 +25,9 @@ class DarwinBlenderApplication(BlenderApplication):
     Darwin (MACOS) Implementation of BlenderApplication
     """
     def __init__(self, argv):
+        # OSX Specific - Needs to initialize first
+        self._ns_window = self.__get_application_window() or None
+
         super().__init__(argv)
 
     def __on_focus_object_changed(self, focus_object: QObject):
@@ -37,8 +40,18 @@ class DarwinBlenderApplication(BlenderApplication):
 
         """
         if focus_object is self.blender_widget:
-            # AppKit.NSApp.something(self._hwnd)
-            pass
+            self._ns_window.makeKey()
+
+    @staticmethod
+    def __get_application_window():
+        """
+        Specific to OSX; Main application window
+
+        Returns: Main NSWindow of the application
+        """
+        ns_window = AppKit.NSApp.mainWindow()
+        ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)
+        return ns_window
 
     def __get_application_hwnd(self):
         """
@@ -47,9 +60,11 @@ class DarwinBlenderApplication(BlenderApplication):
 
         Returns int: Handler Window ID
         """
-        ns_window = AppKit.NSApp.mainWindow()
-        ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)
-        return objc.pyobjc_id(ns_window.contentView())
+        # Check to ensure ns_window is set
+        if self._ns_window is None:
+            self._ns_window = self.__get_application_window()
+
+        return objc.pyobjc_id(self._ns_window.contentView())
 
     def __get_application_icon(self):
         """

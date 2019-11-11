@@ -129,3 +129,6 @@ dmypy.json
 
 # Visual Studio Code
 .vscode/
+
+fake_bpy_modules*/
+test.py

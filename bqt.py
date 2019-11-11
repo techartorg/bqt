@@ -5,7 +5,6 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
 import atexit
-from contextlib import suppress
 import os
 from pathlib import Path
 import platform
@@ -59,24 +58,25 @@ class BlenderApplication(QApplication):
 	def __init__(self, argv = None):
 		argv = [] if argv is None else argv
 		super().__init__(argv)
+
+		self.should_close = False
+
 		if STYLESHEET_FILEPATH.exists():
 			self.setStyleSheet(STYLESHEET_FILEPATH.read_text())
-		self.should_close = False
-		self._hwnd = win32gui.FindWindow(None, 'blender')
-		self._blender_window = QWindow.fromWinId(self._hwnd)
-		self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-
-		if platform.system().lower() == 'darwin':
+				
+		if platform.system().lower() == 'darwin':			
 			self._get_application_icon_macintosh()
 		elif platform.system().lower() == 'linux':
 			self._get_application_icon_linux()
 		elif platform.system().lower() == 'windows':
+			self._hwnd = win32gui.FindWindow(None, 'blender')
+			self._blender_window = QWindow.fromWinId(self._hwnd)
+			self.blender_widget = QWidget.createWindowContainer(self._blender_window)
 			self._get_application_icon_windows()
 
 		QApplication.setWindowIcon(QIcon(str(TEMP_ICON_FILEPATH)))
 
 		self._set_window_geometry()
-
 		self.focusObjectChanged.connect(self._on_focus_object_changed)
 
 
@@ -284,7 +284,6 @@ class QOperator(bpy.types.Operator):
 
 		self.__qapp = instantiate_application()
 		return {'PASS_THROUGH'}
-
 
 
 def instantiate_application():

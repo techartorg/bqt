@@ -30,10 +30,10 @@ class BlenderApplication(QApplication):
         # QApplication
         if STYLESHEET_FILEPATH.exists():
             self.setStyleSheet(STYLESHEET_FILEPATH.read_text())
-        QApplication.setWindowIcon(self.__get_application_icon())
+        QApplication.setWindowIcon(self._get_application_icon())
 
         # Blender Window
-        self._hwnd = self.__get_application_hwnd()
+        self._hwnd = self._get_application_hwnd()
         self._blender_window = QWindow.fromWinId(self._hwnd)
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
 
@@ -41,8 +41,8 @@ class BlenderApplication(QApplication):
         self.should_close = False
 
         # Runtime
-        self.__set_window_geometry()
-        self.focusObjectChanged.connect(self.__on_focus_object_changed)
+        self._set_window_geometry()
+        self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     def notify(self, receiver: QObject, event: QEvent):
         """
@@ -62,7 +62,7 @@ class BlenderApplication(QApplication):
 
         return super().notify(receiver, event)
 
-    def __on_focus_object_changed(self, focus_object: QObject):
+    def _on_focus_object_changed(self, focus_object: QObject):
         """
 
         Args:
@@ -71,9 +71,9 @@ class BlenderApplication(QApplication):
         Returns: None
 
         """
-        return NotImplementedError
+        raise NotImplementedError
 
-    def __set_window_geometry(self):
+    def _set_window_geometry(self):
         """
         Loads stored window geometry preferences and applies them to the QWindow.
         .setGeometry() sets the size of the window minus the window frame.
@@ -98,25 +98,25 @@ class BlenderApplication(QApplication):
 
         settings.endGroup()
 
-    def __get_application_hwnd(self):
+    def _get_application_hwnd(self):
         """
         This finds the blender application window and collects the
         handler window ID
 
         Returns int: Handler Window ID
         """
-        return NotImplementedError
+        raise NotImplementedError
 
-    def __get_application_icon(self):
+    def _get_application_icon(self):
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
         It then creates a QIcon with that data and returns it.
 
         Returns QIcon: Application Icon
         """
-        return NotImplementedError
+        raise NotImplementedError
 
-    def __store_window_geometry(self):
+    def _store_window_geometry(self):
         """
         Stores the current window geometry for the QWindow
         The .geometry() method on QWindow includes the size of the application minus the window frame.

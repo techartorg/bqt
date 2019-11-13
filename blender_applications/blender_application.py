@@ -4,19 +4,12 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
+from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 
 from PySide2.QtWidgets import QApplication, QWidget
-from PySide2.QtGui import QWindow, QCloseEvent
-from PySide2.QtCore import QEvent, QObject, QSettings, QRect
-
-# GLOBALS ###
-STYLESHEET_FILEPATH = Path(__file__).parent / 'blender_stylesheet.qss'
-
-SETTINGS_KEY_GEOMETRY = 'Geometry'
-SETTINGS_KEY_MAXIMIZED = 'IsMaximized'
-SETTINGS_KEY_FULL_SCREEN = 'IsFullScreen'
-SETTINGS_WINDOW_GROUP_NAME = 'MainWindow'
+from PySide2.QtGui import QCloseEvent, QIcon, QWindow
+from PySide2.QtCore import QEvent, QObject, QRect, QSettings
 
 
 class BlenderApplication(QApplication):
@@ -25,11 +18,19 @@ class BlenderApplication(QApplication):
     """
 
     def __init__(self):
+        __metaclass__ = ABCMeta
         super().__init__()
 
+        self._stylesheet_filepath = Path(__file__).parent / 'blender_stylesheet.qss'
+        self._settings_key_geometry = 'Geometry'
+        self._settings_key_maximized = 'IsMaximized'
+        self._settings_key_full_screen = 'IsFullScreen'
+        self._settings_key_window_group_name = 'MainWindow'
+
         # QApplication
-        if STYLESHEET_FILEPATH.exists():
-            self.setStyleSheet(STYLESHEET_FILEPATH.read_text())
+        if self._stylesheet_filepath.exists():
+            self.setStyleSheet(self._stylesheet_filepath.read_text())
+
         QApplication.setWindowIcon(self._get_application_icon())
 
         # Blender Window
@@ -44,87 +45,94 @@ class BlenderApplication(QApplication):
         self._set_window_geometry()
         self.focusObjectChanged.connect(self._on_focus_object_changed)
 
-    def notify(self, receiver: QObject, event: QEvent):
-        """
 
-        Args:
-            receiver: Object to recieve event
-            event: Event
-
-        Returns: None
-
-        """
-        if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
-            event.ignore()
-            self._store_window_geometry()
-            self.should_close = True
-            return False
-
-        return super().notify(receiver, event)
-
-    def _on_focus_object_changed(self, focus_object: QObject):
-        """
-
-        Args:
-            focus_object: Object to track focus event
-
-        Returns: None
-
-        """
-        raise NotImplementedError
-
-    def _set_window_geometry(self):
-        """
-        Loads stored window geometry preferences and applies them to the QWindow.
-        .setGeometry() sets the size of the window minus the window frame.
-        For this reason it should be set on self.blender_widget.
-
-        Returns: None
-
-        """
-        settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
-        settings.beginGroup(SETTINGS_WINDOW_GROUP_NAME)
-
-        if settings.value(SETTINGS_KEY_FULL_SCREEN, 'false').lower() == 'true':
-            self.blender_widget.showFullScreen()
-            return
-
-        if settings.value(SETTINGS_KEY_MAXIMIZED, 'false').lower() == 'true':
-            self.blender_widget.showMaximized()
-            return
-
-        self.blender_widget.setGeometry(settings.value(SETTINGS_KEY_GEOMETRY, QRect(0, 0, 640, 480)))
-        self.blender_widget.show()
-
-        settings.endGroup()
-
-    def _get_application_hwnd(self):
+    @abstractstaticmethod
+    def _get_application_hwnd() -> int:
         """
         This finds the blender application window and collects the
         handler window ID
 
         Returns int: Handler Window ID
         """
-        raise NotImplementedError
 
-    def _get_application_icon(self):
+        return -1
+
+
+    @abstractstaticmethod
+    def _get_application_icon() -> QIcon:
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
         It then creates a QIcon with that data and returns it.
 
         Returns QIcon: Application Icon
         """
-        raise NotImplementedError
 
-    def _store_window_geometry(self):
+        return QIcon()
+
+
+    @abstractmethod
+    def _on_focus_object_changed(self, focus_object: QObject):
+        """
+        Args:
+            focus_object: Object to track focus event
+        """
+
+        pass
+
+
+    def _set_window_geometry(self):
+        """
+        Loads stored window geometry preferences and applies them to the QWindow.
+        .setGeometry() sets the size of the window minus the window frame.
+        For this reason it should be set on self.blender_widget.
+        """
+
+        settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
+        settings.beginGroup(self._settings_key_window_group_name)
+
+        if settings.value(self._settings_key_full_screen, 'false').lower() == 'true':
+            self.blender_widget.showFullScreen()
+            return
+
+        if settings.value(self._settings_key_maximized, 'false').lower() == 'true':
+            self.blender_widget.showMaximized()
+            return
+
+        self.blender_widget.setGeometry(settings.value(self._settings_key_geometry, QRect(0, 0, 640, 480)))
+        self.blender_widget.show()
+
+        settings.endGroup()
+        return
+
+
+    def notify(self, receiver: QObject, event: QEvent) -> bool:
+        """
+        Args:
+            receiver: Object to recieve event
+            event: Event
+
+        Returns: bool
+        """
+
+        if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
+            event.ignore()
+            self.store_window_geometry()
+            self.should_close = True
+            return False
+
+        return super().notify(receiver, event)
+
+
+    def store_window_geometry(self):
         """
         Stores the current window geometry for the QWindow
         The .geometry() method on QWindow includes the size of the application minus the window frame.
         For that reason the _blender_widget should be used.
         """
+        
         settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
-        settings.beginGroup(SETTINGS_WINDOW_GROUP_NAME)
-        settings.setValue(SETTINGS_KEY_GEOMETRY, self.blender_widget.geometry())
-        settings.setValue(SETTINGS_KEY_MAXIMIZED, self.blender_widget.isMaximized())
-        settings.setValue(SETTINGS_KEY_FULL_SCREEN, self.blender_widget.isFullScreen())
+        settings.beginGroup(self._settings_key_window_group_name)
+        settings.setValue(self._settings_key_geometry, self.blender_widget.geometry())
+        settings.setValue(self._settings_key_maximized, self.blender_widget.isMaximized())
+        settings.setValue(self._settings_key_full_screen, self.blender_widget.isFullScreen())
         settings.endGroup()

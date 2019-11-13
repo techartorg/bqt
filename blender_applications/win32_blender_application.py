@@ -29,7 +29,7 @@ class Win32BlenderApplication(BlenderApplication):
     def __init__(self, ):
         super().__init__(self)
 
-    def __on_focus_object_changed(self, focus_object: QObject):
+    def _on_focus_object_changed(self, focus_object: QObject):
         """
 
         Args:
@@ -38,7 +38,7 @@ class Win32BlenderApplication(BlenderApplication):
         if focus_object is self.blender_widget:
             win32gui.SetFocus(self._hwnd)
 
-    def __get_application_hwnd(self):
+    def _get_application_hwnd(self):
         """
         This finds the blender application window and collects the
         handler window ID
@@ -47,7 +47,7 @@ class Win32BlenderApplication(BlenderApplication):
         """
         return win32gui.FindWindow(None, 'blender')
 
-    def __get_application_icon(self) -> QIcon:
+    def _get_application_icon(self) -> QIcon:
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
         It then creates a QIcon with that data and returns it.

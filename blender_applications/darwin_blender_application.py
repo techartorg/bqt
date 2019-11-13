@@ -28,7 +28,7 @@ class DarwinBlenderApplication(BlenderApplication):
         # OSX Specific - Needs to initialize first
         self._ns_window = self._get_application_window() or None
 
-        super().__init__(self)
+        super().__init__()
 
     def __on_focus_object_changed(self, focus_object: QObject):
         """

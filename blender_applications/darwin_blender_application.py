@@ -24,11 +24,11 @@ class DarwinBlenderApplication(BlenderApplication):
     """
     Darwin (MACOS) Implementation of BlenderApplication
     """
-    def __init__(self, argv):
+    def __init__(self):
         # OSX Specific - Needs to initialize first
         self._ns_window = self.__get_application_window() or None
 
-        super().__init__(argv)
+        super().__init__(self)
 
     def __on_focus_object_changed(self, focus_object: QObject):
         """

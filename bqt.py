@@ -74,7 +74,7 @@ def instantiate_application() -> BlenderApplication:
     """
     app = QApplication.instance()
     if not app:
-        app = load_os_module()(sys.argv)
+        app = load_os_module()()
         bpy.app.timers.register(on_update, persistent=True)
 
     return app

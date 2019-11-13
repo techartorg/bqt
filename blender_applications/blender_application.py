@@ -24,12 +24,8 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self, argv=None):
-        argv = [] if argv is None else argv
-        super().__init__(argv)
-
-        # System
-        self.os_module = self.load_os_module()()
+    def __init__(self):
+        super().__init__(self)
 
         # QApplication
         if STYLESHEET_FILEPATH.exists():

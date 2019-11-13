@@ -26,8 +26,8 @@ class Win32BlenderApplication(BlenderApplication):
     """
     Windows implementation of BlenderApplication
     """
-    def __init__(self, argv):
-        super().__init__(argv)
+    def __init__(self, ):
+        super().__init__(self)
 
     def __on_focus_object_changed(self, focus_object: QObject):
         """

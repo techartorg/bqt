@@ -26,7 +26,7 @@ class DarwinBlenderApplication(BlenderApplication):
     """
     def __init__(self):
         # OSX Specific - Needs to initialize first
-        self._ns_window = self.__get_application_window() or None
+        self._ns_window = self._get_application_window() or None
 
         super().__init__(self)
 
@@ -43,7 +43,7 @@ class DarwinBlenderApplication(BlenderApplication):
             self._ns_window.makeKey()
 
     @staticmethod
-    def __get_application_window():
+    def _get_application_window():
         """
         Specific to OSX; Main application window
 
@@ -53,7 +53,7 @@ class DarwinBlenderApplication(BlenderApplication):
         ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)
         return ns_window
 
-    def __get_application_hwnd(self):
+    def _get_application_hwnd(self):
         """
         This finds the blender application window and collects the
         handler window ID
@@ -62,11 +62,11 @@ class DarwinBlenderApplication(BlenderApplication):
         """
         # Check to ensure ns_window is set
         if self._ns_window is None:
-            self._ns_window = self.__get_application_window()
+            self._ns_window = self._get_application_window()
 
         return objc.pyobjc_id(self._ns_window.contentView())
 
-    def __get_application_icon(self):
+    def _get_application_icon(self):
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
         It then creates a QIcon with that data and returns it.

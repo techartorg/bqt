@@ -25,7 +25,7 @@ class BlenderApplication(QApplication):
     """
 
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
 
         # QApplication
         if STYLESHEET_FILEPATH.exists():

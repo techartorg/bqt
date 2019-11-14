@@ -4,57 +4,53 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
+from contextlib import suppress
+
 import bpy
-import win32con
-import win32api
-import win32gui
-import win32ui
+
+with suppress(ModuleNotFoundError):
+    import win32con
+    import win32api
+    import win32gui
+    import win32ui
 
 from PySide2.QtGui import QIcon, QImage, QPixmap
 from PySide2.QtCore import QByteArray, QObject
 
-from .blender_application import BlenderApplication
-
-# GLOBALS ###
-SETTINGS_KEY_GEOMETRY = 'Geometry'
-SETTINGS_KEY_MAXIMIZED = 'IsMaximized'
-SETTINGS_KEY_FULL_SCREEN = 'IsFullScreen'
-SETTINGS_WINDOW_GROUP_NAME = 'MainWindow'
+from bqt import BlenderApplication
 
 
 class Win32BlenderApplication(BlenderApplication):
     """
     Windows implementation of BlenderApplication
     """
+
     def __init__(self):
         super().__init__()
 
-    def _on_focus_object_changed(self, focus_object: QObject):
-        """
 
-        Args:
-            QObject focus_object: Object to track focus change
-        """
-        if focus_object is self.blender_widget:
-            win32gui.SetFocus(self._hwnd)
-
-    def _get_application_hwnd(self):
+    @staticmethod
+    def _get_application_hwnd() -> int:
         """
         This finds the blender application window and collects the
         handler window ID
 
         Returns int: Handler Window ID
         """
-        return win32gui.FindWindow(None, 'blender')
 
-    def _get_application_icon(self) -> QIcon:
+        hwnd = win32gui.FindWindow(None, 'blender')
+        return hwnd
+
+
+    @staticmethod
+    def _get_application_icon() -> QIcon:
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
         It then creates a QIcon with that data and returns it.
 
-        Returns: QImage icon
-
+        Returns: QIcon icon
         """
+
         hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
         hbmp = win32ui.CreateBitmap()
         ico_x = win32api.GetSystemMetrics(win32con.SM_CXICON)
@@ -70,3 +66,14 @@ class Win32BlenderApplication(BlenderApplication):
         img.loadFromData(QByteArray(bmp_str))
 
         return QIcon(QPixmap(img))
+
+
+    def _on_focus_object_changed(self, focus_object: QObject):
+        """
+        Args:
+            QObject focus_object: Object to track focus change
+        """
+
+        if focus_object is self.blender_widget:
+            win32gui.SetFocus(self._hwnd)
+

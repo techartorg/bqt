@@ -9,10 +9,7 @@ from contextlib import suppress
 import bpy
 
 with suppress(ModuleNotFoundError):
-    import win32con
-    import win32api
     import win32gui
-    import win32ui
 
 from PySide2.QtGui import QIcon, QImage, QPixmap
 from PySide2.QtCore import QByteArray, QObject
@@ -50,4 +47,3 @@ class Win32BlenderApplication(BlenderApplication):
 
         if focus_object is self.blender_widget:
             win32gui.SetFocus(self._hwnd)
-

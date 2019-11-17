@@ -8,7 +8,7 @@ from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 
 from PySide2.QtWidgets import QApplication, QWidget
-from PySide2.QtGui import QCloseEvent, QIcon, QWindow
+from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings
 
 
@@ -21,11 +21,11 @@ class BlenderApplication(QApplication):
         __metaclass__ = ABCMeta
         super().__init__()
 
-        self._stylesheet_filepath = Path(__file__).parent / 'blender_stylesheet.qss'
-        self._settings_key_geometry = 'Geometry'
-        self._settings_key_maximized = 'IsMaximized'
-        self._settings_key_full_screen = 'IsFullScreen'
-        self._settings_key_window_group_name = 'MainWindow'
+        self._stylesheet_filepath = Path(__file__).parent / ".." / "blender_stylesheet.qss"
+        self._settings_key_geometry = "Geometry"
+        self._settings_key_maximized = "IsMaximized"
+        self._settings_key_full_screen = "IsFullScreen"
+        self._settings_key_window_group_name = "MainWindow"
 
         # QApplication
         if self._stylesheet_filepath.exists():
@@ -58,7 +58,7 @@ class BlenderApplication(QApplication):
         return -1
 
 
-    @abstractstaticmethod
+    @staticmethod
     def _get_application_icon() -> QIcon:
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
@@ -67,7 +67,15 @@ class BlenderApplication(QApplication):
         Returns QIcon: Application Icon
         """
 
-        return QIcon()
+        icon_filepath = Path(__file__).parent / ".." / "blender_icon_16.png"
+        icon = QIcon()
+
+        if icon_filepath.exists():
+            image = QImage(str(icon_filepath))
+            if not image.isNull():
+                icon = QIcon(QPixmap().fromImage(image))
+
+        return icon
 
 
     @abstractmethod
@@ -129,7 +137,7 @@ class BlenderApplication(QApplication):
         The .geometry() method on QWindow includes the size of the application minus the window frame.
         For that reason the _blender_widget should be used.
         """
-        
+
         settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
         settings.beginGroup(self._settings_key_window_group_name)
         settings.setValue(self._settings_key_geometry, self.blender_widget.geometry())

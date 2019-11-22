@@ -16,7 +16,7 @@ with suppress(ModuleNotFoundError):
 from PySide2.QtGui import QIcon
 from PySide2.QtCore import QObject
 
-from bqt import BlenderApplication
+from .blender_application import BlenderApplication
 
 
 class DarwinBlenderApplication(BlenderApplication):

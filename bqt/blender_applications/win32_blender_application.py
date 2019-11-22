@@ -14,7 +14,7 @@ with suppress(ModuleNotFoundError):
 from PySide2.QtGui import QIcon, QImage, QPixmap
 from PySide2.QtCore import QByteArray, QObject
 
-from bqt import BlenderApplication
+from .blender_application import BlenderApplication
 
 
 class Win32BlenderApplication(BlenderApplication):

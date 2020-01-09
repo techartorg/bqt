@@ -1,15 +1,32 @@
 QWidget {
     background-color: #424242;
+    color: #e6e6e6;
 }
 
+QCheckBox {
+    background-color: transparent;   
+}
+
+QGroupBox {
+    border: 0px;
+    background-color: #373737;
+    padding-top: 12px;
+}
+
+QGroupBox::title {
+    background-color: transparent;
+    padding-top: 4px;
+    padding-left: 4px;
+}
+    
+
 QHeaderView {
-    background-color: #3b3b3b;
+    background-color: #3b3b3b;    
     border: 0px transparent transparent;
-    color: #e6e6e6;
     padding: 2px;
 }
 QHeaderView:section {
-    background-color: #3b3b3b;
+    background-color: #3b3b3b;   
     border: 0px transparent transparent;
     padding: 2px;
 }
@@ -22,7 +39,6 @@ QLabel {
 QListView {
     background-color: #232323;
     border: 0px transparent transparent;
-    color: #e6e6e6;
 }
 QListView:disabled {
     background-color: #19232D;
@@ -30,7 +46,6 @@ QListView:disabled {
 }
 QListView:item {
     background-color: #282828;
-    color:#e6e6e6;
 }
 QListView:item:hover {
     background-color: #484848;
@@ -45,7 +60,6 @@ QListView:item:selected {
 QPushButton {
     background-color: #585858;
     border-radius: 3;
-    color: #e6e6e6;
     padding: 1px;
 }
  QPushButton:hover {
@@ -55,11 +69,44 @@ QPushButton {
      background-color: #5680c2;
      color:#fcfdfd;
  }
+ 
+QTabWidget::pane {
+    border-color: #3a3a3a;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    margin-left: 0px;
+}
+QTabBar::tab {
+    padding: 2px;
+    background-color: #595959;
+    border-style: solid;
+    border-width: 1px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    border-top-color: #3b3b3b;
+    border-right-color: #3b3b3b;
+    border-left-color: #3b3b3b;
+    border-bottom-color: #3b3b3b;    
+}
+QTabBar::tab:selected, QTabBar::tab:last:selected {
+    background-color: #547ab5;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-bottom-color: #547ab5;
+}
+QTabBar::tab:hover:!selected {
+    background-color: #686868
+}
+QTabBar::tab:!selected {    
+    margin-top: 1px;
+    margin-right: 1px;
+}
+
 
  QTreeView {
     background-color: #232323;
     border: 0px transparent transparent;
-    color: #e6e6e6;
 }
 QTreeView:disabled {
     background-color: #19232D;
@@ -67,7 +114,6 @@ QTreeView:disabled {
 }
 QTreeView:item {
     background-color: #282828;
-    color:#e6e6e6;
 }
 QTreeView:item:hover {
     background-color: #484848;

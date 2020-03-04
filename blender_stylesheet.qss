@@ -121,10 +121,12 @@ QListView:item:selected {
 QProgressBar {
     background-color: #424242;
     border: 1px solid #373737;
-    text-align: center;
+    padding: 0px;
+    text-align: right;
 }
 QProgressBar::chunk {
     background-color: #5680c2;    
+    border: 1px solid #373737;
 }
 
 

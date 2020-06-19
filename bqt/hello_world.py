@@ -11,7 +11,8 @@ The point is to show how to parent a window to the Blender application.
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel
 
-class Hello_World_Dialog( QDialog ):
+
+class HelloWorldDialog(QDialog):
     """
     A sample 'Hello World!' QDialog.
 
@@ -28,21 +29,24 @@ class Hello_World_Dialog( QDialog ):
         Jeff Hanna, jeff.b.hanna@gmail.com, June 1, 2020
     """
 
-    def __init__( self, parent ):
-        super( ).__init__( parent, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint )
+    def __init__(self, parent):
+        super().__init__(parent, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
 
-        self.resize( 200, 50 )
-        self.setWindowTitle( 'Qt for Python in Blender' )
+        self.resize(200, 50)
+        self.setWindowTitle('Qt for Python in Blender')
 
-        lbl_hw =  QLabel( 'Hello World!' )
+        lbl_hw = QLabel('Hello World!')
 
-        main_layout = QHBoxLayout( )
-        main_layout.addWidget( lbl_hw )
-        self.setLayout( main_layout )
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(lbl_hw)
+        self.setLayout(main_layout)
 
+
+def demo():
+    main_window = QApplication.instance().blender_widget
+    dlg = HelloWorldDialog(main_window)
+    dlg.show()
 
 
 if __name__ == '__main__':
-    main_window = QApplication.instance( ).blender_widget
-    dlg = Hello_World_Dialog( main_window )
-    dlg.show( )
+    demo()

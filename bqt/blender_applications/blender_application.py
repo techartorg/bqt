@@ -37,6 +37,7 @@ class BlenderApplication(QApplication):
         self._hwnd = self._get_application_hwnd()
         self._blender_window = QWindow.fromWinId(self._hwnd)
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+        self.blender_widget.setWindowTitle("Blender")
 
         # Variables
         self.should_close = False
@@ -44,7 +45,6 @@ class BlenderApplication(QApplication):
         # Runtime
         self._set_window_geometry()
         self.focusObjectChanged.connect(self._on_focus_object_changed)
-
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:
@@ -56,7 +56,6 @@ class BlenderApplication(QApplication):
         """
 
         return -1
-
 
     @staticmethod
     def _get_application_icon() -> QIcon:
@@ -77,7 +76,6 @@ class BlenderApplication(QApplication):
 
         return icon
 
-
     @abstractmethod
     def _on_focus_object_changed(self, focus_object: QObject):
         """
@@ -86,7 +84,6 @@ class BlenderApplication(QApplication):
         """
 
         pass
-
 
     def _set_window_geometry(self):
         """
@@ -112,7 +109,6 @@ class BlenderApplication(QApplication):
         settings.endGroup()
         return
 
-
     def notify(self, receiver: QObject, event: QEvent) -> bool:
         """
         Args:
@@ -129,7 +125,6 @@ class BlenderApplication(QApplication):
             return False
 
         return super().notify(receiver, event)
-
 
     def store_window_geometry(self):
         """

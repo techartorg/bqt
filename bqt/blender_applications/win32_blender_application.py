@@ -47,3 +47,4 @@ class Win32BlenderApplication(BlenderApplication):
 
         if focus_object is self.blender_widget:
             win32gui.SetFocus(self._hwnd)
+            self.just_focused = True

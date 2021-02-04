@@ -44,6 +44,7 @@ class BlenderApplication(QApplication):
 
         # Runtime
         self._set_window_geometry()
+        self.just_focused = False
         self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     @abstractstaticmethod

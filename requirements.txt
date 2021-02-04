@@ -1,3 +1,4 @@
 fake-bpy-module-2.80
 PySide2
 pypiwin32
+keyboard

@@ -119,3 +119,4 @@ class Win32BlenderApplication(BlenderApplication):
         """
         if focus_object is self.blender_widget:
             ctypes.windll.user32.SetFocus(self._hwnd)
+            self.just_focused = True

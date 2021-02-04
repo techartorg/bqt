@@ -9,6 +9,7 @@ import os
 import sys
 
 import bpy
+import keyboard
 
 from PySide2.QtWidgets import QApplication
 
@@ -41,6 +42,45 @@ class QOperator(bpy.types.Operator):
         """
         self._qapp = instantiate_application()
         return {'PASS_THROUGH'}
+
+
+class BQT_OT_return_focus(bpy.types.Operator):
+    bl_idname = "bqt.return_focus"
+    bl_label = "Return Focus"
+    bl_description = "Returns focus to Blender"
+    bl_options = {'INTERNAL'}
+
+    def __init__(self):
+        self.bqt_instance = instantiate_application()
+        self.bad_keys = {'LEFT_SHIFT', 'RIGHT_SHIFT', 'LEFT_ALT',
+                         'RIGHT_ALT', 'LEFT_CTRL', 'RIGHT_CTRL', 'TIMER',
+                         'MOUSEMOVE', 'EVT_TWEAK_L', 'INBETWEEN_MOUSEMOVE',
+                         'TIMER_REPORT', 'TIMER1', 'TIMERREGION',
+                         'WINDOW_DEACTIVATE', 'NONE'}
+
+    def __del__(self):
+        pass
+
+    def invoke(self, context, event):
+        context.window_manager.modal_handler_add(self)
+        return {"RUNNING_MODAL"}
+
+    def modal(self, context, event):
+        if context.area:
+            context.area.tag_redraw()
+        self.detect_keyboard(event)
+        return {"PASS_THROUGH"}
+
+    def detect_keyboard(self, event):
+        if self.bqt_instance.just_focused:
+            self.bqt_instance.just_focused = False
+            if event.value == "PRESS" and event.type in self.bad_keys:
+                if event.ctrl:
+                    keyboard.release('ctrl')
+                if event.alt:
+                    keyboard.release('alt')
+                if event.shift:
+                    keyboard.release('shift')
 
 
 # CORE FUNCTIONS #
@@ -104,6 +144,8 @@ def create_global_app(*_args):
     """
     if 'startup' in __file__ and not os.getenv('BQT_DISABLE_STARTUP'):
         bpy.ops.qoperator.global_app()
+        bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
+    bpy.app.handlers.load_post.remove(create_global_app)
 
 
 def register():
@@ -114,6 +156,7 @@ def register():
 
     """
     bpy.utils.register_class(QOperator)
+    bpy.utils.register_class(BQT_OT_return_focus)
     if create_global_app not in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.append(create_global_app)
 
@@ -125,6 +168,7 @@ def unregister():
     Returns: None
 
     """
+    bpy.utils.unregister_class(BQT_OT_return_focus)
     bpy.utils.unregister_class(QOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)

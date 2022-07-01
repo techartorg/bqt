@@ -7,9 +7,22 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 
-from PySide2.QtWidgets import QApplication, QWidget
-from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
-from PySide2.QtCore import QEvent, QObject, QRect, QSettings
+import Qt5
+QApplication = Qt5.QtWidgets.QApplication
+QWidget = Qt5.QtWidgets.QWidget
+QCloseEvent = Qt5.QtGui.QCloseEvent
+QIcon = Qt5.QtGui.QIcon
+QImage = Qt5.QtGui.QImage
+QPixmap = Qt5.QtGui.QPixmap
+QWindow = Qt5.QtGui.QWindow
+QEvent = Qt5.QtCore.QEvent
+QObject = Qt5.QtCore.QObject
+QRect = Qt5.QtCore.QRect
+QSettings = Qt5.QtCore.QSettings
+
+# from Qt5.QtWidgets import QApplication, QWidget
+# from Qt5.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
+# from Qt5.QtCore import QEvent, QObject, QRect, QSettings
 
 
 class BlenderApplication(QApplication):
@@ -17,9 +30,9 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         __metaclass__ = ABCMeta
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
         self._stylesheet_filepath = Path(__file__).parent / ".." / "blender_stylesheet.qss"
         self._settings_key_geometry = "Geometry"
@@ -35,7 +48,11 @@ class BlenderApplication(QApplication):
 
         # Blender Window
         self._hwnd = self._get_application_hwnd()
-        self._blender_window = QWindow.fromWinId(self._hwnd)
+
+        # when swapping don't forget to enable _set_window_geometry below
+        # self._blender_window = QWindow.fromWinId(self._hwnd)
+        self._blender_window = QWindow()
+
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         self.blender_widget.setWindowTitle("Blender Qt")
 
@@ -43,7 +60,8 @@ class BlenderApplication(QApplication):
         self.should_close = False
 
         # Runtime
-        self._set_window_geometry()
+        self.just_focused = False
+        # self._set_window_geometry()  # apply window size settings from last session, needed for fromWinId()
         self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     @abstractstaticmethod

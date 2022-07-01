@@ -37,7 +37,7 @@ class BlenderApplication(QApplication):
         self._hwnd = self._get_application_hwnd()
         self._blender_window = QWindow.fromWinId(self._hwnd)
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-        self.blender_widget.setWindowTitle("Blender")
+        self.blender_widget.setWindowTitle("Blender Qt")
 
         # Variables
         self.should_close = False

@@ -10,7 +10,8 @@ import sys
 
 import bpy
 
-from PySide2.QtWidgets import QApplication
+import Qt5
+# QApplication = Qt5.QtWidgets.QApplication
 
 from .blender_applications import BlenderApplication
 
@@ -51,7 +52,8 @@ def instantiate_application() -> BlenderApplication:
     Returns BlenderApplication: Application Instance
 
     """
-    app = QApplication.instance()
+
+    app = BlenderApplication.instance()
     if not app:
         app = load_os_module()
         bpy.app.timers.register(on_update, persistent=True)
@@ -85,8 +87,9 @@ def on_update() -> float:
     Returns: Tick Rate
 
     """
-    app = QApplication.instance()
-    if app.should_close:
+    app = BlenderApplication.instance()
+
+    if app and app.should_close:
         bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
 
     return TICK
@@ -137,7 +140,7 @@ def on_exit():
     Returns: None
 
     """
-    app = QApplication.instance()
+    app = BlenderApplication.instance()
     if app:
         app.store_window_geometry()
         app.quit()

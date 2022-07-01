@@ -49,9 +49,12 @@ class BlenderApplication(QApplication):
         # Blender Window
         self._hwnd = self._get_application_hwnd()
 
-        # when swapping don't forget to enable _set_window_geometry below
-        # self._blender_window = QWindow.fromWinId(self._hwnd)
-        self._blender_window = QWindow()
+        # since embedding window messes with alt tabbing, we don't embed by default
+        embed_window = os.getenv("BQT_FROM_WIN_ID", False)
+        if embed_window:
+            self._blender_window = QWindow.fromWinId(self._hwnd)
+        else:
+            self._blender_window = QWindow()
 
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         self.blender_widget.setWindowTitle("Blender Qt")
@@ -61,7 +64,8 @@ class BlenderApplication(QApplication):
 
         # Runtime
         self.just_focused = False
-        # self._set_window_geometry()  # apply window size settings from last session, needed for fromWinId()
+        if embed_window:
+            self._set_window_geometry()  # apply window size settings from last session
         self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     @abstractstaticmethod

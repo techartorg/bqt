@@ -81,4 +81,3 @@ class DarwinBlenderApplication(BlenderApplication):
 
         if focus_object is self.blender_widget:
             self._ns_window.makeKey()
-            self.just_focused = True

@@ -121,4 +121,4 @@ class Win32BlenderApplication(BlenderApplication):
         pass
         if focus_object is self.blender_widget:
             # win32gui.SetFocus(self._hwnd)
-			ctypes.windll.user32.SetFocus(self._hwnd)
+            ctypes.windll.user32.SetFocus(self._hwnd)

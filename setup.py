@@ -40,10 +40,6 @@ class CustomInstall(install):
 
         # Post install logic:
 
-        # Install pypiwin32 through a separate process since setuptools.setup() can not
-        # properly handle the install for an unknown reason compared to a straight pypi install.
-        Popen([sys.executable, "-m", "pip", "install", "pypiwin32"])
-
         # Copy the bqt_startup.py to the blender scripts/startup so that
         # bqt will initialize properly at Blender startup
         startup_file_path = None

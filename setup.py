@@ -59,6 +59,11 @@ class CustomInstall(install):
 
         # Get the file destination path
         destination_path = Path(sys.executable).parents[2] / "scripts" / "startup"
+
+        if not os.path.exists(destination_path) and not os.path.isdir(destination_path):
+            print("Bqt didn't get installed in a Blender Python environment, skipping further setup.")
+            return
+
         # Copy the file to destination path
         copy(startup_file_path, destination_path)
 

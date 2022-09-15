@@ -30,6 +30,14 @@ from bqt import hello_world
 hello_world.demo()
 ```  
 
+#### Environment Variables
+env variables and their default values:
+```python
+BQT_DISABLE_STARTUP = None  #  test
+BQT_TICK_RATE = 30          # 30 ticks per second by default for the qt event loop
+BQT_FROM_WIN_ID = False     # if true, blender will be wrapped in a qt window. 
+                            # disabled since it causes alt tab bugs, breaking typing in blender
+```
 ## Contribute
 If you would like to contribute to bqt, please create a pull request and we will review
 the changes

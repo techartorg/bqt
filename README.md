@@ -13,7 +13,7 @@ focus and main stream of support is within the Windows environment.
 The installation of bqt with automatic setup for Blender requires the usage of the integrated python
 interpreter found within `../Blender Foundation/<version>/Python/bin`
 ```commandline
-python.exe -m pip insteall bqt
+python.exe -m pip install bqt
 ```
 
 #### Installing from Source

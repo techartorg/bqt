@@ -20,3 +20,7 @@ anim_bar.main()
 
 ## timer
 a Qt-timer demo
+```python
+from bqt_demo import timer
+timer.main()
+```

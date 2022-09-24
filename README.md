@@ -23,12 +23,8 @@ to bqt's root folder and running:
 python setup.py install
 ```
 
-To verify installation was successful, launch Blender and in the python console enter
-the following:
-```python
-from bqt import hello_world
-hello_world.demo()
-```  
+### Sample code
+[bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
 
 ## Contribute
 If you would like to contribute to bqt, please create a pull request and we will review

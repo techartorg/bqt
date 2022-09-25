@@ -9,7 +9,6 @@ import os
 import sys
 
 import bpy
-import keyboard
 
 from PySide2.QtWidgets import QApplication
 
@@ -89,9 +88,12 @@ class QFocusOperator(bpy.types.Operator):
 
         if self._qapp.just_focused:
             self._qapp.just_focused = False
-            keyboard.release('ctrl')
-            keyboard.release('alt')
-            keyboard.release('shift')
+
+            import ctypes
+            # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
+            ctypes.windll.user32.keybd_event(0x12, 0, 2, 0)  # Alt up
+            ctypes.windll.user32.keybd_event(0x11, 0, 2, 0)  # Ctrl up
+            ctypes.windll.user32.keybd_event(0x10, 0, 2, 0)  # Shift up
 
 
 # CORE FUNCTIONS #

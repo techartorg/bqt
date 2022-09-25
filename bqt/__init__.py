@@ -107,7 +107,7 @@ def instantiate_application() -> BlenderApplication:
     app = QApplication.instance()
     if not app:
         app = load_os_module()
-        bpy.app.timers.register(on_update, persistent=True)
+        # bpy.app.timers.register(on_update, persistent=True)
     return app
 
 
@@ -130,18 +130,14 @@ def load_os_module() -> object:
         return Win32BlenderApplication()
 
 
-def on_update() -> float:
-    """
-    Checks per Blender timer tick to verify if application should close
-
-    Returns: Tick Rate
-
-    """
-    app = QApplication.instance()
-    if app.should_close:
-        bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
-
-    return TICK
+# def on_update() -> float:
+#     """
+#     Checks per Blender timer tick to verify if application should close
+#
+#     Returns: Tick Rate
+#
+#     """
+#     return TICK
 
 
 @bpy.app.handlers.persistent

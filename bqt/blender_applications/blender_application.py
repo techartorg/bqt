@@ -39,9 +39,6 @@ class BlenderApplication(QApplication):
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         self.blender_widget.setWindowTitle("Blender")
 
-        # Variables
-        self.should_close = False
-
         # Runtime
         self._set_window_geometry()
         self.just_focused = False
@@ -121,8 +118,9 @@ class BlenderApplication(QApplication):
 
         if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
             event.ignore()
-            self.store_window_geometry()
-            self.should_close = True
+            self.store_window_geometry()  # TODO only store when we actually close, user might cancel
+            import bpy
+            bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
             return False
 
         return super().notify(receiver, event)

@@ -44,43 +44,54 @@ class QOperator(bpy.types.Operator):
         return {'PASS_THROUGH'}
 
 
-class BQT_OT_return_focus(bpy.types.Operator):
+# bpy.ops.bqt.return_focus
+class QFocusOperator(bpy.types.Operator):
     bl_idname = "bqt.return_focus"
-    bl_label = "Return Focus"
-    bl_description = "Returns focus to Blender"
+    bl_label = "Fix bug related to bqt focus"
+    bl_description = "Fix bug related to bqt focus"
     bl_options = {'INTERNAL'}
 
     def __init__(self):
-        self.bqt_instance = instantiate_application()
-        self.bad_keys = {'LEFT_SHIFT', 'RIGHT_SHIFT', 'LEFT_ALT',
-                         'RIGHT_ALT', 'LEFT_CTRL', 'RIGHT_CTRL', 'TIMER',
-                         'MOUSEMOVE', 'EVT_TWEAK_L', 'INBETWEEN_MOUSEMOVE',
-                         'TIMER_REPORT', 'TIMER1', 'TIMERREGION',
-                         'WINDOW_DEACTIVATE', 'NONE'}
+        super().__init__()
+        # self._qapp = instantiate_application()  # this triggers blender qt wrap
 
     def __del__(self):
         pass
 
     def invoke(self, context, event):
+        """
+        every time blender opens a new file, the context resets, losing the focus-hook.
+        Re-instantiate the hook that returns focus to blender on alt tab bug
+
+        ensure this is not called twice! or blender might crash on load new file
+        """
         context.window_manager.modal_handler_add(self)
         return {"RUNNING_MODAL"}
 
     def modal(self, context, event):
-        if context.area:
-            context.area.tag_redraw()
+        """
+        pass all events (e.g. keypress, mouse-move, ...) to detect_keyboard
+        """
+        # if context.area:
+        #     context.area.tag_redraw()
         self.detect_keyboard(event)
         return {"PASS_THROUGH"}
 
     def detect_keyboard(self, event):
-        if self.bqt_instance.just_focused:
-            self.bqt_instance.just_focused = False
-            if event.value == "PRESS" and event.type in self.bad_keys:
-                if event.ctrl:
-                    keyboard.release('ctrl')
-                if event.alt:
-                    keyboard.release('alt')
-                if event.shift:
-                    keyboard.release('shift')
+        """
+        detect when blender receives focus, and forces a release of all keys
+        """
+
+        self._qapp = QApplication.instance()
+        if not self._qapp:
+            # we can just wait until bqt is started
+            return
+
+        if self._qapp.just_focused:
+            self._qapp.just_focused = False
+            keyboard.release('ctrl')
+            keyboard.release('alt')
+            keyboard.release('shift')
 
 
 # CORE FUNCTIONS #
@@ -95,7 +106,6 @@ def instantiate_application() -> BlenderApplication:
     if not app:
         app = load_os_module()
         bpy.app.timers.register(on_update, persistent=True)
-
     return app
 
 
@@ -133,18 +143,19 @@ def on_update() -> float:
 
 
 @bpy.app.handlers.persistent
-def create_global_app(*_args):
-    """
-    Create global application
-    Args:
-        *_args:
+def add_focus_handle(dummy):
+    # create a modal operator to return focus to blender to fix alt tab bug
+    bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
 
-    Returns:
 
-    """
-    if 'startup' in __file__ and not os.getenv('BQT_DISABLE_STARTUP'):
-        bpy.ops.qoperator.global_app()
-        bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
+@bpy.app.handlers.persistent
+def create_global_app(dummy):
+    # if 'startup' in __file__ and not os.getenv('BQT_DISABLE_STARTUP'):
+    if not os.getenv('BQT_DISABLE_STARTUP'):
+        bpy.ops.qoperator.global_app()  # wrap blender in QT
+
+    # after blender is wrapped in QWindow,
+    # remove the  handle so blender is not wrapped again when opening a new scene
     bpy.app.handlers.load_post.remove(create_global_app)
 
 
@@ -156,9 +167,23 @@ def register():
 
     """
     bpy.utils.register_class(QOperator)
-    bpy.utils.register_class(BQT_OT_return_focus)
-    if create_global_app not in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.append(create_global_app)
+    bpy.utils.register_class(QFocusOperator)
+
+    # if create_global_app not in bpy.app.handlers.load_post:  # this is useless since create_global_app removes itself from load_post?
+
+
+    # (re-)add focus handle after EVERY scene is loaded
+    bpy.app.handlers.load_post.append(add_focus_handle)
+
+    # append add_focus_handle before create_global_app,
+    # else it doesn't run on blender startup
+    # guessing that wrapping blender in QT interrupts load_post
+    # resulting in the load_post handler not called on blender startup
+
+    # use load_post since blender doesn't like data changed before scene is loaded,
+    # wrap blender after first scene is loaded
+    bpy.app.handlers.load_post.append(create_global_app)
+
 
 
 def unregister():
@@ -168,19 +193,16 @@ def unregister():
     Returns: None
 
     """
-    bpy.utils.unregister_class(BQT_OT_return_focus)
+    bpy.utils.unregister_class(QFocusOperator)
     bpy.utils.unregister_class(QOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
+    if add_focus_handle in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.remove(add_focus_handle)
 
 
 def on_exit():
-    """
-    Close BlenderApplication instance on exit
-
-    Returns: None
-
-    """
+    """Close BlenderApplication instance on exit"""
     app = QApplication.instance()
     if app:
         app.store_window_geometry()

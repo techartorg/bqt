@@ -7,12 +7,11 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import atexit
 import os
 import sys
-
+import ctypes
 import bpy
-
 from PySide2.QtWidgets import QApplication
-
 from .blender_applications import BlenderApplication
+
 
 # GLOBALS #
 TICK = 1.0 / float(os.getenv("BQT_TICK_RATE", "30"))
@@ -29,7 +28,6 @@ class QOperator(bpy.types.Operator):
     def __init__(self):
         super().__init__()
         self._qapp = None
-
 
     def execute(self, context) -> set:
         """
@@ -78,7 +76,7 @@ class QFocusOperator(bpy.types.Operator):
 
     def detect_keyboard(self, event):
         """
-        detect when blender receives focus, and forces a release of all keys
+        detect when blender receives focus, and forces a release of all keys that cause bugs
         """
 
         self._qapp = QApplication.instance()
@@ -89,11 +87,20 @@ class QFocusOperator(bpy.types.Operator):
         if self._qapp.just_focused:
             self._qapp.just_focused = False
 
-            import ctypes
             # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
-            ctypes.windll.user32.keybd_event(0x12, 0, 2, 0)  # Alt up
-            ctypes.windll.user32.keybd_event(0x11, 0, 2, 0)  # Ctrl up
-            ctypes.windll.user32.keybd_event(0x10, 0, 2, 0)  # Shift up
+
+            # if the first key we press is one of the following,
+            # don't simulate a key release, since it will cause a minor bug
+            # (the first keypress on alt tab in will be ignored, e.g. ctrl + v will just be v)
+            # otherwise we can safely release all keys that might be stuck down
+
+            # don't check for event.alt, if it's stuck it will be true when not pressed
+            if '_ALT' not in event.type:  # event.type is the current button pressed
+                ctypes.windll.user32.keybd_event(0x12, 0, 2, 0)  # Alt up
+            if '_CTRL' not in event.type:
+                ctypes.windll.user32.keybd_event(0x11, 0, 2, 0)  # Ctrl up
+            if '_SHIFT' not in event.type:
+                ctypes.windll.user32.keybd_event(0x10, 0, 2, 0)  # Shift up
 
 
 # CORE FUNCTIONS #
@@ -173,7 +180,6 @@ def register():
 
     # if create_global_app not in bpy.app.handlers.load_post:  # this is useless since create_global_app removes itself from load_post?
 
-
     # (re-)add focus handle after EVERY scene is loaded
     bpy.app.handlers.load_post.append(add_focus_handle)
 
@@ -185,7 +191,6 @@ def register():
     # use load_post since blender doesn't like data changed before scene is loaded,
     # wrap blender after first scene is loaded
     bpy.app.handlers.load_post.append(create_global_app)
-
 
 
 def unregister():

@@ -9,7 +9,7 @@ import os
 import sys
 
 import bpy
-
+import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
 
 from .blender_applications import BlenderApplication
@@ -51,6 +51,10 @@ def instantiate_application() -> BlenderApplication:
     Returns BlenderApplication: Application Instance
 
     """
+    # enable dpi scale, run before creating QApplication
+    QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
     app = QApplication.instance()
     if not app:
         app = load_os_module()

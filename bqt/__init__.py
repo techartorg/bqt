@@ -9,6 +9,7 @@ import os
 import sys
 import ctypes
 import bpy
+import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
 from .blender_applications import BlenderApplication
 
@@ -111,6 +112,10 @@ def instantiate_application() -> BlenderApplication:
     Returns BlenderApplication: Application Instance
 
     """
+    # enable dpi scale, run before creating QApplication
+    QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
     app = QApplication.instance()
     if not app:
         app = load_os_module()
@@ -125,16 +130,18 @@ def load_os_module() -> object:
     Returns: Instance of BlenderApplication
 
     """
+
+    import sys
     operating_system = sys.platform
     if operating_system == 'darwin':
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
-        return DarwinBlenderApplication()
+        return DarwinBlenderApplication(sys.argv)
     if operating_system in ['linux', 'linux2']:
         # TODO: LINUX module
         pass
     elif operating_system == 'win32':
         from .blender_applications.win32_blender_application import Win32BlenderApplication
-        return Win32BlenderApplication()
+        return Win32BlenderApplication(sys.argv)
 
 
 def on_update() -> float:

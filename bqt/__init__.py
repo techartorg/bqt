@@ -77,24 +77,18 @@ class QFocusOperator(bpy.types.Operator):
 
     def detect_keyboard(self, event):
         """
-        detect when blender receives focus, and forces a release of all keys that cause bugs
+        detect when blender receives focus, and force a release of 'stuck' keys
         """
 
         self._qapp = QApplication.instance()
         if not self._qapp:
-            # we can just wait until bqt is started
+            # wait until bqt has started the QApplication
             return
 
         if self._qapp.just_focused:
             self._qapp.just_focused = False
 
             # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
-
-            # if the first key we press is one of the following,
-            # don't simulate a key release, since it will cause a minor bug
-            # (the first keypress on alt tab in will be ignored, e.g. ctrl + v will just be v)
-            # otherwise we can safely release all keys that might be stuck down
-
             keycodes = [
                 ('_ALT', 0x12),
                 ('_CONTROL', 0x11),
@@ -104,7 +98,11 @@ class QFocusOperator(bpy.types.Operator):
              ]
 
             for name, code in keycodes:
+                # if the first key pressed is one of the following,
+                # don't simulate a key release, since it will cause a minor bug
+                # (the first keypress on re-focus blender will be ignored, e.g. ctrl + v will just be v)
                 if name not in event.type:
+                    # safely release all other keys that might be stuck down
                     ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
 
 

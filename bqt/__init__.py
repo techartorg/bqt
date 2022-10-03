@@ -95,13 +95,17 @@ class QFocusOperator(bpy.types.Operator):
             # (the first keypress on alt tab in will be ignored, e.g. ctrl + v will just be v)
             # otherwise we can safely release all keys that might be stuck down
 
-            # don't check for event.alt, if it's stuck it will be true when not pressed
-            if '_ALT' not in event.type:  # event.type is the current button pressed
-                ctypes.windll.user32.keybd_event(0x12, 0, 2, 0)  # Alt up
-            if '_CTRL' not in event.type:
-                ctypes.windll.user32.keybd_event(0x11, 0, 2, 0)  # Ctrl up
-            if '_SHIFT' not in event.type:
-                ctypes.windll.user32.keybd_event(0x10, 0, 2, 0)  # Shift up
+            keycodes = [
+                ('_ALT', 0x12),
+                ('_CONTROL', 0x11),
+                ('_SHIFT', 0x10),
+                ('VK_LWIN', 0x5B),
+                ('VK_RWIN', 0x5C),
+             ]
+
+            for name, code in keycodes:
+                if name not in event.type:
+                    ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
 
 
 # CORE FUNCTIONS #

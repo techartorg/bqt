@@ -97,8 +97,8 @@ class Win32BlenderApplication(BlenderApplication):
     Windows implementation of BlenderApplication
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def _get_application_hwnd() -> int:

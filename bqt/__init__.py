@@ -9,6 +9,7 @@ import os
 import sys
 import ctypes
 import bpy
+import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
 from .blender_applications import BlenderApplication
 
@@ -76,31 +77,33 @@ class QFocusOperator(bpy.types.Operator):
 
     def detect_keyboard(self, event):
         """
-        detect when blender receives focus, and forces a release of all keys that cause bugs
+        detect when blender receives focus, and force a release of 'stuck' keys
         """
 
         self._qapp = QApplication.instance()
         if not self._qapp:
-            # we can just wait until bqt is started
+            # wait until bqt has started the QApplication
             return
 
         if self._qapp.just_focused:
             self._qapp.just_focused = False
 
             # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
+            keycodes = [
+                ('_ALT', 0x12),
+                ('_CONTROL', 0x11),
+                ('_SHIFT', 0x10),
+                ('VK_LWIN', 0x5B),
+                ('VK_RWIN', 0x5C),
+             ]
 
-            # if the first key we press is one of the following,
-            # don't simulate a key release, since it will cause a minor bug
-            # (the first keypress on alt tab in will be ignored, e.g. ctrl + v will just be v)
-            # otherwise we can safely release all keys that might be stuck down
-
-            # don't check for event.alt, if it's stuck it will be true when not pressed
-            if '_ALT' not in event.type:  # event.type is the current button pressed
-                ctypes.windll.user32.keybd_event(0x12, 0, 2, 0)  # Alt up
-            if '_CTRL' not in event.type:
-                ctypes.windll.user32.keybd_event(0x11, 0, 2, 0)  # Ctrl up
-            if '_SHIFT' not in event.type:
-                ctypes.windll.user32.keybd_event(0x10, 0, 2, 0)  # Shift up
+            for name, code in keycodes:
+                # if the first key pressed is one of the following,
+                # don't simulate a key release, since it will cause a minor bug
+                # (the first keypress on re-focus blender will be ignored, e.g. ctrl + v will just be v)
+                if name not in event.type:
+                    # safely release all other keys that might be stuck down
+                    ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
 
 
 # CORE FUNCTIONS #
@@ -111,6 +114,10 @@ def instantiate_application() -> BlenderApplication:
     Returns BlenderApplication: Application Instance
 
     """
+    # enable dpi scale, run before creating QApplication
+    QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
     app = QApplication.instance()
     if not app:
         app = load_os_module()
@@ -128,13 +135,13 @@ def load_os_module() -> object:
     operating_system = sys.platform
     if operating_system == 'darwin':
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
-        return DarwinBlenderApplication()
+        return DarwinBlenderApplication(sys.argv)
     if operating_system in ['linux', 'linux2']:
         # TODO: LINUX module
         pass
     elif operating_system == 'win32':
         from .blender_applications.win32_blender_application import Win32BlenderApplication
-        return Win32BlenderApplication()
+        return Win32BlenderApplication(sys.argv)
 
 
 # def on_update() -> float:

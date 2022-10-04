@@ -23,11 +23,11 @@ class DarwinBlenderApplication(BlenderApplication):
     """
     Darwin (MACOS) Implementation of BlenderApplication
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         # OSX Specific - Needs to initialize first
         self._ns_window = self.__get_application_window() or None
 
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
 
     def _get_application_hwnd(self) -> int:

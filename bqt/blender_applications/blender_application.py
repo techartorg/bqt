@@ -17,9 +17,9 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         __metaclass__ = ABCMeta
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
         self._stylesheet_filepath = Path(__file__).parent / ".." / "blender_stylesheet.qss"
         self._settings_key_geometry = "Geometry"
@@ -37,7 +37,7 @@ class BlenderApplication(QApplication):
         self._hwnd = self._get_application_hwnd()
         self._blender_window = QWindow.fromWinId(self._hwnd)
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-        self.blender_widget.setWindowTitle("Blender")
+        self.blender_widget.setWindowTitle("Blender Qt")
 
         # Runtime
         self._set_window_geometry()

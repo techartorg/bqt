@@ -1,5 +1,5 @@
 # bqt.py  
-This is a blender startup script that allows for creating PySide2 based QtWidgets from within blender.
+Blender qt or bqt in short, is a blender startup script that allows for creating PySide2 based QtWidgets from within blender.
 
 ## Requirements
 Due to the release of `Blender 2.83 LTS`, the minimum Blender version required for bqt is `2.83`.

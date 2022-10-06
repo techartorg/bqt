@@ -1,4 +1,7 @@
-# qt
+"""
+from bqt_demo import anim_bar
+anim_bar.main()
+"""
 from PySide2 import QtCore, QtGui, QtWidgets
 from PySide2.QtCore import Qt, QTimer
 import bpy
@@ -6,7 +9,7 @@ import bpy
 
 class Window(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        super(Window, self).__init__(parent)
+        super().__init__(parent)
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
 
         self.label1 = QtWidgets.QLabel("Changing the current frame in blender updates this slider.")
@@ -45,6 +48,7 @@ class Window(QtWidgets.QWidget):
 
 
 def main():
-    w = Window()
+    main_window = QtWidgets.QApplication.instance().blender_widget
+    w = Window(main_window)
     w.show()
     return w

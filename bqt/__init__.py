@@ -11,6 +11,9 @@ import sys
 import bpy
 
 from PySide2.QtWidgets import QApplication
+from PySide2.QtCore import QDir
+
+from pathlib import Path
 
 from .blender_applications import BlenderApplication
 
@@ -48,6 +51,8 @@ def instantiate_application() -> BlenderApplication:
     Create an instance of Blender Application
     Returns BlenderApplication: Application Instance
     """
+    image_directory = str(Path(__file__).parent / "images")
+    QDir.addSearchPath('images', image_directory)
     app = QApplication.instance()
     if not app:
         app = load_os_module()

@@ -8,12 +8,12 @@ The point is to show how to parent a window to the Blender application.
     Jeff Hanna, jeff.b.hanna@gmail.com, June 1, 2020
 """
 
-import Qt5
-Qt = Qt5.QtCore.Qt
-QApplication = Qt5.QtWidgets.QApplication
-QDialog = Qt5.QtWidgets.QDialog
-QHBoxLayout = Qt5.QtWidgets.QHBoxLayout
-QLabel = Qt5.QtWidgets.QLabel
+import PySide2
+Qt = PySide2.QtCore.Qt
+QApplication = PySide2.QtWidgets.QApplication
+QDialog = PySide2.QtWidgets.QDialog
+QHBoxLayout = PySide2.QtWidgets.QHBoxLayout
+QLabel = PySide2.QtWidgets.QLabel
 
 # from Qt.QtCore import Qt
 # from Qt.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel

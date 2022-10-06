@@ -23,11 +23,11 @@ class DarwinBlenderApplication(BlenderApplication):
     """
     Darwin (MACOS) Implementation of BlenderApplication
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         # OSX Specific - Needs to initialize first
         self._ns_window = self.__get_application_window() or None
 
-        super().__init__(*args, **kwargs)
+        super().__init__()
 
 
     def _get_application_hwnd(self) -> int:
@@ -81,4 +81,3 @@ class DarwinBlenderApplication(BlenderApplication):
 
         if focus_object is self.blender_widget:
             self._ns_window.makeKey()
-            self.just_focused = True

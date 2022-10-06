@@ -1,6 +1,6 @@
 # qt
-from Qt import QtCore, QtGui, QtWidgets
-from Qt.QtCore import Qt, QTimer
+from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import Qt, QTimer
 import bpy
 
 

@@ -17,9 +17,9 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         __metaclass__ = ABCMeta
-        super().__init__(*args, **kwargs)
+        super().__init__()
 
         self._stylesheet_filepath = Path(__file__).parent / ".." / "blender_stylesheet.qss"
         self._settings_key_geometry = "Geometry"
@@ -37,12 +37,14 @@ class BlenderApplication(QApplication):
         self._hwnd = self._get_application_hwnd()
         self._blender_window = QWindow.fromWinId(self._hwnd)
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-        self.blender_widget.setWindowTitle("Blender Qt")
+
+        # Variables
+        self.should_close = False
 
         # Runtime
         self._set_window_geometry()
-        self.just_focused = False
         self.focusObjectChanged.connect(self._on_focus_object_changed)
+
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:
@@ -54,6 +56,7 @@ class BlenderApplication(QApplication):
         """
 
         return -1
+
 
     @staticmethod
     def _get_application_icon() -> QIcon:
@@ -74,6 +77,7 @@ class BlenderApplication(QApplication):
 
         return icon
 
+
     @abstractmethod
     def _on_focus_object_changed(self, focus_object: QObject):
         """
@@ -82,6 +86,7 @@ class BlenderApplication(QApplication):
         """
 
         pass
+
 
     def _set_window_geometry(self):
         """
@@ -107,6 +112,7 @@ class BlenderApplication(QApplication):
         settings.endGroup()
         return
 
+
     def notify(self, receiver: QObject, event: QEvent) -> bool:
         """
         Args:
@@ -118,12 +124,12 @@ class BlenderApplication(QApplication):
 
         if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
             event.ignore()
-            self.store_window_geometry()  # TODO only store when we actually close, user might cancel
-            import bpy
-            bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
+            self.store_window_geometry()
+            self.should_close = True
             return False
 
         return super().notify(receiver, event)
+
 
     def store_window_geometry(self):
         """

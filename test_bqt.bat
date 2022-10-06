@@ -9,7 +9,7 @@ call "%~dp0env\Scripts\activate"
 
 SET PIP_DISABLE_PIP_VERSION_CHECK=1
 call python -m pip install -r requirements.txt
-call python -m pip install %~dp0 --use-feature=in-tree-build
+:: call python -m pip install %~dp0 --use-feature=in-tree-build
 
 set "BLENDER_USER_SCRIPTS=%~dp0"
 call "%bln_exe%"

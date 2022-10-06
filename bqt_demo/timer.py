@@ -1,8 +1,8 @@
 # sample from https://pythonpyqt.com/qtimer/
 
 import sys
-from Qt.QtWidgets import QWidget,QPushButton,QApplication,QListWidget,QGridLayout,QLabel
-from Qt.QtCore import QTimer,QDateTime
+from PySide2.QtWidgets import QWidget,QPushButton,QApplication,QListWidget,QGridLayout,QLabel
+from PySide2.QtCore import QTimer,QDateTime
 
 
 class WinForm(QWidget):

@@ -1,13 +1,18 @@
+"""
+from bqt_demo import timer
+timer.main()
+"""
 # sample from https://pythonpyqt.com/qtimer/
 
 import sys
 from PySide2.QtWidgets import QWidget,QPushButton,QApplication,QListWidget,QGridLayout,QLabel
-from PySide2.QtCore import QTimer,QDateTime
+from PySide2.QtCore import Qt, QTimer, QDateTime
 
 
 class WinForm(QWidget):
     def __init__(self,parent=None):
-        super(WinForm, self).__init__(parent)
+        super().__init__(parent)
+        self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
         self.setWindowTitle('QTimer example')
 
         # self.listFile=QListWidget()
@@ -47,7 +52,8 @@ class WinForm(QWidget):
 
 def main():
     # app=QApplication(sys.argv)
-    form=WinForm()
+    main_window = QApplication.instance().blender_widget
+    form=WinForm(main_window)
     form.show()
     # sys.exit(app.exec_())
     return form

@@ -17,9 +17,9 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         __metaclass__ = ABCMeta
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
         self._stylesheet_filepath = Path(__file__).parents[2] / "blender_stylesheet.qss"
         self._settings_key_geometry = "Geometry"

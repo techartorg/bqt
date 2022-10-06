@@ -64,13 +64,13 @@ def load_os_module() -> object:
     operating_system = sys.platform
     if operating_system == 'darwin':
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
-        return DarwinBlenderApplication()
+        return DarwinBlenderApplication(sys.argv)
     if operating_system in ['linux', 'linux2']:
         # TODO: LINUX module
         pass
     elif operating_system == 'win32':
         from .blender_applications.win32_blender_application import Win32BlenderApplication
-        return Win32BlenderApplication()
+        return Win32BlenderApplication(sys.argv)
 
 
 def on_update() -> float:

@@ -168,6 +168,8 @@ def register():
     if create_global_app not in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.append(create_global_app)
 
+    atexit.register(on_exit)  # TODO add this to unregister
+
 
 def unregister():
     """
@@ -189,15 +191,3 @@ def on_exit():
     if app:
         app.store_window_geometry()
         app.quit()
-
-
-atexit.register(on_exit)
-
-
-if __name__ == '__main__':
-    try:
-        unregister()
-    except (ValueError, TypeError) as e:
-        print(f"Failed to unregister QOperator: {e}")
-
-    register()

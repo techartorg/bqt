@@ -18,30 +18,6 @@ from .blender_applications import BlenderApplication
 TICK = 1.0 / float(os.getenv("BQT_TICK_RATE", "30"))
 
 
-class QOperator(bpy.types.Operator):
-    """
-    QOperator is a subclass of the Blender `bpy.types.Operator`
-    It instantiates the application if one does not exist already
-    """
-    bl_idname = "qoperator.global_app"
-    bl_label = "Global QApplication"
-
-    def __init__(self):
-        super().__init__()
-        self._qapp = None
-
-    def execute(self, context) -> set:
-        """
-        Args:
-            context: Blender Context
-
-        Returns:
-            set
-        """
-        self._qapp = instantiate_application()
-        return {'PASS_THROUGH'}
-
-
 # bpy.ops.bqt.return_focus
 class QFocusOperator(bpy.types.Operator):
     bl_idname = "bqt.return_focus"
@@ -163,8 +139,8 @@ def add_focus_handle(dummy):
 @bpy.app.handlers.persistent
 def create_global_app(dummy):
     # if 'startup' in __file__ and not os.getenv('BQT_DISABLE_STARTUP'):
-    if not os.getenv('BQT_DISABLE_STARTUP'):
-        bpy.ops.qoperator.global_app()  # wrap blender in QT
+    if not os.getenv('BQT_DISABLE_STARTUP'):  # todo move this if to a higher level
+        instantiate_application()
 
     # after blender is wrapped in QWindow,
     # remove the  handle so blender is not wrapped again when opening a new scene
@@ -178,7 +154,6 @@ def register():
     Returns: None
 
     """
-    bpy.utils.register_class(QOperator)
     bpy.utils.register_class(QFocusOperator)
 
     # if create_global_app not in bpy.app.handlers.load_post:  # this is useless since create_global_app removes itself from load_post?
@@ -204,7 +179,6 @@ def unregister():
 
     """
     bpy.utils.unregister_class(QFocusOperator)
-    bpy.utils.unregister_class(QOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
     if add_focus_handle in bpy.app.handlers.load_post:

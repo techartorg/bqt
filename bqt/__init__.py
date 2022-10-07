@@ -86,6 +86,7 @@ def on_update() -> float:
     app = QApplication.instance()
     if app.should_close:
         bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
+        app.should_close = False
 
     return TICK
 

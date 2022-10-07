@@ -168,7 +168,7 @@ def register():
     if create_global_app not in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.append(create_global_app)
 
-    atexit.register(on_exit)  # TODO add this to unregister
+    atexit.register(on_exit)
 
 
 def unregister():
@@ -183,6 +183,7 @@ def unregister():
         bpy.app.handlers.load_post.remove(create_global_app)
     if add_focus_handle in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(add_focus_handle)
+    atexit.unregister(on_exit)
 
 
 def on_exit():

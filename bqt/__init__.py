@@ -149,14 +149,9 @@ def create_global_app(dummy):
 
 def register():
     """
-    Register Blender Operator classes
-
-    Returns: None
-
+    setup bqt, wrap blender in qt, register operators
     """
     bpy.utils.register_class(QFocusOperator)
-
-    # if create_global_app not in bpy.app.handlers.load_post:  # this is useless since create_global_app removes itself from load_post?
 
     # (re-)add focus handle after EVERY scene is loaded
     if add_focus_handle not in bpy.app.handlers.load_post:

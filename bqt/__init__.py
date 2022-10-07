@@ -164,7 +164,7 @@ def register():
     # resulting in the load_post handler not called on blender startup
 
     # use load_post since blender doesn't like data changed before scene is loaded,
-    # wrap blender after first scene is loaded
+    # wrap blender after first scene is loaded, the operator removes itself on first run
     if create_global_app not in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.append(create_global_app)
 

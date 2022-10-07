@@ -117,8 +117,10 @@ class BlenderApplication(QApplication):
         """
 
         if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
+            # catch the close event when clicking close on the qt window,
+            # ignore the event, and ask user if they want to close blender if unsaved changes.
+            # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
-            self.store_window_geometry()  # TODO only store when we actually close, user might cancel
             import bpy
             bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
             return False

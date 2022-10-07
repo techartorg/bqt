@@ -142,7 +142,6 @@ def shutdown_blender(*args):
 
 
 class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
-    """Saves current Blender file and all modified images"""
     bl_idname = "wm.save_from_qt"
     bl_label = "Save_from_Qt"
 

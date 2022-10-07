@@ -137,9 +137,7 @@ def add_focus_handle(dummy):
 
 @bpy.app.handlers.persistent
 def create_global_app(dummy):
-    # if 'startup' in __file__ and not os.getenv('BQT_DISABLE_STARTUP'):
-    if not os.getenv('BQT_DISABLE_STARTUP'):  # todo move this if to a higher level
-        instantiate_application()
+    instantiate_application()
 
     # after blender is wrapped in QWindow,
     # remove the  handle so blender is not wrapped again when opening a new scene
@@ -150,6 +148,10 @@ def register():
     """
     setup bqt, wrap blender in qt, register operators
     """
+
+    if os.getenv('BQT_DISABLE_STARTUP'):
+        return
+
     bpy.utils.register_class(QFocusOperator)
 
     # (re-)add focus handle after EVERY scene is loaded

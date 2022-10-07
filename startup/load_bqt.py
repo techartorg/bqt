@@ -12,12 +12,10 @@ sys.path.append(site_packages)
 
 import bqt
 
-bqt.register()
-
 
 def register():
-    pass
+    bqt.register()
 
 
 def unregister():
-    pass
+    bqt.unregister()

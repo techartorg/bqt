@@ -57,6 +57,7 @@ class QFocusOperator(bpy.types.Operator):
 
         self._qapp = QApplication.instance()
         if not self._qapp:
+            print("QApplication not yet instantiated, focus hook can't be set")
             # wait until bqt has started the QApplication
             return
 

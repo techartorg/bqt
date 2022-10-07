@@ -159,7 +159,8 @@ def register():
     # if create_global_app not in bpy.app.handlers.load_post:  # this is useless since create_global_app removes itself from load_post?
 
     # (re-)add focus handle after EVERY scene is loaded
-    bpy.app.handlers.load_post.append(add_focus_handle)
+    if add_focus_handle not in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.append(add_focus_handle)
 
     # append add_focus_handle before create_global_app,
     # else it doesn't run on blender startup
@@ -168,7 +169,8 @@ def register():
 
     # use load_post since blender doesn't like data changed before scene is loaded,
     # wrap blender after first scene is loaded
-    bpy.app.handlers.load_post.append(create_global_app)
+    if create_global_app not in bpy.app.handlers.load_post:
+        bpy.app.handlers.load_post.append(create_global_app)
 
 
 def unregister():

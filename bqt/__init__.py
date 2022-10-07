@@ -163,13 +163,13 @@ class BlenderClosingDialog(QMessageBox):
             filepath = 'untitled.blend'
         filename = os.path.split(filepath)[1]
         self.setText(filename)
-        self.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+        self.setStandardButtons(QMessageBox.Save | QMessageBox.No | QMessageBox.Cancel)
         self.setIcon(QMessageBox.Question)
 
     def execute(self):
         if bpy.data.is_dirty:
             choice = self.exec_()
-            if choice == QMessageBox.Yes:
+            if choice == QMessageBox.Save:
                 bpy.utils.register_class(WINDOW_OT_SaveFileFromQt)
                 bpy.app.handlers.save_post.append(shutdown_blender)
                 bpy.ops.wm.save_from_qt()

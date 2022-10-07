@@ -13,8 +13,6 @@ sys.path.append(site_packages)
 import bqt
 
 bqt.register()
-bqt.create_global_app()
-bqt.instantiate_application()
 
 
 def register():

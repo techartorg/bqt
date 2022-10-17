@@ -146,11 +146,13 @@ def register():
     if os.getenv('BQT_DISABLE_STARTUP'):
         return
 
-    bpy.utils.register_class(QFocusOperator)
+    # only start focus operator if blender is wrapped
+    if not os.getenv('BQT_DISABLE_WRAP'):
+        bpy.utils.register_class(QFocusOperator)
 
-    # (re-)add focus handle after EVERY scene is loaded
-    if add_focus_handle not in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.append(add_focus_handle)
+        # (re-)add focus handle after EVERY scene is loaded
+        if add_focus_handle not in bpy.app.handlers.load_post:
+            bpy.app.handlers.load_post.append(add_focus_handle)
 
     # append add_focus_handle before create_global_app,
     # else it doesn't run on blender startup
@@ -172,7 +174,8 @@ def unregister():
     Returns: None
 
     """
-    bpy.utils.unregister_class(QFocusOperator)
+    if not os.getenv('BQT_DISABLE_WRAP'):
+        bpy.utils.unregister_class(QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
     if add_focus_handle in bpy.app.handlers.load_post:

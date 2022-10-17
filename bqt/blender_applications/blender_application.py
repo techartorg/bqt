@@ -6,7 +6,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
-
+import os
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings
@@ -35,14 +35,19 @@ class BlenderApplication(QApplication):
 
         # Blender Window
         self._hwnd = self._get_application_hwnd()
-        self._blender_window = QWindow.fromWinId(self._hwnd)
+
+        if not os.getenv('BQT_DISABLE_WRAP'):
+            self._blender_window = QWindow.fromWinId(self._hwnd)
+        else:
+            self._blender_window = QWindow()
         self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         self.blender_widget.setWindowTitle("Blender Qt")
 
         # Runtime
-        self._set_window_geometry()
-        self.just_focused = False
-        self.focusObjectChanged.connect(self._on_focus_object_changed)
+        if not os.getenv('BQT_DISABLE_WRAP'):
+            self._set_window_geometry()
+            self.just_focused = False
+            self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:

@@ -14,10 +14,6 @@ from PySide2.QtWidgets import QApplication
 from .blender_applications import BlenderApplication
 
 
-# GLOBALS #
-TICK = 1.0 / float(os.getenv("BQT_TICK_RATE", "30"))
-
-
 # bpy.ops.bqt.return_focus
 class QFocusOperator(bpy.types.Operator):
     bl_idname = "bqt.return_focus"
@@ -45,8 +41,6 @@ class QFocusOperator(bpy.types.Operator):
         """
         pass all events (e.g. keypress, mouse-move, ...) to detect_keyboard
         """
-        # if context.area:
-        #     context.area.tag_redraw()
         self.detect_keyboard(event)
         return {"PASS_THROUGH"}
 
@@ -97,7 +91,6 @@ def instantiate_application() -> BlenderApplication:
     app = QApplication.instance()
     if not app:
         app = load_os_module()
-        # bpy.app.timers.register(on_update, persistent=True)
     return app
 
 
@@ -118,16 +111,6 @@ def load_os_module() -> object:
     elif operating_system == 'win32':
         from .blender_applications.win32_blender_application import Win32BlenderApplication
         return Win32BlenderApplication(sys.argv)
-
-
-# def on_update() -> float:
-#     """
-#     Checks per Blender timer tick to verify if application should close
-#
-#     Returns: Tick Rate
-#
-#     """
-#     return TICK
 
 
 @bpy.app.handlers.persistent

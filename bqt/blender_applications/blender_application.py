@@ -36,18 +36,16 @@ class BlenderApplication(QApplication):
         # Blender Window
         self._hwnd = self._get_application_hwnd()
 
-        if not os.getenv('BQT_DISABLE_WRAP'):
+        if not os.getenv('BQT_DISABLE_WRAP', 0):
             self._blender_window = QWindow.fromWinId(self._hwnd)
-        else:
-            self._blender_window = QWindow()
-        self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-        self.blender_widget.setWindowTitle("Blender Qt")
-
-        # Runtime
-        if not os.getenv('BQT_DISABLE_WRAP'):
+            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+            self.blender_widget.setWindowTitle("Blender Qt")
             self._set_window_geometry()
             self.just_focused = False
             self.focusObjectChanged.connect(self._on_focus_object_changed)
+        else:
+            self._blender_window = QWindow()
+            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:
@@ -127,6 +125,7 @@ class BlenderApplication(QApplication):
             # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
             import bpy
+
             bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
             return False
 

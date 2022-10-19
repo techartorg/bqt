@@ -65,7 +65,7 @@ class QFocusOperator(bpy.types.Operator):
                 ('_SHIFT', 0x10),
                 ('VK_LWIN', 0x5B),
                 ('VK_RWIN', 0x5C),
-             ]
+            ]
 
             for name, code in keycodes:
                 # if the first key pressed is one of the following,
@@ -104,12 +104,14 @@ def load_os_module() -> object:
     operating_system = sys.platform
     if operating_system == 'darwin':
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
+
         return DarwinBlenderApplication(sys.argv)
     if operating_system in ['linux', 'linux2']:
         # TODO: LINUX module
         pass
     elif operating_system == 'win32':
         from .blender_applications.win32_blender_application import Win32BlenderApplication
+
         return Win32BlenderApplication(sys.argv)
 
 
@@ -120,6 +122,8 @@ def add_focus_handle(dummy):
 
 
 parent_window = None
+
+
 @bpy.app.handlers.persistent
 def create_global_app(dummy):
     """
@@ -147,7 +151,7 @@ def register():
         return
 
     # only start focus operator if blender is wrapped
-    if not os.getenv('BQT_DISABLE_WRAP'):
+    if not os.getenv('BQT_DISABLE_WRAP', 0):
         bpy.utils.register_class(QFocusOperator)
 
         # (re-)add focus handle after EVERY scene is loaded
@@ -174,7 +178,7 @@ def unregister():
     Returns: None
 
     """
-    if not os.getenv('BQT_DISABLE_WRAP'):
+    if not os.getenv('BQT_DISABLE_WRAP', 0):
         bpy.utils.unregister_class(QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)

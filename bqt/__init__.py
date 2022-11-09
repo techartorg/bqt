@@ -136,9 +136,19 @@ def add_focus_handle(dummy):
     bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
 
 
+parent_window = None
 @bpy.app.handlers.persistent
 def create_global_app(dummy):
-    instantiate_application()
+    """
+    runs after blender finished startup
+    """
+    qapp = instantiate_application()
+
+    # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
+    # for some reason this works here, but not in the blender_applications init as a class attribute (self),
+    # and saving it in a global in blender_applications.py causes blender to crash on startup
+    global parent_window
+    parent_window = qapp._blender_window.parent()
 
     # after blender is wrapped in QWindow,
     # remove the  handle so blender is not wrapped again when opening a new scene

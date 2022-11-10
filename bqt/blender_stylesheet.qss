@@ -45,13 +45,13 @@ QComboBox::down-arrow {
     image: url(images:QComboBox_down_arrow.png);
 }
 QComboBox::down-arrow:on {
-    background-color: #7e848e;
+    background-color: #5680c2;
 }
 QComboBox::drop-down {
     background-color: #202020;
 }
 QComboBox::on {
-    background-color: #7e848e;
+    background-color: #5680c2;
     color: #f8f9f9;
 }
 QComboBox QAbstractItemView {
@@ -59,7 +59,6 @@ QComboBox QAbstractItemView {
     border-bottom-right-radius: 4px;
     selection-background-color: #5680c2;
 }
-
 
 QScrollBar{
     margin: 0px;
@@ -139,9 +138,6 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
     height: 0px;
     width: 0px;
 }
-
-
-
 
 
 QGroupBox {

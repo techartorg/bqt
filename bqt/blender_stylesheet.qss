@@ -61,6 +61,89 @@ QComboBox QAbstractItemView {
 }
 
 
+QScrollBar{
+    margin: 0px;
+    padding: 0px;
+}
+
+QScrollBar:vertical {
+    border: 0px solid RED;
+    background-color: none;
+    width: 5px;
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar:horizontal {
+    border: 0px solid RED;
+    background-color: none;
+    height: 5px;
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #404040;
+    min-height: 1px;
+    border-radius: 4px;
+
+}
+QScrollBar::handle:horizontal {
+    background-color: #404040;
+    min-width: 1px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical {
+    background-color: RED;
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: RED;
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: RED;
+    width: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: RED;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background-color: #202020;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background-color: #202020;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background-color: RED;
+    height: 0px;
+    width: 0px;
+}
+
+QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    background-color: RED;
+    height: 0px;
+    width: 0px;
+}
+
+
+
+
+
 QGroupBox {
     border: 0px solid #373737;
     background-color: #373737;

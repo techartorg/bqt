@@ -44,7 +44,6 @@ class BlenderApplication(QApplication):
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
             self.blender_widget.setWindowTitle("Blender Qt")
             self._set_window_geometry()
-            self.just_focused = False
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     @abstractstaticmethod

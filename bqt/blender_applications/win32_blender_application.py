@@ -3,16 +3,9 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-
-from contextlib import suppress
-
 import bpy
-
-from PySide2.QtGui import QIcon, QImage, QPixmap
-from PySide2.QtCore import QByteArray, QObject
-
+from PySide2.QtCore import QObject
 from .blender_application import BlenderApplication
-
 import ctypes
 import os
 from ctypes import wintypes
@@ -119,4 +112,5 @@ class Win32BlenderApplication(BlenderApplication):
         """
         if focus_object is self.blender_widget:
             ctypes.windll.user32.SetFocus(self._hwnd)
-            self.just_focused = True
+            with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+                bpy.ops.bqt.return_focus('INVOKE_DEFAULT')

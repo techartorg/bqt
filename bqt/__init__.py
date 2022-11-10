@@ -3,77 +3,14 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-
+from bqt import focus
 import atexit
 import os
 import sys
-import ctypes
 import bpy
 import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
 from .blender_applications import BlenderApplication
-
-
-# bpy.ops.bqt.return_focus
-class QFocusOperator(bpy.types.Operator):
-    bl_idname = "bqt.return_focus"
-    bl_label = "Fix bug related to bqt focus"
-    bl_description = "Fix bug related to bqt focus"
-    bl_options = {'INTERNAL'}
-
-    def __init__(self):
-        super().__init__()
-
-    def __del__(self):
-        pass
-
-    def invoke(self, context, event):
-        """
-        every time blender opens a new file, the context resets, losing the focus-hook.
-        Re-instantiate the hook that returns focus to blender on alt tab bug
-
-        ensure this is not called twice! or blender might crash on load new file
-        """
-        context.window_manager.modal_handler_add(self)
-        return {"RUNNING_MODAL"}
-
-    def modal(self, context, event):
-        """
-        pass all events (e.g. keypress, mouse-move, ...) to detect_keyboard
-        """
-        self.detect_keyboard(event)
-        return {"PASS_THROUGH"}
-
-    def detect_keyboard(self, event):
-        """
-        detect when blender receives focus, and force a release of 'stuck' keys
-        """
-
-        self._qapp = QApplication.instance()
-        if not self._qapp:
-            print("QApplication not yet instantiated, focus hook can't be set")
-            # wait until bqt has started the QApplication
-            return
-
-        if self._qapp.just_focused:
-            self._qapp.just_focused = False
-
-            # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
-            keycodes = [
-                ('_ALT', 0x12),
-                ('_CONTROL', 0x11),
-                ('_SHIFT', 0x10),
-                ('VK_LWIN', 0x5B),
-                ('VK_RWIN', 0x5C),
-            ]
-
-            for name, code in keycodes:
-                # if the first key pressed is one of the following,
-                # don't simulate a key release, since it will cause a minor bug
-                # (the first keypress on re-focus blender will be ignored, e.g. ctrl + v will just be v)
-                if name not in event.type:
-                    # safely release all other keys that might be stuck down
-                    ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
 
 
 # CORE FUNCTIONS #
@@ -121,6 +58,7 @@ def add_focus_handle(dummy):
     bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
 
 
+# qapp = None
 parent_window = None
 
 
@@ -129,6 +67,7 @@ def create_global_app(dummy):
     """
     runs after blender finished startup
     """
+    # global qapp
     qapp = instantiate_application()
 
     # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
@@ -151,10 +90,10 @@ def register():
         return
 
     # only start focus operator if blender is wrapped
-    if not os.getenv('BQT_DISABLE_WRAP', 0):
-        bpy.utils.register_class(QFocusOperator)
+    if not os.getenv('BQT_DISABLE_WRAP', 0) == "1":
+        bpy.utils.register_class(focus.QFocusOperator)
 
-        # (re-)add focus handle after EVERY scene is loaded
+        # loading a new file clears handlers, so re-add the focus operator after loading a new file
         if add_focus_handle not in bpy.app.handlers.load_post:
             bpy.app.handlers.load_post.append(add_focus_handle)
 

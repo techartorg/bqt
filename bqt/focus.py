@@ -1,16 +1,20 @@
-import atexit
-import os
-import sys
+"""
+when alt tabbing in and out of blender, a bug happens when blender is wrapped in qt.
+some keys stay stuck, e.g. alt or control, resulting in the user
+not being able to use blender on refocus
+
+this module fixes the bug by sending a key release event to the window
+"""
+
 import ctypes
 import bpy
-import PySide2.QtCore as QtCore
-from PySide2.QtWidgets import QApplication
-from .blender_applications import BlenderApplication
 
 
-# bpy.ops.bqt.return_focus
+# todo add focus operator support for other OS, this is windows only atm
+
+
 class QFocusOperator(bpy.types.Operator):
-    bl_idname = "bqt.return_focus"
+    bl_idname = "bqt.return_focus"  # access from bpy.ops.bqt.return_focus
     bl_label = "Fix bug related to bqt focus"
     bl_description = "Fix bug related to bqt focus"
     bl_options = {'INTERNAL'}
@@ -24,61 +28,42 @@ class QFocusOperator(bpy.types.Operator):
 
     def invoke(self, context, event):
         """
-        every time blender opens a new file, the context resets, losing the focus-hook.
-        Re-instantiate the hook that returns focus to blender on alt tab bug
-
-        ensure this is not called twice! or blender might crash on load new file
-        """
-        # modal
-        context.window_manager.modal_handler_add(self)
-        return {"RUNNING_MODAL"}
-
-        # # non modal, run once and exit
-        # self._detect_keyboard(event)
-        # return {"FINISHED"}
-
-    def modal(self, context, event):
-        """
-        pass all events (e.g. keypress, mouse-move, ...) to detect_keyboard
+        simulate key release to prevent blender from ignoring mouse input, after refocusing blender
         """
         self._detect_keyboard(event)
-        return {"PASS_THROUGH"}
+        return {"FINISHED"}
 
     def _detect_keyboard(self, event):
         """
-        detect when blender receives focus, and force a release of 'stuck' keys
+        force a release of 'stuck' keys
         """
 
-        self._qapp = QApplication.instance()
-        if not self._qapp:
-            print("QApplication not yet instantiated, focus hook can't be set")
-            # wait until bqt has started the QApplication
-            return
+        # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
+        keycodes = [
+            ('_ALT', 0x12),
+            ('_CTRL', 0x11),
+            ('_SHIFT', 0x10),
+            ('VK_LWIN', 0x5B),
+            ('VK_RWIN', 0x5C),
+            ('OSKEY', 0x5B),  # dupe oskey, blender names it this
+        ]
 
-        if self._qapp.just_focused:
-            self._qapp.just_focused = False
-            print("just focused")
+        # print("event.type", event.type, type(event.type))
+        for name, code in keycodes:
 
-            # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
-            keycodes = [
-                ('_ALT', 0x12),
-                ('_CTRL', 0x11),
-                ('_SHIFT', 0x10),
-                ('VK_LWIN', 0x5B),
-                ('VK_RWIN', 0x5C),
-                ('OSKEY', 0x5B),  # dupe oskey, blender names it this
-            ]
+            # todo this bug fix is not perfect yet, blender works better without this atm
+            # # if the first key pressed is one of the following,
+            # # don't simulate a key release, since it causes this bug:
+            # # the first keypress on re-focus blender will be ignored, e.g. ctrl + v will just be v
+            # if name in event.type:
+            #     print("skipping:", name)
+            #     continue
 
-            print("event.type", event.type, type(event.type))
-            for name, code in keycodes:
+            # safely release all other keys that might be stuck down
+            ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
+            # print("released key", name, code)
 
-                # if the first key pressed is one of the following,
-                # don't simulate a key release, since it causes this bug:
-                # the first keypress on re-focus blender will be ignored, e.g. ctrl + v will just be v
-                if name in event.type:
-                    print("skipping:", name)
-                    continue
-
-                # safely release all other keys that might be stuck down
-                ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
-                print("released key", name, code)
+        # todo, fix: blender occasionally still frozen input, despite having run the above code
+        # but when we click the mouse, it starts working again
+        # simulate a right mouse click did not work ...
+        # ctypes.windll.user32.mouse_event(0x0008, 0, 0, 0, 0)  # right mouse click

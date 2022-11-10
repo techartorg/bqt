@@ -52,13 +52,6 @@ def load_os_module() -> object:
         return Win32BlenderApplication(sys.argv)
 
 
-@bpy.app.handlers.persistent
-def add_focus_handle(dummy):
-    # create a modal operator to return focus to blender to fix alt tab bug
-    bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
-
-
-# qapp = None
 parent_window = None
 
 
@@ -93,10 +86,6 @@ def register():
     if not os.getenv('BQT_DISABLE_WRAP', 0) == "1":
         bpy.utils.register_class(focus.QFocusOperator)
 
-        # loading a new file clears handlers, so re-add the focus operator after loading a new file
-        if add_focus_handle not in bpy.app.handlers.load_post:
-            bpy.app.handlers.load_post.append(add_focus_handle)
-
     # append add_focus_handle before create_global_app,
     # else it doesn't run on blender startup
     # guessing that wrapping blender in QT interrupts load_post
@@ -121,8 +110,6 @@ def unregister():
         bpy.utils.unregister_class(focus.QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
-    if add_focus_handle in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.remove(add_focus_handle)
     atexit.unregister(on_exit)
 
 

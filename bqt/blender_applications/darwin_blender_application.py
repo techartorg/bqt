@@ -81,4 +81,5 @@ class DarwinBlenderApplication(BlenderApplication):
 
         if focus_object is self.blender_widget:
             self._ns_window.makeKey()
-            self.just_focused = True
+            with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+                bpy.ops.bqt.return_focus('INVOKE_DEFAULT')

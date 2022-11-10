@@ -1,5 +1,5 @@
 [MASTER]
-init-hook='import sys; sys.path.extend(["C:\Program Files\Blender Foundation\Blender\2.80\python\lib\site-packages",])
+init-hook='import sys; sys.path.extend(["C:\Program Files\Blender Foundation\Blender\2.80\python\lib\site-packages",])'
 
 # Specify a configuration file.
 #rcfile=

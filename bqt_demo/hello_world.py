@@ -3,37 +3,21 @@ A demonstration script showing how to parent a QDialog to the Blender main windo
 Yes, this could be done with QtWidgets.QMessageBox more easily.
 The point is to show how to parent a window to the Blender application.
 
-**Author:**
-
-    Jeff Hanna, jeff.b.hanna@gmail.com, June 1, 2020
+from bqt_demo import hello_world
+hello_world.demo()
 """
 
-import Qt5
-Qt = Qt5.QtCore.Qt
-QApplication = Qt5.QtWidgets.QApplication
-QDialog = Qt5.QtWidgets.QDialog
-QHBoxLayout = Qt5.QtWidgets.QHBoxLayout
-QLabel = Qt5.QtWidgets.QLabel
-
-# from Qt.QtCore import Qt
-# from Qt.QtWidgets import QApplication, QDialog, QHBoxLayout, QLabel
+import PySide2
+Qt = PySide2.QtCore.Qt
+QApplication = PySide2.QtWidgets.QApplication
+QDialog = PySide2.QtWidgets.QDialog
+QHBoxLayout = PySide2.QtWidgets.QHBoxLayout
+QLabel = PySide2.QtWidgets.QLabel
 
 
 class HelloWorldDialog(QDialog):
     """
     A sample 'Hello World!' QDialog.
-
-    **Arguments:**
-
-        None
-
-    **Keyword Arguments:**
-
-        None
-
-    **Author:**
-
-        Jeff Hanna, jeff.b.hanna@gmail.com, June 1, 2020
     """
 
     def __init__(self, parent):

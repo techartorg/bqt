@@ -36,7 +36,7 @@ class BlenderApplication(QApplication):
         # Blender Window
         self._hwnd = self._get_application_hwnd()
 
-        if os.getenv('BQT_DISABLE_WRAP') == "1":
+        if os.getenv("BQT_DISABLE_WRAP") == "1":
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:
@@ -92,14 +92,14 @@ class BlenderApplication(QApplication):
         For this reason it should be set on self.blender_widget.
         """
 
-        settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
+        settings = QSettings("Tech-Artists.org", "Blender Qt Wrapper")
         settings.beginGroup(self._settings_key_window_group_name)
 
-        if settings.value(self._settings_key_full_screen, 'false').lower() == 'true':
+        if settings.value(self._settings_key_full_screen, "false").lower() == "true":
             self.blender_widget.showFullScreen()
             return
 
-        if settings.value(self._settings_key_maximized, 'false').lower() == 'true':
+        if settings.value(self._settings_key_maximized, "false").lower() == "true":
             self.blender_widget.showMaximized()
             return
 
@@ -125,7 +125,7 @@ class BlenderApplication(QApplication):
             event.ignore()
             import bpy
 
-            bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
+            bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
             return False
 
         return super().notify(receiver, event)
@@ -137,7 +137,7 @@ class BlenderApplication(QApplication):
         For that reason the _blender_widget should be used.
         """
 
-        settings = QSettings('Tech-Artists.org', 'Blender Qt Wrapper')
+        settings = QSettings("Tech-Artists.org", "Blender Qt Wrapper")
         settings.beginGroup(self._settings_key_window_group_name)
         settings.setValue(self._settings_key_geometry, self.blender_widget.geometry())
         settings.setValue(self._settings_key_maximized, self.blender_widget.isMaximized())

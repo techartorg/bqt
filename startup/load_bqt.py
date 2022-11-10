@@ -2,7 +2,7 @@ import sys
 import os
 import inspect
 
-file_name = inspect.getsourcefile(lambda:0)
+file_name = inspect.getsourcefile(lambda: 0)
 root_path = os.path.abspath(os.path.join(os.path.dirname(file_name), os.pardir))
 site_packages = os.path.join(root_path, "env", "Lib", "site-packages")
 

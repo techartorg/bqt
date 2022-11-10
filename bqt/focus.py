@@ -14,7 +14,7 @@ class QFocusOperator(bpy.types.Operator):
     bl_idname = "bqt.return_focus"  # access from bpy.ops.bqt.return_focus
     bl_label = "Fix bug related to bqt focus"
     bl_description = "Fix bug related to bqt focus"
-    bl_options = {'INTERNAL'}
+    bl_options = {"INTERNAL"}
 
     def __init__(self):
         super().__init__()
@@ -38,12 +38,12 @@ class QFocusOperator(bpy.types.Operator):
 
         # key codes from https://itecnote.com/tecnote/python-simulate-keydown/
         keycodes = [
-            ('_ALT', 0x12),
-            ('_CTRL', 0x11),
-            ('_SHIFT', 0x10),
-            ('VK_LWIN', 0x5B),
-            ('VK_RWIN', 0x5C),
-            ('OSKEY', 0x5B),  # dupe oskey, blender names it this
+            ("_ALT", 0x12),
+            ("_CTRL", 0x11),
+            ("_SHIFT", 0x10),
+            ("VK_LWIN", 0x5B),
+            ("VK_RWIN", 0x5C),
+            ("OSKEY", 0x5B),  # dupe oskey, blender names it this
         ]
 
         # print("event.type", event.type, type(event.type))

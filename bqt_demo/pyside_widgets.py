@@ -3,7 +3,7 @@ from bqt_demo import pyside_widgets
 pyside_widgets.main()
 """
 
-#https://www.pythonguis.com/tutorials/pyside-widgets/
+# https://www.pythonguis.com/tutorials/pyside-widgets/
 
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import (

@@ -31,9 +31,8 @@ import sys
 
 
 class CustomInstall(install):
-    """
+    """ """
 
-    """
     def run(self):
         # Run the standard PyPi Copy
         install.run(self)
@@ -45,7 +44,7 @@ class CustomInstall(install):
         startup_file_path = None
         # Find the blender site-packages folder and generate the full path to bqt_startup.py
         for pkg in getsitepackages():
-            if 'site-packages' in pkg:
+            if "site-packages" in pkg:
                 startup_file_path = Path(pkg) / "bqt" / "dist" / "bqt_startup.py"
                 break
 
@@ -84,19 +83,15 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.7",
     ],
     # Requirements
     python_requires=">=3.7",
     packages=find_packages(),
     install_requires=["PySide2"],
-
     # Package Data
     include_package_data=True,
-    package_data={
-        'bqt': ["*.png", "*.qss", "dist/bqt_startup.py"]
-    },
-
+    package_data={"bqt": ["*.png", "*.qss", "dist/bqt_startup.py"]},
     # Install Wrapper
-    cmdclass={'install': CustomInstall}
+    cmdclass={"install": CustomInstall},
 )

@@ -178,8 +178,8 @@ def unregister():
     Returns: None
 
     """
-    if not os.getenv('BQT_DISABLE_WRAP', 0):
-        bpy.utils.unregister_class(QFocusOperator)
+    if not os.getenv('BQT_DISABLE_WRAP', 0) == "1":
+        bpy.utils.unregister_class(focus.QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
     if add_focus_handle in bpy.app.handlers.load_post:

@@ -16,13 +16,17 @@ QCheckBox::indicator {
     height: 15px;
 }
 QCheckBox::indicator:checked {
+    image: url(images:QCheckBox_checked.png);
 }
 QCheckBox::indicator:checked:hover {
+    image: url(images:QCheckBox_checked_hover.png);
 }
 QCheckBox::indicator:unchecked {
+    image: url(images:QCheckBox_unchecked.png);
 }
 QCheckBox::indicator:unchecked:hover {
     color: #f5f5f5;
+    image: url(images:QCheckBox_unchecked_hover.png);
 }
 
 
@@ -38,21 +42,101 @@ QComboBox:disabled {
 }
 QComboBox::down-arrow {
     background-color: #2c2c2c;
+    image: url(images:QComboBox_down_arrow.png);
 }
 QComboBox::down-arrow:on {
-    background-color: #7e848e;
+    background-color: #5680c2;
 }
 QComboBox::drop-down {
     background-color: #202020;
 }
 QComboBox::on {
-    background-color: #7e848e;
+    background-color: #5680c2;
     color: #f8f9f9;
 }
 QComboBox QAbstractItemView {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     selection-background-color: #5680c2;
+}
+
+QScrollBar{
+    margin: 0px;
+    padding: 0px;
+}
+
+QScrollBar:vertical {
+    border: 0px solid RED;
+    background-color: none;
+    width: 5px;
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar:horizontal {
+    border: 0px solid RED;
+    background-color: none;
+    height: 5px;
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #404040;
+    min-height: 1px;
+    border-radius: 4px;
+
+}
+QScrollBar::handle:horizontal {
+    background-color: #404040;
+    min-width: 1px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical {
+    background-color: RED;
+    height: 0px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    background-color: RED;
+    height: 0px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal {
+    background-color: RED;
+    width: 0px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    background-color: RED;
+    width: 0px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background-color: #202020;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background-color: #202020;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    background-color: RED;
+    height: 0px;
+    width: 0px;
+}
+
+QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    background-color: RED;
+    height: 0px;
+    width: 0px;
 }
 
 
@@ -153,13 +237,17 @@ QRadioButton::indicator {
     height: 14px;
 }
 QRadioButton::indicator:checked {
+    image: url(images:QRadioButton_checked.png);
 }
 QRadioButton::indicator:checked:hover {
+    image: url(images:QRadioButton_checked_hover.png);
 }
 QRadioButton::indicator:unchecked {
+    image: url(images:QRadioButton_unchecked.png);
 }
 QRadioButton::indicator:unchecked:hover {
     color: #f5f5f5;
+    image: url(images:QRadioButton_unchecked_hover.png);
 }
 
 
@@ -182,6 +270,7 @@ QSpinBox::down-button:hover {
 }
 QSpinBox::down-arrow:hover {
     height: 20px;
+    image: url(images:QSpinBox_down_arrow.png);
 }
 QSpinBox::hover {
     background: #808080;
@@ -199,6 +288,7 @@ QSpinBox::up-button:hover {
 }
 QSpinBox::up-arrow:hover {
     height: 20px;
+    image: url(images:QSpinBox_up_arrow.png);
 }
 
 

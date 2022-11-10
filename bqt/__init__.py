@@ -10,6 +10,9 @@ import sys
 import bpy
 import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
+from PySide2.QtCore import QDir
+
+from pathlib import Path
 from .blender_applications import BlenderApplication
 
 
@@ -25,6 +28,8 @@ def instantiate_application() -> BlenderApplication:
     QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
+    image_directory = str(Path(__file__).parent / "images")
+    QDir.addSearchPath('images', image_directory)
     app = QApplication.instance()
     if not app:
         app = load_os_module()

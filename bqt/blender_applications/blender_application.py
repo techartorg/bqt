@@ -21,7 +21,7 @@ class BlenderApplication(QApplication):
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
-        self._stylesheet_filepath = Path(__file__).parent / ".." / "blender_stylesheet.qss"
+        self._stylesheet_filepath = Path(__file__).parents[1] / "blender_stylesheet.qss"
         self._settings_key_geometry = "Geometry"
         self._settings_key_maximized = "IsMaximized"
         self._settings_key_full_screen = "IsFullScreen"
@@ -66,7 +66,7 @@ class BlenderApplication(QApplication):
         Returns QIcon: Application Icon
         """
 
-        icon_filepath = Path(__file__).parent / ".." / "blender_icon_16.png"
+        icon_filepath = Path(__file__).parents[1] / "blender_icon_16.png"
         icon = QIcon()
 
         if icon_filepath.exists():

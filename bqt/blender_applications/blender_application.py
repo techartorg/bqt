@@ -6,7 +6,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
-
+import os
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings
@@ -35,14 +35,17 @@ class BlenderApplication(QApplication):
 
         # Blender Window
         self._hwnd = self._get_application_hwnd()
-        self._blender_window = QWindow.fromWinId(self._hwnd)
-        self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-        self.blender_widget.setWindowTitle("Blender Qt")
 
-        # Runtime
-        self._set_window_geometry()
-        self.just_focused = False
-        self.focusObjectChanged.connect(self._on_focus_object_changed)
+        if os.getenv('BQT_DISABLE_WRAP') == "1":
+            self._blender_window = QWindow()
+            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+        else:
+            self._blender_window = QWindow.fromWinId(self._hwnd)
+            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+            self.blender_widget.setWindowTitle("Blender Qt")
+            self._set_window_geometry()
+            self.just_focused = False
+            self.focusObjectChanged.connect(self._on_focus_object_changed)
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:
@@ -122,6 +125,7 @@ class BlenderApplication(QApplication):
             # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
             import bpy
+
             bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
             return False
 

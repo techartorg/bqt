@@ -14,10 +14,6 @@ from PySide2.QtWidgets import QApplication
 from .blender_applications import BlenderApplication
 
 
-# GLOBALS #
-TICK = 1.0 / float(os.getenv("BQT_TICK_RATE", "30"))
-
-
 # bpy.ops.bqt.return_focus
 class QFocusOperator(bpy.types.Operator):
     bl_idname = "bqt.return_focus"
@@ -45,8 +41,6 @@ class QFocusOperator(bpy.types.Operator):
         """
         pass all events (e.g. keypress, mouse-move, ...) to detect_keyboard
         """
-        # if context.area:
-        #     context.area.tag_redraw()
         self.detect_keyboard(event)
         return {"PASS_THROUGH"}
 
@@ -71,7 +65,7 @@ class QFocusOperator(bpy.types.Operator):
                 ('_SHIFT', 0x10),
                 ('VK_LWIN', 0x5B),
                 ('VK_RWIN', 0x5C),
-             ]
+            ]
 
             for name, code in keycodes:
                 # if the first key pressed is one of the following,
@@ -97,7 +91,6 @@ def instantiate_application() -> BlenderApplication:
     app = QApplication.instance()
     if not app:
         app = load_os_module()
-        # bpy.app.timers.register(on_update, persistent=True)
     return app
 
 
@@ -111,23 +104,15 @@ def load_os_module() -> object:
     operating_system = sys.platform
     if operating_system == 'darwin':
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
+
         return DarwinBlenderApplication(sys.argv)
     if operating_system in ['linux', 'linux2']:
         # TODO: LINUX module
         pass
     elif operating_system == 'win32':
         from .blender_applications.win32_blender_application import Win32BlenderApplication
+
         return Win32BlenderApplication(sys.argv)
-
-
-# def on_update() -> float:
-#     """
-#     Checks per Blender timer tick to verify if application should close
-#
-#     Returns: Tick Rate
-#
-#     """
-#     return TICK
 
 
 @bpy.app.handlers.persistent
@@ -137,6 +122,8 @@ def add_focus_handle(dummy):
 
 
 parent_window = None
+
+
 @bpy.app.handlers.persistent
 def create_global_app(dummy):
     """
@@ -163,11 +150,13 @@ def register():
     if os.getenv('BQT_DISABLE_STARTUP'):
         return
 
-    bpy.utils.register_class(QFocusOperator)
+    # only start focus operator if blender is wrapped
+    if not os.getenv('BQT_DISABLE_WRAP', 0):
+        bpy.utils.register_class(QFocusOperator)
 
-    # (re-)add focus handle after EVERY scene is loaded
-    if add_focus_handle not in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.append(add_focus_handle)
+        # (re-)add focus handle after EVERY scene is loaded
+        if add_focus_handle not in bpy.app.handlers.load_post:
+            bpy.app.handlers.load_post.append(add_focus_handle)
 
     # append add_focus_handle before create_global_app,
     # else it doesn't run on blender startup
@@ -189,7 +178,8 @@ def unregister():
     Returns: None
 
     """
-    bpy.utils.unregister_class(QFocusOperator)
+    if not os.getenv('BQT_DISABLE_WRAP', 0) == "1":
+        bpy.utils.unregister_class(focus.QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
     if add_focus_handle in bpy.app.handlers.load_post:

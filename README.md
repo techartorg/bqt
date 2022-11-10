@@ -29,3 +29,7 @@ python setup.py install
 ## Contribute
 If you would like to contribute to bqt, please create a pull request and we will review
 the changes
+
+## env vars
+BQT_DISABLE_STARTUP if set, completely disable bqt
+BQT_DISABLE_WRAP if set to 1, disable wrapping blender in a QWindow

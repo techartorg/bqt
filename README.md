@@ -23,7 +23,7 @@ python setup.py install
 ```
 
 
-# Developers 
+# Developers
 
 ### Environment variables
 - BQT_DISABLE_STARTUP if set, completely disable bqt

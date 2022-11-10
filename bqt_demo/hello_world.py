@@ -8,6 +8,7 @@ hello_world.demo()
 """
 
 import PySide2
+
 Qt = PySide2.QtCore.Qt
 QApplication = PySide2.QtWidgets.QApplication
 QDialog = PySide2.QtWidgets.QDialog
@@ -24,9 +25,9 @@ class HelloWorldDialog(QDialog):
         super().__init__(parent, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
 
         self.resize(200, 50)
-        self.setWindowTitle('Qt for Python in Blender')
+        self.setWindowTitle("Qt for Python in Blender")
 
-        lbl_hw = QLabel('Hello World!')
+        lbl_hw = QLabel("Hello World!")
 
         main_layout = QHBoxLayout()
         main_layout.addWidget(lbl_hw)
@@ -39,5 +40,5 @@ def demo():
     dlg.show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     demo()

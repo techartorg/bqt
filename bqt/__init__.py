@@ -39,14 +39,14 @@ def load_os_module() -> object:
 
     """
     operating_system = sys.platform
-    if operating_system == 'darwin':
+    if operating_system == "darwin":
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
 
         return DarwinBlenderApplication(sys.argv)
-    if operating_system in ['linux', 'linux2']:
+    if operating_system in ["linux", "linux2"]:
         # TODO: LINUX module
         pass
-    elif operating_system == 'win32':
+    elif operating_system == "win32":
         from .blender_applications.win32_blender_application import Win32BlenderApplication
 
         return Win32BlenderApplication(sys.argv)
@@ -79,11 +79,11 @@ def register():
     setup bqt, wrap blender in qt, register operators
     """
 
-    if os.getenv('BQT_DISABLE_STARTUP'):
+    if os.getenv("BQT_DISABLE_STARTUP"):
         return
 
     # only start focus operator if blender is wrapped
-    if not os.getenv('BQT_DISABLE_WRAP', 0) == "1":
+    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
         bpy.utils.register_class(focus.QFocusOperator)
 
     # append add_focus_handle before create_global_app,
@@ -106,7 +106,7 @@ def unregister():
     Returns: None
 
     """
-    if not os.getenv('BQT_DISABLE_WRAP', 0) == "1":
+    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
         bpy.utils.unregister_class(focus.QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)

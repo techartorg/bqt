@@ -7,4 +7,3 @@ def register():
 
 def unregister():
     bqt.unregister()
-

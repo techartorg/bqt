@@ -6,10 +6,10 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import sys
 from .blender_application import BlenderApplication
 
-if sys.platform == 'darwin':
+if sys.platform == "darwin":
     from .darwin_blender_application import DarwinBlenderApplication
-if sys.platform in ['linux', 'linux2']:
+if sys.platform in ["linux", "linux2"]:
     # TODO: LINUX module
     pass
-elif sys.platform == 'win32':
+elif sys.platform == "win32":
     from .win32_blender_application import Win32BlenderApplication

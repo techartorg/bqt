@@ -23,12 +23,12 @@ class DarwinBlenderApplication(BlenderApplication):
     """
     Darwin (MACOS) Implementation of BlenderApplication
     """
+
     def __init__(self, *args, **kwargs):
         # OSX Specific - Needs to initialize first
         self._ns_window = self.__get_application_window() or None
 
         super().__init__(*args, **kwargs)
-
 
     def _get_application_hwnd(self) -> int:
         """
@@ -44,7 +44,6 @@ class DarwinBlenderApplication(BlenderApplication):
 
         return objc.pyobjc_id(self._ns_window.contentView())
 
-
     @staticmethod
     def _get_application_icon() -> QIcon:
         """
@@ -59,7 +58,6 @@ class DarwinBlenderApplication(BlenderApplication):
         icon_path = contents_path / "Resources" / "blender icon.icns"
         return QIcon(str(icon_path))
 
-
     @staticmethod
     def _get_application_window() -> AppKit.NSApp.mainWindow:
         """
@@ -72,7 +70,6 @@ class DarwinBlenderApplication(BlenderApplication):
         ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)
         return ns_window
 
-
     def _on_focus_object_changed(self, focus_object: QObject):
         """
         Args:
@@ -82,4 +79,4 @@ class DarwinBlenderApplication(BlenderApplication):
         if focus_object is self.blender_widget:
             self._ns_window.makeKey()
             with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
-                bpy.ops.bqt.return_focus('INVOKE_DEFAULT')
+                bpy.ops.bqt.return_focus("INVOKE_DEFAULT")

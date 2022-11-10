@@ -10,9 +10,6 @@ import ctypes
 import bpy
 
 
-# todo add focus operator support for other OS, this is windows only atm
-
-
 class QFocusOperator(bpy.types.Operator):
     bl_idname = "bqt.return_focus"  # access from bpy.ops.bqt.return_focus
     bl_label = "Fix bug related to bqt focus"
@@ -30,10 +27,11 @@ class QFocusOperator(bpy.types.Operator):
         """
         simulate key release to prevent blender from ignoring mouse input, after refocusing blender
         """
-        self._detect_keyboard(event)
+        self._detect_keyboard()
         return {"FINISHED"}
 
-    def _detect_keyboard(self, event):
+    @staticmethod
+    def _detect_keyboard():
         """
         force a release of 'stuck' keys
         """

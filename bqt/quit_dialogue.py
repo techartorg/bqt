@@ -38,12 +38,16 @@ class BlenderClosingDialog(QMessageBox):
         self.setIcon(QMessageBox.Question)
 
     def execute(self):
+        if bpy.data.is_dirty:
+            shutdown_blender()
+            return
+
         choice = self.exec_()
         if choice == QMessageBox.Yes:
             bpy.utils.register_class(WINDOW_OT_SaveFileFromQt)
             bpy.app.handlers.save_post.append(shutdown_blender)
             bpy.ops.wm.save_from_qt()
-        if choice == QMessageBox.No:
+        elif choice == QMessageBox.No:
             shutdown_blender()
         else:  # user clicked cancel
             pass

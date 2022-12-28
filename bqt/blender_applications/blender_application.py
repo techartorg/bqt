@@ -68,7 +68,7 @@ class BlenderApplication(QApplication):
         Returns QIcon: Application Icon
         """
 
-        icon_filepath = Path(__file__).parents[1] / "blender_icon_16.png"
+        icon_filepath = Path(__file__).parents[1] / "images" / "blender_icon_16.png"
         icon = QIcon()
 
         if icon_filepath.exists():

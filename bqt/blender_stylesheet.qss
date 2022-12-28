@@ -212,6 +212,10 @@ QMessageBox {
     background-color: rgb(24, 24, 24);
 }
 
+QMessageBox QPushButton {
+    min-width: 105px;
+}
+
 QPushButton {
     background-color: #585858;
     border: 1px solid #404040;

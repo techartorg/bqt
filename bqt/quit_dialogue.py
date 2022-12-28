@@ -26,11 +26,10 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
 
 
 # todo
-#  darker background
 #  different icon to match the theme
-#  different button UI look
 #  when clicking the icon, the dialogue resets to center screen position
 #  support dragging the dialogue around
+#  add qshortcuts https://stackoverflow.com/questions/19845774/is-it-possible-to-use-an-underlined-letter-as-keyboard-shortcut-in-qt
 
 class BlenderClosingDialog(QMessageBox):
     def __init__(self, parent):

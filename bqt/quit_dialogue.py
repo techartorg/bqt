@@ -22,12 +22,11 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
         # EXEC_AREA - execute the operator in a certain context
         return {'FINISHED'}
 
-
 # todo
-#  different icon to match the theme
 #  when clicking the icon, the dialogue resets to center screen position
 #  support dragging the dialogue around
 #  add qshortcuts https://stackoverflow.com/questions/19845774/is-it-possible-to-use-an-underlined-letter-as-keyboard-shortcut-in-qt
+
 
 class BlenderClosingDialog(QMessageBox):
     def __init__(self, parent):
@@ -43,11 +42,10 @@ class BlenderClosingDialog(QMessageBox):
 
         question_icon = bqt.ui.get_question_pixmap()
 
-        # self.setWindowTitle("Save changes before closing?")
-        self.setText("Save changes before closing?\n" + filename)
+        self.setText("Save changes before closing?\n\n" + filename)
         self.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         self.setDefaultButton(QMessageBox.Save)
-        self.setIconPixmap(question_icon)  # todo use blender QUESTION icon
+        self.setIconPixmap(question_icon)
 
     def execute(self):
         if not bpy.data.is_dirty:

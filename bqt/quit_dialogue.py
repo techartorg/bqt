@@ -48,7 +48,7 @@ class BlenderClosingDialog(QMessageBox):
         self.setText("Save changes before closing?\n" + filename)
         self.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         self.setDefaultButton(QMessageBox.Save)
-        self.setIcon(QMessageBox.Question)
+        # self.setIcon(QMessageBox.Question)  # todo use blender QUESTION icon
 
     def execute(self):
         if not bpy.data.is_dirty:

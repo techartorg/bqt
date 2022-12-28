@@ -208,6 +208,9 @@ QProgressBar::chunk {
     border: 1px solid #373737;
 }
 
+QMessageBox {
+    background-color: rgb(24, 24, 24);
+}
 
 QPushButton {
     background-color: #585858;

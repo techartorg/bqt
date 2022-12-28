@@ -5,8 +5,6 @@ import os
 
 
 def shutdown_blender(*args):
-    # # this triggers the default blender close event, showing the save dialog if needed
-    # bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
     bpy.ops.wm.quit_blender()
 
 

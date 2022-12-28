@@ -28,6 +28,7 @@ python setup.py install
 ### Environment variables
 - BQT_DISABLE_STARTUP if set, completely disable bqt
 - BQT_DISABLE_WRAP if set to 1, disable wrapping blender in a QWindow
+- BQT_DISABLE_CLOSE_DIALOGUE if set to 1, use the standard blender close dialogue
 
 ### Sample code
 [bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender

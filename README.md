@@ -26,7 +26,7 @@ python setup.py install
 # Developers
 
 ### Environment variables
-- BQT_DISABLE_STARTUP if set, completely disable bqt
+- BQT_DISABLE_STARTUP if set to 1, completely disable bqt
 - BQT_DISABLE_WRAP if set to 1, disable wrapping blender in a QWindow
 - BQT_DISABLE_CLOSE_DIALOGUE if set to 1, use the standard blender close dialogue
 

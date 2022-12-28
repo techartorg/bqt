@@ -85,7 +85,7 @@ def register():
     setup bqt, wrap blender in qt, register operators
     """
 
-    if os.getenv("BQT_DISABLE_STARTUP"):
+    if os.getenv("BQT_DISABLE_STARTUP", 0) == "1":
         return
 
     # only start focus operator if blender is wrapped

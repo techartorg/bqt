@@ -2,7 +2,7 @@ import bpy
 from PySide2.QtWidgets import QMessageBox
 from PySide2.QtCore import Qt
 import os
-
+import bqt.ui
 
 def shutdown_blender(*args):
     bpy.ops.wm.quit_blender()
@@ -41,11 +41,13 @@ class BlenderClosingDialog(QMessageBox):
             filepath = 'untitled.blend'
         filename = os.path.split(filepath)[1]
 
+        question_icon = bqt.ui.get_question_pixmap()
+
         # self.setWindowTitle("Save changes before closing?")
         self.setText("Save changes before closing?\n" + filename)
         self.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         self.setDefaultButton(QMessageBox.Save)
-        # self.setIcon(QMessageBox.Question)  # todo use blender QUESTION icon
+        self.setIconPixmap(question_icon)  # todo use blender QUESTION icon
 
     def execute(self):
         if not bpy.data.is_dirty:

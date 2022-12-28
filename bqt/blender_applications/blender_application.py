@@ -124,12 +124,7 @@ class BlenderApplication(QApplication):
             # ignore the event, and ask user if they want to close blender if unsaved changes.
             # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
-            import bpy
 
-            # this triggers the default blender close event, showing the save dialog if needed
-            bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
-
-            # main_window = QApplication.instance().blender_widget
             closing_dialog = BlenderClosingDialog(self.blender_widget)
             closing_dialog.execute()
 

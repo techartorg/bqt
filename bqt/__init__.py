@@ -17,6 +17,7 @@ from .blender_applications import BlenderApplication
 
 
 # CORE FUNCTIONS #
+
 def instantiate_application() -> BlenderApplication:
     """
     Create an instance of Blender Application
@@ -124,3 +125,5 @@ def on_exit():
     if app:
         app.store_window_geometry()
         app.quit()
+
+

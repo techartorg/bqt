@@ -9,7 +9,7 @@ import os
 import sys
 import bpy
 import PySide2.QtCore as QtCore
-from PySide2.QtWidgets import QApplication, QMessageBox
+from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import QDir
 
 from pathlib import Path
@@ -17,6 +17,7 @@ from .blender_applications import BlenderApplication
 
 
 # CORE FUNCTIONS #
+
 def instantiate_application() -> BlenderApplication:
     """
     Create an instance of Blender Application
@@ -58,20 +59,6 @@ def load_os_module() -> object:
 
 
 parent_window = None
-def on_update() -> float:
-    """
-    Checks per Blender timer tick to verify if application should close
-    Returns: Tick Rate
-    """
-    app = QApplication.instance()
-    if app.should_close:
-        app.should_close = False
-        # bpy.ops.wm.quit_blender({'window': bpy.context.window_manager.windows[0]}, 'INVOKE_DEFAULT')
-        main_window = QApplication.instance().blender_widget
-        closing_dialog = BlenderClosingDialog(main_window)
-        closing_dialog.execute()
-
-    return TICK
 
 
 @bpy.app.handlers.persistent
@@ -139,45 +126,4 @@ def on_exit():
         app.store_window_geometry()
         app.quit()
 
-
-def shutdown_blender(*args):
-    bpy.ops.wm.quit_blender()
-
-
-class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
-    """Saves current Blender file and all modified images"""
-    bl_idname = "wm.save_from_qt"
-    bl_label = "Save_from_Qt"
-
-    def execute(self, context):
-        if context.blend_data.is_saved:
-            bpy.ops.wm.save_mainfile('EXEC_AREA', check_existing=False)
-        else:
-            bpy.ops.wm.save_mainfile('INVOKE_AREA', check_existing=False)
-
-        return {'FINISHED'}
-
-
-class BlenderClosingDialog(QMessageBox):
-    def __init__(self, parent):
-        super().__init__(parent) #, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowStaysOnTopHint)
-        self.setWindowTitle("Save changes before closing?")
-        filepath = bpy.data.filepath
-        if not filepath:
-            filepath = 'untitled.blend'
-        filename = os.path.split(filepath)[1]
-        self.setText(filename)
-        self.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
-        self.setIcon(QMessageBox.Question)
-
-    def execute(self):
-        choice = self.exec_()
-        if choice == QMessageBox.Yes:
-            bpy.utils.register_class(WINDOW_OT_SaveFileFromQt)
-            bpy.app.handlers.save_post.append(shutdown_blender)
-            bpy.ops.wm.save_from_qt()
-        if choice == QMessageBox.No:
-            shutdown_blender()
-        else:
-            pass
 

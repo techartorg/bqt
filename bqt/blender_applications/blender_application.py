@@ -10,6 +10,7 @@ import os
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings
+from bqt.quit_dialogue import BlenderClosingDialog
 
 
 class BlenderApplication(QApplication):
@@ -125,7 +126,13 @@ class BlenderApplication(QApplication):
             event.ignore()
             import bpy
 
+            # this triggers the default blender close event, showing the save dialog if needed
             bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
+
+            # main_window = QApplication.instance().blender_widget
+            closing_dialog = BlenderClosingDialog(self.blender_widget)
+            closing_dialog.execute()
+
             return False
 
         return super().notify(receiver, event)

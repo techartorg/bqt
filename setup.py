@@ -45,7 +45,7 @@ class CustomInstall(install):
         # Find the blender site-packages folder and generate the full path to bqt_startup.py
         for pkg in getsitepackages():
             if "site-packages" in pkg:
-                startup_file_path = Path(pkg) / "bqt" / "dist" / "bqt_startup.py"
+                startup_file_path = Path(pkg) / "dist" / "bqt_startup.py"
                 break
 
         if not os.path.isfile(startup_file_path):

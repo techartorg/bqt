@@ -8,17 +8,19 @@ import atexit
 import os
 import sys
 import bpy
-import PySide2.QtCore as QtCore
-from PySide2.QtWidgets import QApplication
-from PySide2.QtCore import QDir
+import PySide6.QtCore as QtCore
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QDir
 
 from pathlib import Path
 from .blender_applications import BlenderApplication
 
+VERSION = "0.2.1"
 
 # CORE FUNCTIONS #
 
-def instantiate_application() -> BlenderApplication:
+
+def instantiate_application() -> BlenderApplication | QApplication:
     """
     Create an instance of Blender Application
 
@@ -30,11 +32,8 @@ def instantiate_application() -> BlenderApplication:
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
     image_directory = str(Path(__file__).parent / "images")
-    QDir.addSearchPath('images', image_directory)
-    app = QApplication.instance()
-    if not app:
-        app = load_os_module()
-    return app
+    QDir.addSearchPath("images", image_directory)
+    return QApplication.instance() or load_os_module()
 
 
 def load_os_module() -> object:
@@ -46,14 +45,18 @@ def load_os_module() -> object:
     """
     operating_system = sys.platform
     if operating_system == "darwin":
-        from .blender_applications.darwin_blender_application import DarwinBlenderApplication
+        from .blender_applications.darwin_blender_application import (
+            DarwinBlenderApplication,
+        )
 
         return DarwinBlenderApplication(sys.argv)
     if operating_system in ["linux", "linux2"]:
         # TODO: LINUX module
         pass
     elif operating_system == "win32":
-        from .blender_applications.win32_blender_application import Win32BlenderApplication
+        from .blender_applications.win32_blender_application import (
+            Win32BlenderApplication,
+        )
 
         return Win32BlenderApplication(sys.argv)
 
@@ -89,7 +92,7 @@ def register():
         return
 
     # only start focus operator if blender is wrapped
-    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
+    if os.getenv("BQT_DISABLE_WRAP", 0) != "1":
         bpy.utils.register_class(focus.QFocusOperator)
 
     # append add_focus_handle before create_global_app,
@@ -112,7 +115,7 @@ def unregister():
     Returns: None
 
     """
-    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
+    if os.getenv("BQT_DISABLE_WRAP", 0) != "1":
         bpy.utils.unregister_class(focus.QFocusOperator)
     if create_global_app in bpy.app.handlers.load_post:
         bpy.app.handlers.load_post.remove(create_global_app)
@@ -121,9 +124,6 @@ def unregister():
 
 def on_exit():
     """Close BlenderApplication instance on exit"""
-    app = QApplication.instance()
-    if app:
+    if app := QApplication.instance():
         app.store_window_geometry()
         app.quit()
-
-

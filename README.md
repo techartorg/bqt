@@ -1,5 +1,5 @@
 # bqt
-Add QT support to Blender, letting you create custom UI for your addons with PySide2 QtWidgets.
+Add QT support to Blender, letting you create custom UI for your addons with PySide6 QtWidgets.
 
 ## Requirements
 Blender `2.83`or higher.

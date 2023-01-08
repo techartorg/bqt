@@ -7,9 +7,9 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 import os
-from PySide2.QtWidgets import QApplication, QWidget
-from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
-from PySide2.QtCore import QEvent, QObject, QRect, QSettings
+from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
+from PySide6.QtCore import QEvent, QObject, QRect, QSettings
 from bqt.quit_dialogue import BlenderClosingDialog
 import bpy
 
@@ -120,7 +120,10 @@ class BlenderApplication(QApplication):
         Returns: bool
         """
 
-        if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
+        if isinstance(event, QCloseEvent) and receiver in (
+            self.blender_widget,
+            self._blender_window,
+        ):
             # catch the close event when clicking close on the qt window,
             # ignore the event, and ask user if they want to close blender if unsaved changes.
             # if this is successful, blender will trigger bqt.on_exit()
@@ -128,7 +131,10 @@ class BlenderApplication(QApplication):
 
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed
-                bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
+                bpy.ops.wm.quit_blender(
+                    {"window": bpy.context.window_manager.windows[0]},
+                    "INVOKE_DEFAULT",
+                )
             else:
                 closing_dialog = BlenderClosingDialog(self.blender_widget)
                 closing_dialog.execute()

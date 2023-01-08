@@ -5,8 +5,15 @@ timer.main()
 # sample from https://pythonpyqt.com/qtimer/
 
 import sys
-from PySide2.QtWidgets import QWidget, QPushButton, QApplication, QListWidget, QGridLayout, QLabel
-from PySide2.QtCore import Qt, QTimer, QDateTime
+from PySide6.QtWidgets import (
+    QWidget,
+    QPushButton,
+    QApplication,
+    QListWidget,
+    QGridLayout,
+    QLabel,
+)
+from PySide6.QtCore import Qt, QTimer, QDateTime
 
 
 class WinForm(QWidget):

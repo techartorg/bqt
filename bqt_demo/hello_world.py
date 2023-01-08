@@ -7,13 +7,13 @@ from bqt_demo import hello_world
 hello_world.demo()
 """
 
-import PySide2
+import PySide6
 
-Qt = PySide2.QtCore.Qt
-QApplication = PySide2.QtWidgets.QApplication
-QDialog = PySide2.QtWidgets.QDialog
-QHBoxLayout = PySide2.QtWidgets.QHBoxLayout
-QLabel = PySide2.QtWidgets.QLabel
+Qt = PySide6.QtCore.Qt
+QApplication = PySide6.QtWidgets.QApplication
+QDialog = PySide6.QtWidgets.QDialog
+QHBoxLayout = PySide6.QtWidgets.QHBoxLayout
+QLabel = PySide6.QtWidgets.QLabel
 
 
 class HelloWorldDialog(QDialog):
@@ -22,7 +22,10 @@ class HelloWorldDialog(QDialog):
     """
 
     def __init__(self, parent):
-        super().__init__(parent, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
+        super().__init__(
+            parent,
+            Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint,
+        )
 
         self.resize(200, 50)
         self.setWindowTitle("Qt for Python in Blender")

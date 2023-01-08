@@ -5,8 +5,8 @@ pyside_widgets.main()
 
 # https://www.pythonguis.com/tutorials/pyside-widgets/
 
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import (
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
     QComboBox,

@@ -40,6 +40,10 @@ if not STARTUP.is_file():
     print(f"bqt: Installed to {STARTUP.as_posix()}")
     ShowMessageBox("Please restart blender", "bqt startup file installed")
 
+vendor = HERE / "vendor"
+
+if vendor not in sys.path:
+    sys.path.append(vendor.as_posix())
 
 from bqt import focus
 import atexit

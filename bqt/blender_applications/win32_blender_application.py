@@ -115,3 +115,6 @@ class Win32BlenderApplication(BlenderApplication):
             ctypes.windll.user32.SetFocus(self._hwnd)
             with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
                 bpy.ops.bqt.return_focus("INVOKE_DEFAULT")
+
+
+__all__ = ["Win32BlenderApplication"]

@@ -32,8 +32,7 @@ class Window(QtWidgets.QWidget):
 
     def show(self):
         super(Window, self).show()
-        tick = int(1000 / 30)  # tick 1000 / frames per second
-        self.timer.start(tick)
+        self.timer.start(1000 // 30)  # tick 1000 / frames per second
 
     def on_update(self):
         """set slider to current frame from blender"""

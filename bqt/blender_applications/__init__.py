@@ -13,3 +13,9 @@ if sys.platform in ["linux", "linux2"]:
     pass
 elif sys.platform == "win32":
     from .win32_blender_application import Win32BlenderApplication
+
+__all__ = [
+    "BlenderApplication",
+    "DarwinBlenderApplication",
+    "Win32BlenderApplication",
+]

@@ -4,12 +4,10 @@ timer.main()
 """
 # sample from https://pythonpyqt.com/qtimer/
 
-import sys
 from PySide6.QtWidgets import (
     QWidget,
     QPushButton,
     QApplication,
-    QListWidget,
     QGridLayout,
     QLabel,
 )
@@ -22,7 +20,6 @@ class WinForm(QWidget):
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
         self.setWindowTitle("QTimer example")
 
-        # self.listFile=QListWidget()
         self.label = QLabel("Label")
         self.startBtn = QPushButton("Start")
         self.endBtn = QPushButton("Stop")
@@ -59,11 +56,9 @@ class WinForm(QWidget):
 
 
 def main():
-    # app=QApplication(sys.argv)
     main_window = QApplication.instance().blender_widget
     form = WinForm(main_window)
     form.show()
-    # sys.exit(app.exec_())
     return form
 
 

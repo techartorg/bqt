@@ -1,5 +1,5 @@
 from pathlib import Path
-from PySide6.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
+from PySide6.QtGui import QImage, QPixmap
 import PySide6.QtCore as QtCore
 
 
@@ -12,3 +12,6 @@ def get_question_pixmap():
             pixmap = pixmap.fromImage(image)
             pixmap = pixmap.scaledToWidth(64, QtCore.Qt.SmoothTransformation)
     return pixmap
+
+
+__all__ = ["get_question_pixmap"]

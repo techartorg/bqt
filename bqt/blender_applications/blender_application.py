@@ -156,3 +156,6 @@ class BlenderApplication(QApplication):
         settings.setValue(self._settings_key_maximized, self.blender_widget.isMaximized())
         settings.setValue(self._settings_key_full_screen, self.blender_widget.isFullScreen())
         settings.endGroup()
+
+
+__all__ = ["BlenderApplication"]

@@ -133,3 +133,7 @@ dmypy.json
 fake_bpy_modules*/
 run_blender.ps1
 test.py
+
+# Ignore vendored deps
+vendor/*
+!.keep

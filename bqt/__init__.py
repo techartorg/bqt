@@ -3,16 +3,51 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+import sys
+from pathlib import Path
+import bpy
+import shutil
+
+bl_info = {
+    "name": "bqt",
+    "author": "tech-artists.org",
+    "description": "PySide6 application loop utility",
+    "blender": (3, 4, 0),
+    "version": (2, 4, 1),
+    "location": "",
+    "warning": "",
+    "wiki_url": "",
+    "category": "Development",
+}
+
+
+def ShowMessageBox(message="", title="Message Box", icon="INFO"):
+    def draw(self, context):
+        self.layout.label(text=message)
+
+    bpy.context.window_manager.popup_menu(draw, title=title, icon=icon)
+
+
+# - CHECK STARTUP
+HERE = Path(__file__).parent
+USER_PATH = Path(bpy.utils.resource_path("USER"))
+STARTUP = USER_PATH / "scripts" / "startup" / "bqt_startup.py"
+
+
+if not STARTUP.is_file():
+    print("bqt: Startup file not found, installing...")
+    shutil.copy(HERE / "data" / "bqt_startup.py", STARTUP)
+    print(f"bqt: Installed to {STARTUP.as_posix()}")
+    ShowMessageBox("Please restart blender", "bqt startup file installed")
+
+
 from bqt import focus
 import atexit
 import os
-import sys
-import bpy
 import PySide6.QtCore as QtCore
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import QDir
 
-from pathlib import Path
 from .blender_applications import BlenderApplication
 
 VERSION = "0.2.1"

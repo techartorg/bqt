@@ -37,8 +37,9 @@ class BlenderApplication(QApplication):
 
         # Blender Window
         self._hwnd = self._get_application_hwnd()
+        failed_to_get_handle = self._hwnd is None
 
-        if os.getenv("BQT_DISABLE_WRAP") == "1":
+        if os.getenv("BQT_DISABLE_WRAP") == "1" or failed_to_get_handle:
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:

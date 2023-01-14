@@ -83,7 +83,9 @@ def get_process_hwnds():
 
 def get_first_blender_window():
     process_windows = get_process_hwnds()
-    return process_windows[0].hwnd
+    if process_windows:
+        return process_windows[0].hwnd
+    return None
 
 
 class Win32BlenderApplication(BlenderApplication):
@@ -95,7 +97,7 @@ class Win32BlenderApplication(BlenderApplication):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def _get_application_hwnd() -> int:
+    def _get_application_hwnd() -> int or None:
         """
         This finds the blender application window and collects the
         handler window ID

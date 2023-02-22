@@ -30,6 +30,12 @@ from subprocess import Popen
 import sys
 
 
+# read the contents of your README file
+from pathlib import Path
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+
+
 class CustomInstall(install):
     """ """
 
@@ -74,6 +80,8 @@ setup(
     name="bqt",
     version="0.2.0",
     description="Files to help bootstrap PySide2 with an event loop within Blender.",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     keywords=["Technical", "Art", "TechArt", "TechArtOrg", "Blender", "Qt", "PySide"],
     license="Mozilla Public License 2.0 (MPL 2.0)",
     url="https://github.com/techartorg/bqt",

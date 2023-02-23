@@ -3,7 +3,8 @@
 
 
 [![PyPI version](https://img.shields.io/pypi/v/bqt)](https://pypi.org/project/bqt/)
-[![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github%20tag)](https://github.com/techartorg/bqt)
+[![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github)](https://github.com/techartorg/bqt) ⚠️ PyPi version is currently outdated. Install from this repo for latest.
+
 
 Add QT support to Blender, letting you create custom UI for your addons with PySide2 QtWidgets.
 

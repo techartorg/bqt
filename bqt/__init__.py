@@ -85,6 +85,12 @@ def register():
     setup bqt, wrap blender in qt, register operators
     """
 
+    # hacky way to check if we already are waiting on bqt setup, or bqt is already setup
+    if QApplication.instance() or create_global_app in bpy.app.handlers.load_post:
+        import logging
+        logging.warning("bqt: QApplication already exists, skipping bqt registration")
+        return
+
     if os.getenv("BQT_DISABLE_STARTUP", 0) == "1":
         return
 

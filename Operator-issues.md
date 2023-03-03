@@ -1,4 +1,4 @@
-##Problem
+## Problem
 
 The exact same code might behave different when executed from the script editor compared to when executed after pressing a QT button.
 

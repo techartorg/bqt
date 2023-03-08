@@ -11,6 +11,7 @@ import bpy
 import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import QDir
+import logging
 
 from pathlib import Path
 from .blender_applications import BlenderApplication
@@ -87,7 +88,6 @@ def register():
 
     # hacky way to check if we already are waiting on bqt setup, or bqt is already setup
     if QApplication.instance() or create_global_app in bpy.app.handlers.load_post:
-        import logging
         logging.warning("bqt: QApplication already exists, skipping bqt registration")
         return
 
@@ -105,8 +105,14 @@ def register():
 
     # use load_post since blender doesn't like data changed before scene is loaded,
     # wrap blender after first scene is loaded, the operator removes itself on first run
-    if create_global_app not in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.append(create_global_app)
+    finished_startup = hasattr(bpy.context, "scene")
+    if finished_startup:
+        create_global_app(None)
+    else:
+        if create_global_app not in bpy.app.handlers.load_post:
+            bpy.app.handlers.load_post.append(create_global_app)
+        else:
+            logging.warning("bqt: create_global_app already in bpy.app.handlers.load_post")
 
     atexit.register(on_exit)
 

@@ -10,12 +10,19 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 
 ## Requirements
 Blender `2.83`or higher.
-Windows or Mac
+Windows (stable) or Mac (experimental)
 
 
 ## Installation  
 
+### install as addon
+1. Download the latest release. You can download the zip from the repo.
+2. Extract the zip and copy the `bqt` folder to your blender addons folder.
+3. Enable the addon by going to `Edit > Preferences > Add-ons` and search for `qt`
+
 ### PIP install
+⚠ PIP install is currently outdated, do not use until further notice.
+
 The installation of bqt with automatic setup for Blender requires the usage of the integrated python
 interpreter found within `../Blender Foundation/<version>/Python/bin`
 ```commandline
@@ -39,7 +46,3 @@ python setup.py install
 
 ### Sample code
 [bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
-
-### Supported Platforms  
-bqt is developed on Windows, but also supports Darwin (MacOS).
-If you are a dev, add a PR for another OS.

@@ -17,6 +17,21 @@ from pathlib import Path
 from .blender_applications import BlenderApplication
 
 
+bl_info = {
+        "name": "PySide2 Qt wrapper (bqt)",
+        "description": "Enable PySide2 QtWidgets in Blender",
+        "author": "tech-artists.org",
+        "version": (1, 0),
+        "blender": (2, 80, 0),
+        # "location": "",
+        # "warning": "", # used for warning icon and text in add-ons panel
+        # "wiki_url": "http://my.wiki.url",
+        # "tracker_url": "http://my.bugtracker.url",
+        "support": "COMMUNITY",
+        "category": "UI"
+        }
+
+
 # CORE FUNCTIONS #
 
 def instantiate_application() -> BlenderApplication:
@@ -88,6 +103,7 @@ def register():
         return
 
     if os.getenv("BQT_DISABLE_STARTUP", 0) == "1":
+        logging.warning("bqt: BQT_DISABLE_STARTUP is set, skipping bqt registration")
         return
 
     # only start focus operator if blender is wrapped
@@ -108,6 +124,10 @@ def unregister():
     Returns: None
 
     """
+    # todo, as long as blender is wrapped in qt, unregistering operator & callback will cause issues,
+    #  for now we just return since unregister should not be called partially
+    return
+
     if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
         bpy.utils.unregister_class(focus.QFocusOperator)
     atexit.unregister(on_exit)

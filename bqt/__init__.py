@@ -3,7 +3,8 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-from bqt import focus
+import bqt
+import bqt.focus
 import atexit
 import os
 import sys
@@ -12,9 +13,7 @@ import PySide2.QtCore as QtCore
 from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import QDir
 import logging
-
 from pathlib import Path
-from .blender_applications import BlenderApplication
 
 
 bl_info = {
@@ -34,7 +33,7 @@ bl_info = {
 
 # CORE FUNCTIONS #
 
-def instantiate_application() -> BlenderApplication:
+def instantiate_application() -> "bqt.blender_applications.BlenderApplication":
     """
     Create an instance of Blender Application
 
@@ -109,7 +108,7 @@ def register():
     # only start focus operator if blender is wrapped
     if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
         # todo check if operator is already registered
-        bpy.utils.register_class(focus.QFocusOperator)
+        bpy.utils.register_class(bqt.focus.QFocusOperator)
         # append add_focus_handle before create_global_app, else it doesn't run on blender startup
 
     create_global_app()
@@ -129,7 +128,7 @@ def unregister():
     return
 
     if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
-        bpy.utils.unregister_class(focus.QFocusOperator)
+        bpy.utils.unregister_class(bqt.focus.QFocusOperator)
     atexit.unregister(on_exit)
 
 

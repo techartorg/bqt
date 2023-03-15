@@ -84,7 +84,9 @@ def get_process_hwnds():
 def get_first_blender_window():
     process_windows = get_process_hwnds()
     if process_windows:
-        return process_windows[0].hwnd
+        # sometimes there are 2 process_windows,the console, and the blender window
+        blender_win = [win for win in process_windows if "Blender" in win.title][0]
+        return blender_win.hwnd
     return None
 
 

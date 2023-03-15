@@ -63,7 +63,7 @@ parent_window = None
 
 
 @bpy.app.handlers.persistent
-def create_global_app(dummy):
+def create_global_app():
     """
     runs after blender finished startup
     """
@@ -76,10 +76,6 @@ def create_global_app(dummy):
     global parent_window
     parent_window = qapp._blender_window.parent()
 
-    # after blender is wrapped in QWindow,
-    # remove the  handle so blender is not wrapped again when opening a new scene
-    bpy.app.handlers.load_post.remove(create_global_app)
-
 
 def register():
     """
@@ -87,7 +83,7 @@ def register():
     """
 
     # hacky way to check if we already are waiting on bqt setup, or bqt is already setup
-    if QApplication.instance() or create_global_app in bpy.app.handlers.load_post:
+    if QApplication.instance():
         logging.warning("bqt: QApplication already exists, skipping bqt registration")
         return
 
@@ -96,23 +92,11 @@ def register():
 
     # only start focus operator if blender is wrapped
     if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
+        # todo check if operator is already registered
         bpy.utils.register_class(focus.QFocusOperator)
+        # append add_focus_handle before create_global_app, else it doesn't run on blender startup
 
-    # append add_focus_handle before create_global_app,
-    # else it doesn't run on blender startup
-    # guessing that wrapping blender in QT interrupts load_post
-    # resulting in the load_post handler not called on blender startup
-
-    # use load_post since blender doesn't like data changed before scene is loaded,
-    # wrap blender after first scene is loaded, the operator removes itself on first run
-    finished_startup = hasattr(bpy.context, "scene")
-    if finished_startup:
-        create_global_app(None)
-    else:
-        if create_global_app not in bpy.app.handlers.load_post:
-            bpy.app.handlers.load_post.append(create_global_app)
-        else:
-            logging.warning("bqt: create_global_app already in bpy.app.handlers.load_post")
+    create_global_app()
 
     atexit.register(on_exit)
 
@@ -126,8 +110,6 @@ def unregister():
     """
     if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
         bpy.utils.unregister_class(focus.QFocusOperator)
-    if create_global_app in bpy.app.handlers.load_post:
-        bpy.app.handlers.load_post.remove(create_global_app)
     atexit.unregister(on_exit)
 
 

@@ -7,6 +7,16 @@
 
 
 Add QT support to Blender, letting you create custom UI for your addons with PySide2 QtWidgets.
+![custom ui sample](https://user-images.githubusercontent.com/3758308/192096952-e9ed73be-26e4-4ad8-a85f-be4175cebbda.gif)
+
+## Features
+| feature | description|
+|--|--|
+|fully custom UI |Instead of feeling limited by N-Panel only UI. Do whatever you want. |
+| cross app | Qt widgets run nativaly in Krita, 3ds Max, Maya, … and are great to use in cross dcc pipelines |
+| existing community | hundreds of QT widgets on GitHub you can reuse, and lots of stack exchange questions answered regarding qt.|
+|Themed | BQT ships with a basic blender theme, so qt widgets will by default look similar to Blender.|
+
 
 ## Requirements
 Blender `2.83`or higher.
@@ -15,12 +25,12 @@ Windows (stable) or Mac (experimental)
 
 ## Installation  
 
-### install as addon
+### install as addon (recommended)
 1. Download the latest release. You can download the zip from the repo.
 2. Extract the zip and copy the `bqt` folder to your blender addons folder.
 3. Enable the addon by going to `Edit > Preferences > Add-ons` and search for `qt`
 
-### PIP install
+### PIP install (outdated)
 ⚠ PIP install is currently outdated, do not use until further notice.
 
 The installation of bqt with automatic setup for Blender requires the usage of the integrated python
@@ -35,8 +45,6 @@ to bqt's root folder and running:
 ```commandline
 python setup.py install
 ```
-
-# Developers
 
 ## Develop setup
 you can symlink the bqt folder to your blender addons folder to develop bqt. 

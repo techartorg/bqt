@@ -47,6 +47,7 @@ python setup.py install
 ```
 
 ## Develop setup
+When working on the bqt code from a repo, to prevent having to reinstall bqt every time you make a change,
 you can symlink the bqt folder to your blender addons folder to develop bqt. 
 Any updates in the repo are then reflected in blender on restart.
 e.g.:

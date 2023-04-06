@@ -4,7 +4,12 @@ from PySide2.QtCore import Qt
 import os
 import bqt.ui
 
+
 def shutdown_blender(*args):
+    # By default changes to preferences are saved on exit, this can be toggled off in the preferences
+    if bpy.context.preferences.use_preferences_save:
+        bpy.ops.wm.save_userpref()
+
     bpy.ops.wm.quit_blender()
 
 

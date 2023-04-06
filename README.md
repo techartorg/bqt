@@ -55,7 +55,7 @@ mklink /J "C:\Users\USERNAME\AppData\Roaming\Blender Foundation\Blender\2.93\scr
 [bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
 
 ### Community
-- discuss on blenderartists [thread](https://blenderartists.org/t/bqt-custom-ui-for-add-ons-tool-in-blender-with-pyqt-or-pyside/1458808)
+- Discuss BQT on the BlenderArtists [thread](https://blenderartists.org/t/bqt-custom-ui-for-add-ons-tool-in-blender-with-pyqt-or-pyside/1458808)
 
 ### ALternative
 - Custom UI for Blender only: https://github.com/mmmrqs/bl_ui_widgets

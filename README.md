@@ -36,8 +36,15 @@ to bqt's root folder and running:
 python setup.py install
 ```
 
-
 # Developers
+
+## Develop setup
+you can symlink the bqt folder to your blender addons folder to develop bqt. 
+Any updates in the repo are then reflected in blender on restart.
+e.g.:
+```commandline
+mklink /J "C:\Users\USERNAME\AppData\Roaming\Blender Foundation\Blender\2.93\scripts\addons\bqt" "C:\Users\hanne\OneDrive\Documents\repos\_Blender\bqt\bqt"
+```
 
 ### Environment variables
 - BQT_DISABLE_STARTUP if set to 1, completely disable bqt

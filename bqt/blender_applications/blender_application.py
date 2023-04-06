@@ -10,7 +10,7 @@ import os
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings
-from bqt.quit_dialogue import BlenderClosingDialog
+from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 
 

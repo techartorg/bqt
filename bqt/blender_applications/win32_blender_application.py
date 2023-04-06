@@ -10,11 +10,20 @@ import ctypes
 import os
 from ctypes import wintypes
 from collections import namedtuple
+import logging
+user32 = ctypes.windll.user32
+
+# def get_class_name(hwnd):
+#     # returns "GHOST_WindowClass" for Blender and BlenderWindows (e.g. Preferences),
+#     # returns "PseudoConsoleWindow" for the terminal window
+#     buf_len = 256
+#     buf = ctypes.create_unicode_buffer(buf_len)
+#     user32.GetClassNameW(hwnd, buf, buf_len)
+#     return buf.value
 
 
 def get_process_hwnds():
     # https://stackoverflow.com/questions/37501191/how-to-get-windows-window-names-with-ctypes-in-python
-    user32 = ctypes.WinDLL("user32", use_last_error=True)
 
     def check_zero(result, func, args):
         if not result:
@@ -67,9 +76,12 @@ def get_process_hwnds():
             if user32.IsWindowVisible(hWnd):
                 pid = wintypes.DWORD()
                 tid = user32.GetWindowThreadProcessId(hWnd, ctypes.byref(pid))
+
+                # get title
                 length = user32.GetWindowTextLengthW(hWnd) + 1
                 title = ctypes.create_unicode_buffer(length)
                 user32.GetWindowTextW(hWnd, title, length)
+
                 current_pid = os.getpid()
                 if pid.value == current_pid:
                     result.append(WindowInfo(title.value, hWnd))
@@ -81,12 +93,30 @@ def get_process_hwnds():
     return list_windows()
 
 
-def get_first_blender_window():
+def get_blender_window():
     process_windows = get_process_hwnds()
     if process_windows:
-        # sometimes there are 2 process_windows,the console, and the blender window
-        blender_win = [win for win in process_windows if "Blender" in win.title][0]
-        return blender_win.hwnd
+        # by default there often are 2 process_windows: the console & the main blender window
+        # the console doesn't has Blender in the title, so we filter it out
+        blender_windows = [win for win in process_windows if "Blender" in win.title]
+
+        # if we still found more than 1 window, e.g. the Preferences window is open, let's wrap the biggest one
+        # this is not perfect, but it works for now. Warn the user about this.
+        if len(blender_windows) > 1:
+            logging.warning("BQT: More than one blender window found, using the biggest one.")
+            rects = []
+            for win in process_windows:
+                # get height and width
+                rect = wintypes.RECT()
+                user32.GetWindowRect(win.hwnd, ctypes.byref(rect))
+                heigh = rect.bottom - rect.top
+                width = rect.right - rect.left
+                rects.append((heigh, width, win))
+            rects.sort(key=lambda x: x[0], reverse=True)  # sort by height
+            rects.sort(key=lambda x: x[1], reverse=True)  # sort by width
+            blender_windows = [rects[0][2]]  # get the biggest win
+
+        return blender_windows[0].hwnd
     return None
 
 
@@ -107,7 +137,7 @@ class Win32BlenderApplication(BlenderApplication):
         Returns int: Handler Window ID
         """
 
-        hwnd = get_first_blender_window()
+        hwnd = get_blender_window()
         return hwnd
 
     def _on_focus_object_changed(self, focus_object: QObject):

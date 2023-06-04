@@ -14,9 +14,10 @@ from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 
 
-STYLESHEET_FILEPATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
-ORG = "Tech-Artists.org"
+STYLESHEET_PATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
+ORGANISATION = "Tech-Artists.org"
 APP = "Blender Qt"
+WINDOW_TITLE = "Blender Qt"
 WINDOW_GROUP_NAME = "MainWindow"
 GEOMETRY = "Geometry"
 MAXIMIZED = "IsMaximized"
@@ -32,9 +33,8 @@ class BlenderApplication(QApplication):
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
-        # QApplication
-        if self._stylesheet_filepath.exists():
-            self.setStyleSheet(self._stylesheet_filepath.read_text())
+        if STYLESHEET_PATH.exists():
+            self.setStyleSheet(STYLESHEET_PATH.read_text())
 
         QApplication.setWindowIcon(self._get_application_icon())
 
@@ -114,7 +114,7 @@ class BlenderApplication(QApplication):
         .setGeometry() sets the size of the window minus the window frame.
         For this reason it should be set on self.blender_widget.
         """
-        settings = QSettings(ORG, APP)
+        settings = QSettings(ORGANISATION, APP)
         settings.beginGroup(WINDOW_GROUP_NAME)
         fullscreen = settings.value(FULL_SCREEN, defaultValue=False, type=bool)
         maximized = settings.value(MAXIMIZED, defaultValue=False, type=bool)
@@ -169,7 +169,7 @@ class BlenderApplication(QApplication):
         For that reason the _blender_widget should be used.
         """
 
-        settings = QSettings(ORG, APP)
+        settings = QSettings(ORGANISATION, APP)
         settings.beginGroup(WINDOW_GROUP_NAME)
         settings.setValue(GEOMETRY, self.blender_widget.geometry())
         settings.setValue(MAXIMIZED, self.blender_widget.isMaximized())

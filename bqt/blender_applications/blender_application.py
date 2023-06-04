@@ -14,6 +14,15 @@ from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 
 
+STYLESHEET_FILEPATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
+ORG = "Tech-Artists.org"
+APP = "Blender Qt"
+WINDOW_GROUP_NAME = "MainWindow"
+GEOMETRY = "Geometry"
+MAXIMIZED = "IsMaximized"
+FULL_SCREEN = "IsFullScreen"
+
+
 class BlenderApplication(QApplication):
     """
     Base Implementation for QT Blender Window Container
@@ -22,12 +31,6 @@ class BlenderApplication(QApplication):
     def __init__(self, *args, **kwargs):
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
-
-        self._stylesheet_filepath = Path(__file__).parents[1] / "blender_stylesheet.qss"
-        self._settings_key_geometry = "Geometry"
-        self._settings_key_maximized = "IsMaximized"
-        self._settings_key_full_screen = "IsFullScreen"
-        self._settings_key_window_group_name = "MainWindow"
 
         # QApplication
         if self._stylesheet_filepath.exists():
@@ -43,9 +46,9 @@ class BlenderApplication(QApplication):
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:
-            self._blender_window = QWindow.fromWinId(self._hwnd)
+            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-            self.blender_widget.setWindowTitle("Blender Qt")
+            self.blender_widget.setWindowTitle(WINDOW_TITLE)
             self._set_window_geometry()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
@@ -94,19 +97,21 @@ class BlenderApplication(QApplication):
         .setGeometry() sets the size of the window minus the window frame.
         For this reason it should be set on self.blender_widget.
         """
+        settings = QSettings(ORG, APP)
+        settings.beginGroup(WINDOW_GROUP_NAME)
+        fullscreen = settings.value(FULL_SCREEN, defaultValue=False, type=bool)
+        maximized = settings.value(MAXIMIZED, defaultValue=False, type=bool)
+        saved_geometry = settings.value(GEOMETRY)
 
-        settings = QSettings("Tech-Artists.org", "Blender Qt Wrapper")
-        settings.beginGroup(self._settings_key_window_group_name)
-
-        if settings.value(self._settings_key_full_screen, "false").lower() == "true":
+        if fullscreen:
             self.blender_widget.showFullScreen()
             return
 
-        if settings.value(self._settings_key_maximized, "false").lower() == "true":
+        if maximized:
             self.blender_widget.showMaximized()
             return
 
-        self.blender_widget.setGeometry(settings.value(self._settings_key_geometry, QRect(0, 0, 640, 480)))
+        self.blender_widget.setGeometry(saved_geometry)  # setGeometry is relative to its parent
         self.blender_widget.show()
 
         settings.endGroup()
@@ -115,7 +120,7 @@ class BlenderApplication(QApplication):
     def notify(self, receiver: QObject, event: QEvent) -> bool:
         """
         Args:
-            receiver: Object to recieve event
+            receiver: Object to receive event
             event: Event
 
         Returns: bool
@@ -145,9 +150,9 @@ class BlenderApplication(QApplication):
         For that reason the _blender_widget should be used.
         """
 
-        settings = QSettings("Tech-Artists.org", "Blender Qt Wrapper")
-        settings.beginGroup(self._settings_key_window_group_name)
-        settings.setValue(self._settings_key_geometry, self.blender_widget.geometry())
-        settings.setValue(self._settings_key_maximized, self.blender_widget.isMaximized())
-        settings.setValue(self._settings_key_full_screen, self.blender_widget.isFullScreen())
+        settings = QSettings(ORG, APP)
+        settings.beginGroup(WINDOW_GROUP_NAME)
+        settings.setValue(GEOMETRY, self.blender_widget.geometry())
+        settings.setValue(MAXIMIZED, self.blender_widget.isMaximized())
+        settings.setValue(FULL_SCREEN, self.blender_widget.isFullScreen())
         settings.endGroup()

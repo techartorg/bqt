@@ -91,6 +91,23 @@ class BlenderApplication(QApplication):
 
         pass
 
+    def _unwrapped_window_geometry(self) -> QRect:
+        """
+        Get the window geometry from the Blender window before it was wrapped in a QWidgetContainer
+        Run this before wrapping the window in a QWidgetContainer
+        Returns QRect(x, y, width, height)
+        """
+        window = bpy.context.window_manager.windows[0]
+        height, widht = window.height, window.width
+        x = window.x
+        y = window.y  # blender y relative from bottom of screen to bottom of Blender window
+        # convert y to be relative from the top
+        current_screen_rect = self.primaryScreen().availableGeometry()
+        y = current_screen_rect.height() - y - height
+        y += 56  # title bar offset
+        return QRect(x, y, widht, height)
+
+
     def _set_window_geometry(self):
         """
         Loads stored window geometry preferences and applies them to the QWindow.
@@ -102,6 +119,7 @@ class BlenderApplication(QApplication):
         fullscreen = settings.value(FULL_SCREEN, defaultValue=False, type=bool)
         maximized = settings.value(MAXIMIZED, defaultValue=False, type=bool)
         saved_geometry = settings.value(GEOMETRY)
+        settings.endGroup()
 
         if fullscreen:
             self.blender_widget.showFullScreen()
@@ -111,11 +129,12 @@ class BlenderApplication(QApplication):
             self.blender_widget.showMaximized()
             return
 
-        self.blender_widget.setGeometry(saved_geometry)  # setGeometry is relative to its parent
-        self.blender_widget.show()
 
-        settings.endGroup()
-        return
+        unwrapped_geometry = self._unwrapped_window_geometry()  # maintain unwrapped window size & pos
+        geometry = saved_geometry or unwrapped_geometry  # if no saved geometry, use previous blender window size
+        self.blender_widget.setGeometry(geometry)  # setGeometry is relative to its parent
+
+        self.blender_widget.show()
 
     def notify(self, receiver: QObject, event: QEvent) -> bool:
         """

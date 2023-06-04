@@ -148,12 +148,9 @@ class BlenderApplication(QApplication):
         if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
             # catch the close event when clicking close on the qt window,
             # ignore the event, and ask user if they want to close blender if unsaved changes.
-            # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
 
-            # todo - this is a hack to get around the fact that the close event is not being triggered
-            # the only drawback is we now save geo even if user cancels the close dialogue
-            self.store_window_geometry()  # this should trigger on_exit(), but atm on_exit() is not being triggered
+            self.store_window_geometry()  # save qt window geometry, to restore on next launch
 
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed

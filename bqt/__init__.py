@@ -5,7 +5,6 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 import bqt
 import bqt.focus
-# import atexit
 import os
 import sys
 import bpy
@@ -113,8 +112,6 @@ def register():
 
     create_global_app()
 
-    # atexit.register(on_exit)
-
 
 def unregister():
     """
@@ -127,18 +124,7 @@ def unregister():
     #  for now we just return since unregister should not be called partially
     return
 
-    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
-        bpy.utils.unregister_class(bqt.focus.QFocusOperator)
-    # atexit.unregister(on_exit)
-
-
-# todo this doesnt work, likely becayse of the ACCESS_VIOLATION
-# def on_exit():
-#     """Close BlenderApplication instance on exit"""
-#     print("bqt: on_exit")
-#     app = QApplication.instance()
-#     if app:
-#         app.store_window_geometry()
-#         app.quit()
+    # if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
+    #     bpy.utils.unregister_class(bqt.focus.QFocusOperator)
 
 

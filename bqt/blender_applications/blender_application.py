@@ -151,6 +151,10 @@ class BlenderApplication(QApplication):
             # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
 
+            # todo - this is a hack to get around the fact that the close event is not being triggered
+            # the only drawback is we now save geo even if user cancels the close dialogue
+            self.store_window_geometry()  # this should trigger on_exit(), but atm on_exit() is not being triggered
+
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed
                 bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")

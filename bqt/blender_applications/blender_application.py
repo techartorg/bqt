@@ -14,6 +14,16 @@ from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 
 
+STYLESHEET_PATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
+ORGANISATION = "Tech-Artists.org"
+APP = "Blender Qt"
+WINDOW_TITLE = "Blender Qt"
+WINDOW_GROUP_NAME = "MainWindow"
+GEOMETRY = "Geometry"
+MAXIMIZED = "IsMaximized"
+FULL_SCREEN = "IsFullScreen"
+
+
 class BlenderApplication(QApplication):
     """
     Base Implementation for QT Blender Window Container
@@ -23,15 +33,8 @@ class BlenderApplication(QApplication):
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
-        self._stylesheet_filepath = Path(__file__).parents[1] / "blender_stylesheet.qss"
-        self._settings_key_geometry = "Geometry"
-        self._settings_key_maximized = "IsMaximized"
-        self._settings_key_full_screen = "IsFullScreen"
-        self._settings_key_window_group_name = "MainWindow"
-
-        # QApplication
-        if self._stylesheet_filepath.exists():
-            self.setStyleSheet(self._stylesheet_filepath.read_text())
+        if STYLESHEET_PATH.exists():
+            self.setStyleSheet(STYLESHEET_PATH.read_text())
 
         QApplication.setWindowIcon(self._get_application_icon())
 
@@ -43,9 +46,9 @@ class BlenderApplication(QApplication):
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:
-            self._blender_window = QWindow.fromWinId(self._hwnd)
+            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
-            self.blender_widget.setWindowTitle("Blender Qt")
+            self.blender_widget.setWindowTitle(WINDOW_TITLE)
             self._set_window_geometry()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
@@ -88,34 +91,55 @@ class BlenderApplication(QApplication):
 
         pass
 
+    def _unwrapped_window_geometry(self) -> QRect:
+        """
+        Get the window geometry from the Blender window before it was wrapped in a QWidgetContainer
+        Run this before wrapping the window in a QWidgetContainer
+        Returns QRect(x, y, width, height)
+        """
+        window = bpy.context.window_manager.windows[0]
+        height, widht = window.height, window.width
+        x = window.x
+        y = window.y  # blender y relative from bottom of screen to bottom of Blender window
+        # convert y to be relative from the top
+        current_screen_rect = self.primaryScreen().availableGeometry()
+        y = current_screen_rect.height() - y - height
+        y += 56  # title bar offset
+        return QRect(x, y, widht, height)
+
+
     def _set_window_geometry(self):
         """
         Loads stored window geometry preferences and applies them to the QWindow.
         .setGeometry() sets the size of the window minus the window frame.
         For this reason it should be set on self.blender_widget.
         """
+        settings = QSettings(ORGANISATION, APP)
+        settings.beginGroup(WINDOW_GROUP_NAME)
+        fullscreen = settings.value(FULL_SCREEN, defaultValue=False, type=bool)
+        maximized = settings.value(MAXIMIZED, defaultValue=False, type=bool)
+        saved_geometry = settings.value(GEOMETRY)
+        settings.endGroup()
 
-        settings = QSettings("Tech-Artists.org", "Blender Qt Wrapper")
-        settings.beginGroup(self._settings_key_window_group_name)
-
-        if settings.value(self._settings_key_full_screen, "false").lower() == "true":
+        if fullscreen:
             self.blender_widget.showFullScreen()
             return
 
-        if settings.value(self._settings_key_maximized, "false").lower() == "true":
+        if maximized:
             self.blender_widget.showMaximized()
             return
 
-        self.blender_widget.setGeometry(settings.value(self._settings_key_geometry, QRect(0, 0, 640, 480)))
-        self.blender_widget.show()
 
-        settings.endGroup()
-        return
+        unwrapped_geometry = self._unwrapped_window_geometry()  # maintain unwrapped window size & pos
+        geometry = saved_geometry or unwrapped_geometry  # if no saved geometry, use previous blender window size
+        self.blender_widget.setGeometry(geometry)  # setGeometry is relative to its parent
+
+        self.blender_widget.show()
 
     def notify(self, receiver: QObject, event: QEvent) -> bool:
         """
         Args:
-            receiver: Object to recieve event
+            receiver: Object to receive event
             event: Event
 
         Returns: bool
@@ -124,8 +148,9 @@ class BlenderApplication(QApplication):
         if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
             # catch the close event when clicking close on the qt window,
             # ignore the event, and ask user if they want to close blender if unsaved changes.
-            # if this is successful, blender will trigger bqt.on_exit()
             event.ignore()
+
+            self.store_window_geometry()  # save qt window geometry, to restore on next launch
 
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed
@@ -145,9 +170,9 @@ class BlenderApplication(QApplication):
         For that reason the _blender_widget should be used.
         """
 
-        settings = QSettings("Tech-Artists.org", "Blender Qt Wrapper")
-        settings.beginGroup(self._settings_key_window_group_name)
-        settings.setValue(self._settings_key_geometry, self.blender_widget.geometry())
-        settings.setValue(self._settings_key_maximized, self.blender_widget.isMaximized())
-        settings.setValue(self._settings_key_full_screen, self.blender_widget.isFullScreen())
+        settings = QSettings(ORGANISATION, APP)
+        settings.beginGroup(WINDOW_GROUP_NAME)
+        settings.setValue(GEOMETRY, self.blender_widget.geometry())
+        settings.setValue(MAXIMIZED, self.blender_widget.isMaximized())
+        settings.setValue(FULL_SCREEN, self.blender_widget.isFullScreen())
         settings.endGroup()

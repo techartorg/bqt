@@ -5,7 +5,6 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 import bqt
 import bqt.focus
-import atexit
 import os
 import sys
 import bpy
@@ -52,34 +51,29 @@ def instantiate_application() -> "bqt.blender_applications.BlenderApplication":
     return app
 
 
-def load_os_module() -> object:
-    """
-    Loads the correct OS platform Application Class
-
-    Returns: Instance of BlenderApplication
-
-    """
+def load_os_module() -> "bqt.blender_applications.BlenderApplication":
+    """Loads the correct OS platform Application Class"""
     operating_system = sys.platform
     if operating_system == "darwin":
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
 
         return DarwinBlenderApplication(sys.argv)
+
     if operating_system in ["linux", "linux2"]:
         # TODO: LINUX module
         pass
+
     elif operating_system == "win32":
         from .blender_applications.win32_blender_application import Win32BlenderApplication
 
         return Win32BlenderApplication(sys.argv)
 
 
-parent_window = None
-
-
 @bpy.app.handlers.persistent
 def create_global_app():
     """
-    runs after blender finished startup
+    Create a global QApplication instance, that's maintained between Blender sessions.
+    Runs after Blender finished startup.
     """
     # global qapp
     qapp = instantiate_application()
@@ -93,6 +87,7 @@ def create_global_app():
 
 def register():
     """
+    Runs on enabling the add-on.
     setup bqt, wrap blender in qt, register operators
     """
 
@@ -113,30 +108,16 @@ def register():
 
     create_global_app()
 
-    atexit.register(on_exit)
-
 
 def unregister():
     """
-    Unregister Blender Operator classes
-
-    Returns: None
-
+    Runs on disabling the add-on.
     """
     # todo, as long as blender is wrapped in qt, unregistering operator & callback will cause issues,
     #  for now we just return since unregister should not be called partially
     return
 
-    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
-        bpy.utils.unregister_class(bqt.focus.QFocusOperator)
-    atexit.unregister(on_exit)
-
-
-def on_exit():
-    """Close BlenderApplication instance on exit"""
-    app = QApplication.instance()
-    if app:
-        app.store_window_geometry()
-        app.quit()
+    # if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
+    #     bpy.utils.unregister_class(bqt.focus.QFocusOperator)
 
 

@@ -5,6 +5,7 @@ Bqt takes care of the heavy lifting, so you can focus on your qt tools.
 - manage focus of widgets, letting you parent widgets to blender
 - manage QApplication setup for you (the qt eventloop)
 - prevent widgets from being garbage collected
+- auto style your widgets to match Blender's UI
 
 ### More info
 

@@ -1,6 +1,5 @@
-Custom UI for Python tools in games & VFX often uses QT.<br>
-E.g. Maya, Max & Substance all support it natively.<br>
-But Blender doesn't. This is where BQT can help.<br>
+Custom UI for Python tools in games & VFX often use QT.<br>
+Maya, Max & Substance support Qt natively, but Blender doesn't. This is where BQT can help.<br>
 
 ```python
 from PySide2.QtWidgets import QWidget

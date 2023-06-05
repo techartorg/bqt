@@ -51,7 +51,6 @@ class BlenderApplication(QApplication):
             self.blender_widget.setWindowTitle(WINDOW_TITLE)
             self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
             self.window_container = QMainWindow.createWindowContainer(self._blender_window)
-            self.window_container.setWindowTitle(WINDOW_TITLE)
             self.blender_widget.setCentralWidget(self.window_container)
             self._set_window_geometry()
             self.blender_widget.show()

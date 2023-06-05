@@ -7,7 +7,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 import os
-from PySide2.QtWidgets import QApplication, QWidget
+from PySide2.QtWidgets import QApplication, QWidget, QPushButton
 from PySide2.QtWidgets import QMainWindow
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt, Signal, Slot
@@ -23,6 +23,7 @@ WINDOW_GROUP_NAME = "MainWindow"
 GEOMETRY = "Geometry"
 MAXIMIZED = "IsMaximized"
 FULL_SCREEN = "IsFullScreen"
+FOCUS_FRAMERATE = 15
 
 
 class BlenderApplication(QApplication):
@@ -57,18 +58,23 @@ class BlenderApplication(QApplication):
             self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
-        # create dummy widget
-        self.blender_widget2 = QWidget(self.blender_widget)
-        self.blender_widget2.setWindowTitle("test")
+        # create test widget
+        self.blender_widget2 = QPushButton("make cube", self.blender_widget)
+        self.blender_widget2.setWindowTitle("test widget")
         self.blender_widget2.resize(400, 300)
-        # set window flags
-        self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() |  Qt.Window)  #Qt.WindowStaysOnTopHint |
+        self.blender_widget2.clicked.connect(self.on_click)
+        self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.Window)
         self.blender_widget2.show()
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_update)
-        tick = int(1000 / 10)  # tick 1000 / frames per second
+        tick = int(1000 / FOCUS_FRAMERATE)  # tick 1000 / frames per second
         self.timer.start(tick)
+
+    def on_click(self):
+        print("click")
+        bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 0.0))
+        bpy.ops.object.modifier_add(type='SOLIDIFY')  # error when run from qt, context missing active object
 
     def on_update(self):
         w = self._get_active_window_handle()
@@ -80,10 +86,12 @@ class BlenderApplication(QApplication):
             # set focus self.blender_widget
             # self._blender_window.requestActivate()
             self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.WindowStaysOnTopHint)  #
+
+            self.blender_widget2.show()
         else:
             self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)  #
-        if vis:
-            self.blender_widget2.show()
+        # if vis:
+        #     self.blender_widget2.show()
 
         # show steals focus, this refocuses the previous window
         # todo get hwnd of previous window, but it shows as 0 ...

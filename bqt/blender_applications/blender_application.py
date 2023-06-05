@@ -8,6 +8,7 @@ from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 import os
 from PySide2.QtWidgets import QApplication, QWidget
+from PySide2.QtWidgets import QMainWindow
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings
 from bqt.ui.quit_dialogue import BlenderClosingDialog
@@ -46,11 +47,16 @@ class BlenderApplication(QApplication):
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:
-            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
-            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+            self.blender_widget = QMainWindow()
             self.blender_widget.setWindowTitle(WINDOW_TITLE)
+            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
+            self.window_container = QMainWindow.createWindowContainer(self._blender_window)
+            self.window_container.setWindowTitle(WINDOW_TITLE)
+            self.blender_widget.setCentralWidget(self.window_container)
             self._set_window_geometry()
+			self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
+
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:
@@ -134,7 +140,6 @@ class BlenderApplication(QApplication):
         geometry = saved_geometry or unwrapped_geometry  # if no saved geometry, use previous blender window size
         self.blender_widget.setGeometry(geometry)  # setGeometry is relative to its parent
 
-        self.blender_widget.show()
 
     def notify(self, receiver: QObject, event: QEvent) -> bool:
         """

@@ -3,7 +3,7 @@
 
 
 [![PyPI version](https://img.shields.io/pypi/v/bqt)](https://pypi.org/project/bqt/)
-[![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github)](https://github.com/techartorg/bqt) ⚠️ PyPi version is currently outdated. Install from this repo for latest.
+[![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github)](https://github.com/techartorg/bqt)
 
 
 Add QT support to Blender, letting you create custom UI for your addons with PySide2 QtWidgets.
@@ -30,9 +30,7 @@ Windows (stable) or Mac (experimental)
 2. Extract the zip and copy the `bqt` folder to your blender addons folder.
 3. Enable the addon by going to `Edit > Preferences > Add-ons` and search for `qt`
 
-### PIP install (outdated)
-⚠ PIP install is currently outdated, do not use until further notice.
-
+### PIP install
 The installation of bqt with automatic setup for Blender requires the usage of the integrated python
 interpreter found within `../Blender Foundation/<version>/Python/bin`
 ```commandline

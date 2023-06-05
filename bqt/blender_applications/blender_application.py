@@ -54,9 +54,8 @@ class BlenderApplication(QApplication):
             self.window_container.setWindowTitle(WINDOW_TITLE)
             self.blender_widget.setCentralWidget(self.window_container)
             self._set_window_geometry()
-			self.blender_widget.show()
+            self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
-
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:

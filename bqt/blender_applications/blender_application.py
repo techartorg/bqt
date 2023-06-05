@@ -81,25 +81,18 @@ class BlenderApplication(QApplication):
 
         # check if self.blender_widget2 is visible
         vis = self.blender_widget2.isVisible()
-        if w != 0:  # w == self._hwnd:
-            print("blender")
+
+        # get activie window handle returns 0 for any window that is not created by blender
+        focussed_on_a_blender_window = w != 0
+        if focussed_on_a_blender_window:
             # set focus self.blender_widget
             # self._blender_window.requestActivate()
             self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.WindowStaysOnTopHint)  #
-
-            self.blender_widget2.show()
+            # if vis:
+            #     self.blender_widget2.show()
+            self.blender_widget2.show()  # todo this wont let you close the window if in blender, fix this
         else:
             self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)  #
-        # if vis:
-        #     self.blender_widget2.show()
-
-        # show steals focus, this refocuses the previous window
-        # todo get hwnd of previous window, but it shows as 0 ...
-        # if w == 0:
-        #     self._focus_window()
-
-        # self.blender_widget2.show()
-        print(w)
 
     def _get_active_window_handle(self):
         # override this method to get the active window handle

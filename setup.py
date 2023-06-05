@@ -20,25 +20,16 @@ https://packaging.python.org/tutorials/packaging-projects/#uploading-the-distrib
 **Contributors:**
     Greg Amato, amatobahn@gmail.com, June 18, 2020.
 """
-import os
-from pathlib import Path
 from setuptools import setup, find_packages
 from setuptools.command.install import install
-from shutil import copy
-from site import getsitepackages
-from subprocess import Popen
-import sys
-
-
-# read the contents of your README file
 from pathlib import Path
+
+
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 
 class CustomInstall(install):
-    """ """
-
     def run(self):
         # Run the standard PyPi Copy
         install.run(self)
@@ -47,7 +38,7 @@ class CustomInstall(install):
 setup(
     # Metadata
     name="bqt",
-    version="0.2.0",
+    version="1.0.0",
     description="Files to help bootstrap PySide2 with an event loop within Blender.",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -68,7 +59,7 @@ setup(
     install_requires=["PySide2"],
     # Package Data
     include_package_data=True,
-    package_data={"bqt": ["*.png", "*.qss", "dist/bqt_startup.py"]},
+    package_data={"bqt": ["*.png", "*.qss"]},
     # Install Wrapper
     cmdclass={"install": CustomInstall},
 )

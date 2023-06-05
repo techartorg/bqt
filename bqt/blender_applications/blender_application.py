@@ -10,7 +10,7 @@ import os
 from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtWidgets import QMainWindow
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
-from PySide2.QtCore import QEvent, QObject, QRect, QSettings
+from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt, Signal, Slot
 from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 
@@ -52,9 +52,53 @@ class BlenderApplication(QApplication):
             self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
             self.window_container = QMainWindow.createWindowContainer(self._blender_window)
             self.blender_widget.setCentralWidget(self.window_container)
+
             self._set_window_geometry()
             self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
+
+        # create dummy widget
+        self.blender_widget2 = QWidget(self.blender_widget)
+        self.blender_widget2.setWindowTitle("test")
+        self.blender_widget2.resize(400, 300)
+        # set window flags
+        self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() |  Qt.Window)  #Qt.WindowStaysOnTopHint |
+        self.blender_widget2.show()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.on_update)
+        tick = int(1000 / 10)  # tick 1000 / frames per second
+        self.timer.start(tick)
+
+    def on_update(self):
+        w = self._get_active_window_handle()
+
+        # check if self.blender_widget2 is visible
+        vis = self.blender_widget2.isVisible()
+        if w != 0:  # w == self._hwnd:
+            print("blender")
+            # set focus self.blender_widget
+            # self._blender_window.requestActivate()
+            self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.WindowStaysOnTopHint)  #
+        else:
+            self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)  #
+        if vis:
+            self.blender_widget2.show()
+
+        # show steals focus, this refocuses the previous window
+        # todo get hwnd of previous window, but it shows as 0 ...
+        # if w == 0:
+        #     self._focus_window()
+
+        # self.blender_widget2.show()
+        print(w)
+
+    def _get_active_window_handle(self):
+        # override this method to get the active window handle
+        return 0
+
+    def _focus_window(self):
+        pass
 
     @abstractstaticmethod
     def _get_application_hwnd() -> int:
@@ -147,6 +191,7 @@ class BlenderApplication(QApplication):
 
         Returns: bool
         """
+        # todo believe this func sometimes freezes blender, ctrl-c keyboard interrupt in console shows this func as the culprit
 
         if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
             # catch the close event when clicking close on the qt window,

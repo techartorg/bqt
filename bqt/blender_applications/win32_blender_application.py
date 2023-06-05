@@ -137,5 +137,19 @@ class Win32BlenderApplication(BlenderApplication):
         """
         if focus_object is self.blender_widget:
             ctypes.windll.user32.SetFocus(self._hwnd)
+            # the context override is needed to run Blender operators from Qt
             with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
                 bpy.ops.bqt.return_focus("INVOKE_DEFAULT")
+
+    def _get_active_window_handle(self):
+        """
+        Get the handle from the window that's currently in focus.
+        Returns 0 for active windows not managed by Blender
+        """
+        # note that negative values are also possible
+        return user32.GetActiveWindow()
+
+    def _focus_window(self, hwnd):
+        """Focus the window with the given handle."""
+        user32.SetForegroundWindow(hwnd)
+        # user32.SetFocus(hwnd)

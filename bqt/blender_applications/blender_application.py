@@ -63,7 +63,7 @@ class BlenderApplication(QApplication):
         self.blender_widget2.setWindowTitle("test widget")
         self.blender_widget2.resize(400, 300)
         self.blender_widget2.clicked.connect(self.on_click)
-        self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.Window)
+        self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.Tool)
         self.blender_widget2.show()
 
         self.timer = QTimer()

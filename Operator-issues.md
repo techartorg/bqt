@@ -5,11 +5,11 @@ The exact same code might behave different when executed from the script editor 
 Blender Operators often fail when run from QT, because they rely on the active window & other context properties.
 But when running a QT tool, the active window is None, leading to an error.
 
-this code works in Blender, but won't work if run from qt.
+This sample code works in Blender, but won't work if run from qt.
 ```python
 import bpy
-bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 0.0))
-bpy.ops.object.modifier_add(type='SOLIDIFY')
+bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 0.0))  # this works
+bpy.ops.object.modifier_add(type='SOLIDIFY')  # missing active object in context error
 ```
 
 ## Fix

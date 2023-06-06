@@ -46,7 +46,14 @@ def iter_widget_data():
         __widgets.remove(widget_data)
 
 
-def _blender_window_change(focussed_on_a_blender_window: bool):
+def _blender_window_change(hwnd: int):
+    """
+    hide widgets when blender is not focussed,
+    keep widgets in front of the Blender window when Blender is focussed
+    run when changing between a blender & non-blender window
+    """
+    focussed_on_a_blender_window = hwnd != 0  # 0 for windows not created by blender
+
     for widget_data in iter_widget_data():
         widget = widget_data.widget
 
@@ -66,3 +73,6 @@ def _blender_window_change(focussed_on_a_blender_window: bool):
             # remove top flag, allow the widget to be hidden behind the blender window
             # self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)
             widget.hide()  # todo since we hide do we need to remove flag?
+
+    # todo right now widgets stay in front of other blender windows,
+    #  e.g. the preferences window, ideally we handle this

@@ -83,8 +83,7 @@ class BlenderApplication(QApplication):
 
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
-            focussed_on_a_blender_window = self._active_window_hwnd != 0  # 0 for windows not created by blender
-            bqt.widget_manager._blender_window_change(focussed_on_a_blender_window)
+            bqt.widget_manager._blender_window_change(self._active_window_hwnd)
 
 
             # import bqt.focus

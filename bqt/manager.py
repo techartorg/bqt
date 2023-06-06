@@ -33,11 +33,12 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
     exclude = exclude or []
 
     if not widget:
-        logging.warning("bqt: widget is None, skipping widget registration")
+        logging.warning("widget is None, skipping registration")
         return
 
     parent_widget = QApplication.instance().blender_widget
     if widget == parent_widget:
+        logging.warning("widget equals parent, skipping registration")
         return
 
     # prevent registering a new widget with the same objectName
@@ -64,6 +65,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
 
     # parent to blender window
     if parent:
+        logging.debug("parenting widget to blender window")
         vis = widget.isVisible()
         widget.setParent(parent_widget, Qt.Window)  # default set flag to window
         widget.setVisible(vis)  # parenting hides the widget, restore visibility
@@ -75,6 +77,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
 
         # ensure widget stays in foreground if blender is not wrapped in qt
         if os.getenv("BQT_DISABLE_WRAP", "0") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1":
+            logging.debug("setting widget WindowStaysOnTopHint")
             vis = widget.isVisible()
             widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)
             widget.setVisible(vis)

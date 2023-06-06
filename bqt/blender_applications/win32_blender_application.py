@@ -134,7 +134,8 @@ class Win32BlenderApplication(BlenderApplication):
             ctypes.windll.user32.SetFocus(self._hwnd)
             bqt.focus._detect_keyboard(self._hwnd)
 
-    def _get_active_window_handle(self):
+    @staticmethod
+    def _get_active_window_handle():
         """
         Get the handle from the window that's currently in focus.
         Returns 0 for active windows not managed by Blender
@@ -142,7 +143,8 @@ class Win32BlenderApplication(BlenderApplication):
         # note that negative values are also possible
         return user32.GetActiveWindow()
 
-    def _focus_window(self, hwnd):
+    @staticmethod
+    def _focus_window(hwnd):
         """Focus the window with the given handle."""
         user32.SetForegroundWindow(hwnd)
         # user32.SetFocus(hwnd)

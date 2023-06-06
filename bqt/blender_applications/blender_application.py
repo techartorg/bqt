@@ -93,11 +93,13 @@ class BlenderApplication(QApplication):
         else:
             self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)  #
 
-    def _get_active_window_handle(self):
+    @staticmethod
+    def _get_active_window_handle():
         # override this method to get the active window handle
         return 0
 
-    def _focus_window(self):
+    @staticmethod
+    def _focus_window():
         pass
 
     @abstractstaticmethod

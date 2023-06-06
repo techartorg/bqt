@@ -12,6 +12,7 @@ from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt
 from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
+import bqt.widget_manager
 
 
 STYLESHEET_PATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
@@ -72,29 +73,21 @@ class BlenderApplication(QApplication):
         tick = int(1000 / FOCUS_FRAMERATE)  # tick 1000 / frames per second
         self.timer.start(tick)
 
+        bqt.widget_manager.add(self.blender_widget2)
     def on_click(self):
         print("click")
         bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 0.0))
         bpy.ops.object.modifier_add(type='SOLIDIFY')  # error when run from qt, context missing active object
 
     def on_update(self):
-        w = self._get_active_window_handle()
 
-        # check if self.blender_widget2 is visible
-        vis = self.blender_widget2.isVisible()
+        if self.blender_focus_toggled():
+            focussed_on_a_blender_window = self._active_window_hwnd != 0  # 0 for windows not created by blender
+            bqt.widget_manager._blender_window_change(focussed_on_a_blender_window)
 
-        # get activie window handle returns 0 for any window that is not created by blender
-        focussed_on_a_blender_window = w != 0
-        if focussed_on_a_blender_window:
-            # set focus self.blender_widget
-            # self._blender_window.requestActivate()
-            self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.WindowStaysOnTopHint)  #
-            # if vis:
-            #     self.blender_widget2.show()
-            self.blender_widget2.show()  # todo this wont let you close the window if in blender, fix this
-        else:
-            self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)  #
 
+            # import bqt.focus
+            # bqt.focus._detect_keyboard(self._hwnd)
 
     def blender_focus_toggled(self):
         """returns true the first frame the blender window is focussed or unfoccused"""
@@ -109,6 +102,8 @@ class BlenderApplication(QApplication):
             print("non_blender_toggle", non_blender_toggle)
             self._active_window_hwnd = current_active_hwnd
             return non_blender_toggle
+
+
     @staticmethod
     def _get_active_window_handle():
         # override this method to get the active window handle

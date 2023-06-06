@@ -38,7 +38,7 @@ class CustomInstall(install):
 setup(
     # Metadata
     name="bqt",
-    version="1.0.0",
+    version="1.1.0",
     description="Files to help bootstrap PySide2 with an event loop within Blender.",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -55,7 +55,7 @@ setup(
     ],
     # Requirements
     python_requires=">=3.7",
-    packages=find_packages(),
+    packages=["bqt"],
     install_requires=["PySide2"],
     # Package Data
     include_package_data=True,

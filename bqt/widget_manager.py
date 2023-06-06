@@ -7,6 +7,7 @@ widget manager to register your widgets with bqt
 from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import Qt
 import logging
+import os
 
 
 __widgets = []
@@ -53,6 +54,12 @@ def register(widget, exclude=None, parent=True, manage=True):
         data = WidgetData(widget, widget.isVisible())  # todo can we init vis state to false?
         __widgets.append(data)
 
+        # ensure widget stays in foreground if blender is not wrapped in qt
+        if os.getenv("BQT_DISABLE_WRAP", "0") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1":
+            vis = widget.isVisible()
+            widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)
+            widget.setVisible(vis)
+
 
 def iter_widget_data():
     """iterate over all registered widgets, remove widgets that have been removed"""
@@ -80,7 +87,7 @@ def _blender_window_change(hwnd: int):
         if focussed_on_a_blender_window:
 
             # add top flag, ensure the widget stays in front of the blender window
-            widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)
+            # widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)  # todo move this to register?
 
             # restore visibility state of the widget
             if widget_data.visible:

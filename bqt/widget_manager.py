@@ -44,7 +44,9 @@ def register(widget, exclude=None, parent=True, manage=True):
 
     # parent to blender window
     if parent:
+        vis = widget.isVisible()
         widget.setParent(parent_widget, Qt.Window)  # default set flag to window
+        widget.setVisible(vis)  # parenting hides the widget, restore visibility
 
     # save widget so we can manage the focus and visibility
     if manage:

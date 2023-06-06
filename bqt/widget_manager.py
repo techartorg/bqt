@@ -68,6 +68,13 @@ def iter_widget_data():
         if not widget_data.widget:
             cleanup.append(widget_data)
             continue
+
+        try:
+            v = widget_data.widget.isVisible()
+        except RuntimeError:
+            cleanup.append(widget_data)
+            continue
+
         yield widget_data
     for widget_data in cleanup:
         __widgets.remove(widget_data)
@@ -117,4 +124,13 @@ def parent_orphan_widgets(exclude=None):
     exclude = exclude or []
     __excluded_widgets.extend(exclude)
     for widget in _orphan_toplevel_widgets():
+
+        # check if widget is window type, else skip and exclude
+        if not widget.windowType() == Qt.Window:
+            __excluded_widgets.append(widget)
+            continue
+        # todo test with various widgets, we likely exclude some valid widgets
+        #  this should fail with a combobox (dropdown) and menu
+
         register(widget, exclude=exclude)
+

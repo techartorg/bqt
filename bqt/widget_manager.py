@@ -18,20 +18,36 @@ class WidgetData():
         self.visible = visible
 
 
-def add(widget):
-    """parent widget to blender window"""
+def add(widget, exclude=None, parent=None):
+    """
+    parent widget to blender window
+    Args:
+        widget: child widget to parent
+        parent: parent widget to parent the child widget to
+        exclude: widgets to exclude from being parented to the blender window
+    """
+    exclude = exclude or []
+
     if not widget:
         logging.warning("bqt: widget is None, skipping widget registration")
         return
 
-    app = QApplication.instance()
+    parent = parent or QApplication.instance().blender_widget
+    if widget == parent:
+        return
+
+    if widget in exclude:
+        logging.warning("bqt: widget is in exclude list, skipping widget registration")
+        return
 
     # parent to blender window
-    widget.setParent(app.blender_widget)
+    widget.setParent(parent, Qt.Window)  # default set flag to window
 
     # save widget so we can manage the focus and visibility
     data = WidgetData(widget, widget.isVisible())  # todo can we init vis state to false?
     __widgets.append(data)
+
+    print(f"bqt: added widget {widget} to blender window {parent}")
 
 
 def iter_widget_data():
@@ -83,7 +99,8 @@ def _orphan_toplevel_widgets():
     return [widget for widget in QApplication.instance().topLevelWidgets() if not widget.parent()]
 
 
-def parent_orphan_widgets():
+def parent_orphan_widgets(exclude=None):
     """Find and parent orphan widgets to the blender widget"""
+    exclude = exclude or []
     for widget in _orphan_toplevel_widgets():
-        add(widget)
+        add(widget, exclude=exclude)

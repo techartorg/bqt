@@ -1,9 +1,10 @@
 from pathlib import Path
-from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
+from PySide2.QtGui import QImage, QPixmap
 import PySide2.QtCore as QtCore
 
 
-def get_question_pixmap():
+def get_question_pixmap() -> QPixmap:
+    """Return the question image used in the quit dialogue"""
     icon_filepath = Path(__file__).parents[1] / "images" / "question.svg"
     pixmap = QPixmap()
     if icon_filepath.exists():

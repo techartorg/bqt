@@ -81,7 +81,7 @@ class BlenderApplication(QApplication):
 
     def on_update(self):
 
-        if self.blender_focus_toggled():
+        if os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
             focussed_on_a_blender_window = self._active_window_hwnd != 0  # 0 for windows not created by blender
             bqt.widget_manager._blender_window_change(focussed_on_a_blender_window)
 

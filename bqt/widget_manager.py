@@ -76,3 +76,14 @@ def _blender_window_change(hwnd: int):
 
     # todo right now widgets stay in front of other blender windows,
     #  e.g. the preferences window, ideally we handle this
+
+
+def _orphan_toplevel_widgets():
+    # todo do we need to filter by window type?
+    return [widget for widget in QApplication.instance().topLevelWidgets() if not widget.parent()]
+
+
+def parent_orphan_widgets():
+    """Find and parent orphan widgets to the blender widget"""
+    for widget in _orphan_toplevel_widgets():
+        add(widget)

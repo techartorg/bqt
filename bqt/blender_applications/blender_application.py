@@ -60,34 +60,15 @@ class BlenderApplication(QApplication):
             self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
-        # create test widget
-        self.blender_widget2 = QPushButton("make cube", self.blender_widget)
-        self.blender_widget2.setWindowTitle("test widget")
-        self.blender_widget2.resize(400, 300)
-        self.blender_widget2.clicked.connect(self.on_click)
-        self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() | Qt.Tool)
-        self.blender_widget2.show()
-
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_update)
         tick = int(1000 / FOCUS_FRAMERATE)  # tick 1000 / frames per second
         self.timer.start(tick)
 
-        bqt.widget_manager.add(self.blender_widget2)
-    def on_click(self):
-        print("click")
-        bpy.ops.mesh.primitive_cube_add(location=(0.0, 0.0, 0.0))
-        bpy.ops.object.modifier_add(type='SOLIDIFY')  # error when run from qt, context missing active object
-
     def on_update(self):
-
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
             bqt.widget_manager._blender_window_change(self._active_window_hwnd)
-
-
-            # import bqt.focus
-            # bqt.focus._detect_keyboard(self._hwnd)
 
     def blender_focus_toggled(self):
         """returns true the first frame the blender window is focussed or unfoccused"""
@@ -99,7 +80,6 @@ class BlenderApplication(QApplication):
         else:
             # we toggled between 2 windows, but we only care if we toggled in or out of blender
             non_blender_toggle = self._active_window_hwnd == 0 or current_active_hwnd == 0
-            print("non_blender_toggle", non_blender_toggle)
             self._active_window_hwnd = current_active_hwnd
             return non_blender_toggle
 

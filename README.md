@@ -60,7 +60,7 @@ mklink /J "C:\Users\USERNAME\AppData\Roaming\Blender Foundation\Blender\2.93\scr
 |BQT_DISABLE_STARTUP| if set to `1`, completely disable bqt|
 |BQT_DISABLE_WRAP| if set to `1`, disable wrapping blender in a QWindow|
 |BQT_DISABLE_CLOSE_DIALOGUE| if set to `1`, use the standard blender close dialogue|
-|BQT_MANAGE_FOREGROUND| defaults to `1`, if `0`, widgets registered with `bqt.add(my_widget)` won't stay in the foreground when using Blender.|
+|BQT_MANAGE_FOREGROUND| defaults to `1`, if `0`, widgets registered with `bqt.register(my_widget)` won't stay in the foreground when using Blender.|
 |BQT_AUTO_ADD| defaults to `1`, if `0` top level widgets won't automatically be added to bqt.|
 
 - if you modify env vars, ensure they're strings

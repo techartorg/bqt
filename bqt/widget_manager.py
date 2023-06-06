@@ -68,6 +68,13 @@ def iter_widget_data():
         if not widget_data.widget:
             cleanup.append(widget_data)
             continue
+
+        try:
+            v = widget_data.widget.isVisible()
+        except RuntimeError:
+            cleanup.append(widget_data)
+            continue
+
         yield widget_data
     for widget_data in cleanup:
         __widgets.remove(widget_data)

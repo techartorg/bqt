@@ -10,6 +10,7 @@ import logging
 
 
 __widgets = []
+__excluded_widgets = []
 
 
 class WidgetData():
@@ -96,12 +97,15 @@ def _blender_window_change(hwnd: int):
 
 
 def _orphan_toplevel_widgets():
-    # todo do we need to filter by window type?
-    return [widget for widget in QApplication.instance().topLevelWidgets() if not widget.parent()]
+    return [widget for widget in QApplication.instance().topLevelWidgets() if
+            not widget.parent()
+            and widget not in __widgets
+            and widget not in __excluded_widgets]
 
 
 def parent_orphan_widgets(exclude=None):
     """Find and parent orphan widgets to the blender widget"""
     exclude = exclude or []
+    __excluded_widgets.extend(exclude)
     for widget in _orphan_toplevel_widgets():
         register(widget, exclude=exclude)

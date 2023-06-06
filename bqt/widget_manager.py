@@ -1,9 +1,15 @@
+"""
+widget manager to register your widgets with bqt
+
+- parent widget to blender window (blender_widget)
+- keep widget in front of Blender window only, even when bqt is not wrapped in qt
+"""
 from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import Qt
+import logging
 
 
-widgets = []
-# todo manage if widget is None, or removed
+__widgets = []
 
 
 class WidgetData():
@@ -14,7 +20,9 @@ class WidgetData():
 
 def add(widget):
     """parent widget to blender window"""
-    print("adding widget to blender window", widget)
+    if not widget:
+        logging.warning("bqt: widget is None, skipping widget registration")
+        return
 
     app = QApplication.instance()
 
@@ -23,11 +31,23 @@ def add(widget):
 
     # save widget so we can manage the focus and visibility
     data = WidgetData(widget, widget.isVisible())  # todo can we init vis state to false?
-    widgets.append(data)
+    __widgets.append(data)
+
+
+def iter_widget_data():
+    """iterate over all registered widgets, remove widgets that have been removed"""
+    cleanup = []
+    for widget_data in __widgets:
+        if not widget_data.widget:
+            cleanup.append(widget_data)
+            continue
+        yield widget_data
+    for widget_data in cleanup:
+        __widgets.remove(widget_data)
 
 
 def _blender_window_change(focussed_on_a_blender_window: bool):
-    for widget_data in widgets:
+    for widget_data in iter_widget_data():
         widget = widget_data.widget
 
         if focussed_on_a_blender_window:

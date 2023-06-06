@@ -41,7 +41,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
         return
 
     # prevent registering a new widget with the same objectName
-    if unique:
+    if unique and os.getenv("BQT_UNIQUE_OBJECTNAME", "1") == "1":
         obj_name = widget.objectName()
         old_widget = None  # already registered widget with the same objectName
         if obj_name:

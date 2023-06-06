@@ -60,12 +60,14 @@ class BlenderApplication(QApplication):
             self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
+        # hookup event loop
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_update)
         tick = int(1000 / FOCUS_FRAMERATE)  # tick 1000 / frames per second
         self.timer.start(tick)
 
     def on_update(self):
+        """qt event loop"""
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
             bqt.widget_manager._blender_window_change(self._active_window_hwnd)

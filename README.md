@@ -54,13 +54,17 @@ mklink /J "C:\Users\USERNAME\AppData\Roaming\Blender Foundation\Blender\2.93\scr
 ```
 
 ### Environment variables
+
 | variable | description|
 |--|--|
 |BQT_DISABLE_STARTUP| if set to `1`, completely disable bqt|
 |BQT_DISABLE_WRAP| if set to `1`, disable wrapping blender in a QWindow|
 |BQT_DISABLE_CLOSE_DIALOGUE| if set to `1`, use the standard blender close dialogue|
 |BQT_MANAGE_FOREGROUND| defaults to `1`, if `0`, widgets registered with `bqt.add(my_widget)` won't stay in the foreground when using Blender.|
-if you modify env vars, ensure they're strings
+
+- if you modify env vars, ensure they're strings
+- if you're unsure how to set env vars, google `set environment variable windows`.
+- Restart Blender (or your computer) after changing them.
 
 ### Sample code
 [bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
@@ -70,5 +74,5 @@ Discuss BQT on
 - the BlenderArtists [thread](https://blenderartists.org/t/bqt-custom-ui-for-add-ons-tool-in-blender-with-pyqt-or-pyside/1458808)
 - [Ynput  thread](https://community.ynput.io/t/use-bqt-for-blender-qt-integration/127)
 
-### ALternative
+### Alternative
 - Custom UI for Blender only: https://github.com/mmmrqs/bl_ui_widgets

@@ -32,22 +32,17 @@ bl_info = {
 
 # CORE FUNCTIONS #
 
-def instantiate_application() -> "bqt.blender_applications.BlenderApplication":
-    """
-    Create an instance of Blender Application
-
-    Returns BlenderApplication: Application Instance
-
-    """
+def _instantiate_QApplication() -> "bqt.blender_applications.BlenderApplication":
     # enable dpi scale, run before creating QApplication
     QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
+
+    # add image directory to Qt search path, for blender_stylesheet
     image_directory = str(Path(__file__).parent / "images")
-    QDir.addSearchPath('images', image_directory)
-    app = QApplication.instance()
-    if not app:
-        app = load_os_module()
+    QDir.addSearchPath('images', image_directory)  # todo this is generic, might clash with other qt scripts
+
+    app = load_os_module()
     return app
 
 
@@ -76,7 +71,7 @@ def create_global_app():
     Runs after Blender finished startup.
     """
     # global qapp
-    qapp = instantiate_application()
+    qapp = _instantiate_QApplication()
 
     # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
     # for some reason this works here, but not in the blender_applications init as a class attribute (self),
@@ -102,7 +97,8 @@ def register():
 
     # only start focus operator if blender is wrapped
     if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
-        # todo check if operator is already registered
+        # we return when a QApp exists, and a QApp is created when BQT starts
+        # so it's not possible that the focus operator is already registered
         bpy.utils.register_class(bqt.focus.QFocusOperator)
         # append add_focus_handle before create_global_app, else it doesn't run on blender startup
 

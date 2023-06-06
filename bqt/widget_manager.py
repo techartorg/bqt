@@ -18,20 +18,37 @@ class WidgetData():
         self.visible = visible
 
 
-def add(widget):
-    """parent widget to blender window"""
+def register(widget, exclude=None, parent=True, manage=True):
+    """
+    parent widget to blender window
+    Args:
+        widget: child widget to parent
+        parent: if True, parent the widget to the blender window
+        exclude: widgets to exclude from being parented to the blender window
+        manage: if True, manage the visibility of the widget
+    """
+    exclude = exclude or []
+
     if not widget:
         logging.warning("bqt: widget is None, skipping widget registration")
         return
 
-    app = QApplication.instance()
+    parent_widget = QApplication.instance().blender_widget
+    if widget == parent_widget:
+        return
+
+    if widget in exclude:
+        logging.warning("bqt: widget is in exclude list, skipping widget registration")
+        return
 
     # parent to blender window
-    widget.setParent(app.blender_widget)
+    if parent:
+        widget.setParent(parent_widget, Qt.Window)  # default set flag to window
 
     # save widget so we can manage the focus and visibility
-    data = WidgetData(widget, widget.isVisible())  # todo can we init vis state to false?
-    __widgets.append(data)
+    if manage:
+        data = WidgetData(widget, widget.isVisible())  # todo can we init vis state to false?
+        __widgets.append(data)
 
 
 def iter_widget_data():
@@ -76,3 +93,15 @@ def _blender_window_change(hwnd: int):
 
     # todo right now widgets stay in front of other blender windows,
     #  e.g. the preferences window, ideally we handle this
+
+
+def _orphan_toplevel_widgets():
+    # todo do we need to filter by window type?
+    return [widget for widget in QApplication.instance().topLevelWidgets() if not widget.parent()]
+
+
+def parent_orphan_widgets(exclude=None):
+    """Find and parent orphan widgets to the blender widget"""
+    exclude = exclude or []
+    for widget in _orphan_toplevel_widgets():
+        register(widget, exclude=exclude)

@@ -46,6 +46,8 @@ class BlenderApplication(QApplication):
         self._hwnd = self._get_blender_hwnd()
         failed_to_get_handle = self._hwnd is None
 
+        self.window_container: QWidget = None
+
         if os.getenv("BQT_DISABLE_WRAP") == "1" or failed_to_get_handle:
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
@@ -60,15 +62,20 @@ class BlenderApplication(QApplication):
             self.blender_widget.show()
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
+        # hookup event loop
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_update)
         tick = int(1000 / FOCUS_FRAMERATE)  # tick 1000 / frames per second
         self.timer.start(tick)
 
     def on_update(self):
+        """qt event loop"""
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
             bqt.widget_manager._blender_window_change(self._active_window_hwnd)
+
+        if os.getenv("BQT_AUTO_ADD", "1") == "1":
+            bqt.widget_manager.parent_orphan_widgets(exclude=[self.blender_widget, self._blender_window, self.window_container])  # auto parent any orphaned widgets
 
     def blender_focus_toggled(self):
         """returns true the first frame the blender window is focussed or unfoccused"""

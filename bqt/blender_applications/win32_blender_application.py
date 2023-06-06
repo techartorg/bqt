@@ -8,9 +8,9 @@ from PySide2.QtCore import QObject
 from .blender_application import BlenderApplication
 import ctypes
 import os
-from ctypes import wintypes
 from collections import namedtuple
 import logging
+from ctypes import wintypes
 user32 = ctypes.windll.user32
 
 def get_class_name(hwnd):
@@ -119,14 +119,8 @@ class Win32BlenderApplication(BlenderApplication):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def _get_application_hwnd() -> int or None:
-        """
-        This finds the blender application window and collects the
-        handler window ID
-
-        Returns int: Handler Window ID
-        """
-
+    def _get_blender_hwnd() -> int or None:
+        """Get the handler window ID for the blender application window"""
         hwnd = get_blender_window()
         return hwnd
 

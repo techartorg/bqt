@@ -30,7 +30,7 @@ class DarwinBlenderApplication(BlenderApplication):
 
         super().__init__(*args, **kwargs)
 
-    def _get_application_hwnd(self) -> int:
+    def _get_blender_hwnd(self) -> int:
         """
         This finds the blender application window and collects the
         handler window ID

@@ -7,10 +7,9 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 import os
-from PySide2.QtWidgets import QApplication, QWidget, QPushButton
-from PySide2.QtWidgets import QMainWindow
+from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QDockWidget, QMainWindow
 from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
-from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt, Signal, Slot
+from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt
 from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 
@@ -41,7 +40,7 @@ class BlenderApplication(QApplication):
         QApplication.setWindowIcon(self._get_application_icon())
 
         # Blender Window
-        self._hwnd = self._get_application_hwnd()
+        self._hwnd = self._get_blender_hwnd()
         failed_to_get_handle = self._hwnd is None
 
         if os.getenv("BQT_DISABLE_WRAP") == "1" or failed_to_get_handle:
@@ -102,14 +101,8 @@ class BlenderApplication(QApplication):
         pass
 
     @abstractstaticmethod
-    def _get_application_hwnd() -> int:
-        """
-        This finds the blender application window and collects the
-        handler window ID
-
-        Returns int: Handler Window ID
-        """
-
+    def _get_blender_hwnd() -> int:
+        """Get the handler window ID for the blender application window"""
         return -1
 
     @staticmethod

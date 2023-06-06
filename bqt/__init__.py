@@ -42,11 +42,11 @@ def _instantiate_QApplication() -> "bqt.blender_applications.BlenderApplication"
     image_directory = str(Path(__file__).parent / "images")
     QDir.addSearchPath('images', image_directory)  # todo this is generic, might clash with other qt scripts
 
-    app = load_os_module()
+    app = _load_os_module()
     return app
 
 
-def load_os_module() -> "bqt.blender_applications.BlenderApplication":
+def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
     """Loads the correct OS platform Application Class"""
     operating_system = sys.platform
     if operating_system == "darwin":
@@ -65,7 +65,7 @@ def load_os_module() -> "bqt.blender_applications.BlenderApplication":
 
 
 @bpy.app.handlers.persistent
-def create_global_app():
+def _create_global_app():
     """
     Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
@@ -95,7 +95,7 @@ def register():
         logging.warning("bqt: BQT_DISABLE_STARTUP is set, skipping bqt registration")
         return
 
-    create_global_app()
+    _create_global_app()
 
 
 def unregister():

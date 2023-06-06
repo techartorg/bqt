@@ -20,7 +20,7 @@ class WidgetData():
         self.visible = visible
 
 
-def register(widget, exclude=None, parent=True, manage=True):
+def register(widget, exclude=None, parent=True, manage=True, unique=True):
     """
     parent widget to blender window
     Args:
@@ -28,6 +28,7 @@ def register(widget, exclude=None, parent=True, manage=True):
         parent: if True, parent the widget to the blender window
         exclude: widgets to exclude from being parented to the blender window
         manage: if True, manage the visibility of the widget
+        unique: if True, prevent registering a new widget with the same objectName
     """
     exclude = exclude or []
 
@@ -38,6 +39,24 @@ def register(widget, exclude=None, parent=True, manage=True):
     parent_widget = QApplication.instance().blender_widget
     if widget == parent_widget:
         return
+
+    # prevent registering a new widget with the same objectName
+    if unique:
+        obj_name = widget.objectName()
+        old_widget = None  # already registered widget with the same objectName
+        if obj_name:
+            for data in iter_widget_data():
+                if data.widget.objectName() == obj_name:
+                    old_widget = data.widget
+                    break
+        if old_widget:
+            logging.warning("bqt: widget is already registered, skipping widget registration")
+            # show old widget, delete new widget
+            old_widget.show()
+            old_widget.activateWindow()
+            widget.deleteLater()  # delete duplicate widget, todo dangerous?
+            __excluded_widgets.append(widget)
+            return
 
     if widget in exclude:
         logging.warning("bqt: widget is in exclude list, skipping widget registration")

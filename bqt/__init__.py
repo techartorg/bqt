@@ -30,7 +30,7 @@ bl_info = {
         "category": "UI"
         }
 
-register = bqt.widget_manager.register
+add = bqt.widget_manager.register
 
 # CORE FUNCTIONS #
 

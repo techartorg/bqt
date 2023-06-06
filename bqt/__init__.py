@@ -5,7 +5,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 import bqt
 import bqt.focus
-import bqt.widget_manager
+import bqt.manager
 import os
 import sys
 import bpy
@@ -30,7 +30,7 @@ bl_info = {
         "category": "UI"
         }
 
-add = bqt.widget_manager.register
+add = bqt.manager.register
 
 # CORE FUNCTIONS #
 

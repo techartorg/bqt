@@ -12,7 +12,7 @@ from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
 from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt
 from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
-import bqt.widget_manager
+import bqt.manager
 
 
 STYLESHEET_PATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
@@ -72,10 +72,10 @@ class BlenderApplication(QApplication):
         """qt event loop"""
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
-            bqt.widget_manager._blender_window_change(self._active_window_hwnd)
+            bqt.manager._blender_window_change(self._active_window_hwnd)
 
         if os.getenv("BQT_AUTO_ADD", "1") == "1":
-            bqt.widget_manager.parent_orphan_widgets(exclude=[self.blender_widget, self._blender_window, self.window_container])  # auto parent any orphaned widgets
+            bqt.manager.parent_orphan_widgets(exclude=[self.blender_widget, self._blender_window, self.window_container])  # auto parent any orphaned widgets
 
     def blender_focus_toggled(self):
         """returns true the first frame the blender window is focussed or unfoccused"""

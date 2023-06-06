@@ -34,6 +34,8 @@ class BlenderApplication(QApplication):
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
+        self._active_window_hwnd = 0
+
         if STYLESHEET_PATH.exists():
             self.setStyleSheet(STYLESHEET_PATH.read_text())
 
@@ -93,6 +95,20 @@ class BlenderApplication(QApplication):
         else:
             self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)  #
 
+
+    def blender_focus_toggled(self):
+        """returns true the first frame the blender window is focussed or unfoccused"""
+        current_active_hwnd = self._get_active_window_handle()
+        handle_changed = self._active_window_hwnd != current_active_hwnd
+        if not handle_changed:
+            self._active_window_hwnd = current_active_hwnd
+            return False
+        else:
+            # we toggled between 2 windows, but we only care if we toggled in or out of blender
+            non_blender_toggle = self._active_window_hwnd == 0 or current_active_hwnd == 0
+            print("non_blender_toggle", non_blender_toggle)
+            self._active_window_hwnd = current_active_hwnd
+            return non_blender_toggle
     @staticmethod
     def _get_active_window_handle():
         # override this method to get the active window handle

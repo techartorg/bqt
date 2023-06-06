@@ -10,6 +10,7 @@ import ctypes
 import os
 from collections import namedtuple
 import logging
+import bqt.focus
 from ctypes import wintypes
 user32 = ctypes.windll.user32
 
@@ -131,9 +132,7 @@ class Win32BlenderApplication(BlenderApplication):
         """
         if focus_object is self.blender_widget:
             ctypes.windll.user32.SetFocus(self._hwnd)
-            # the context override is needed to run Blender operators from Qt
-            with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
-                bpy.ops.bqt.return_focus("INVOKE_DEFAULT")
+            bqt.focus._detect_keyboard(self._hwnd)
 
     def _get_active_window_handle(self):
         """

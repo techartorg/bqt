@@ -95,13 +95,6 @@ def register():
         logging.warning("bqt: BQT_DISABLE_STARTUP is set, skipping bqt registration")
         return
 
-    # only start focus operator if blender is wrapped
-    if not os.getenv("BQT_DISABLE_WRAP", 0) == "1":
-        # we return when a QApp exists, and a QApp is created when BQT starts
-        # so it's not possible that the focus operator is already registered
-        bpy.utils.register_class(bqt.focus.QFocusOperator)
-        # append add_focus_handle before create_global_app, else it doesn't run on blender startup
-
     create_global_app()
 
 

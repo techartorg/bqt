@@ -17,6 +17,7 @@ from PySide2.QtGui import QIcon
 from PySide2.QtCore import QObject
 
 from .blender_application import BlenderApplication
+import bqt.focus
 
 
 class DarwinBlenderApplication(BlenderApplication):
@@ -78,5 +79,4 @@ class DarwinBlenderApplication(BlenderApplication):
 
         if focus_object is self.blender_widget:
             self._ns_window.makeKey()
-            with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
-                bpy.ops.bqt.return_focus("INVOKE_DEFAULT")
+            bqt.focus._detect_keyboard(self._hwnd)

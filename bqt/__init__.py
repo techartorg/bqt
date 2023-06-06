@@ -5,7 +5,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 import bqt
 import bqt.focus
-import bqt.widget_manager
+import bqt.manager
 import os
 import sys
 import bpy
@@ -20,7 +20,7 @@ bl_info = {
         "name": "PySide2 Qt wrapper (bqt)",
         "description": "Enable PySide2 QtWidgets in Blender",
         "author": "tech-artists.org",
-        "version": (1, 2, 3),
+        "version": (1, 3, 0),
         "blender": (2, 80, 0),
         # "location": "",
         # "warning": "", # used for warning icon and text in add-ons panel
@@ -30,7 +30,7 @@ bl_info = {
         "category": "UI"
         }
 
-add = bqt.widget_manager.register
+add = bqt.manager.register
 
 # CORE FUNCTIONS #
 

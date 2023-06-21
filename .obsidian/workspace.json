@@ -208,18 +208,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "842eb0fb36cfb5bb",
+  "active": "3fa95d65f63d8d57",
   "lastOpenFiles": [
-    "contribute guidelines.md",
+    "notes/quick start guide.md",
     "Home.md",
+    "features.md",
+    "notes/why bqt.md",
+    "contribute guidelines.md",
     "README.md",
     "notes/setup bqt develop environment.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/Sync the wiki and wiki-branch.md",
     "notes/tips for bqt doc writers.md",
     "notes/widget disappears.md",
-    "notes/why bqt.md",
-    "notes/quick start guide.md",
     "alternatives to bqt.md",
     "notes/show QWidgets without freezing Blender.md",
     "notes/keep QtWidgets in foreground.md",
@@ -235,7 +236,6 @@
     "notes/install bqt addon.md",
     "notes/install bqt module.md",
     "notes/operator issues.md",
-    "notes/Environment variables.md",
     "notes"
   ]
 }

@@ -13,7 +13,71 @@
             "state": {
               "type": "markdown",
               "state": {
+<<<<<<< HEAD
                 "file": "README.md",
+=======
+                "file": "Home.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "610599a13c120805",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "notes/Environment variables.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "94df3b5efdc2d39c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Home.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ed54599862696a0b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Home.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "011bbfdab593abd8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "notes/close dialogue in foreground.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "3fa95d65f63d8d57",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "notes/alternatives to bqt.md",
+>>>>>>> wiki
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +149,11 @@
             "state": {
               "type": "backlink",
               "state": {
+<<<<<<< HEAD
                 "file": "README.md",
+=======
+                "file": "notes/alternatives to bqt.md",
+>>>>>>> wiki
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +170,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+<<<<<<< HEAD
                 "file": "README.md",
+=======
+                "file": "notes/alternatives to bqt.md",
+>>>>>>> wiki
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +197,11 @@
             "state": {
               "type": "outline",
               "state": {
+<<<<<<< HEAD
                 "file": "README.md"
+=======
+                "file": "notes/alternatives to bqt.md"
+>>>>>>> wiki
               }
             }
           }
@@ -146,15 +222,29 @@
       "command-palette:Open command palette": false
     }
   },
+<<<<<<< HEAD
   "active": "698c7fb2551cc302",
   "lastOpenFiles": [
     "notes/tips for bqt doc writers.md",
+=======
+  "active": "b286b842012cf051",
+  "lastOpenFiles": [
+    "Home.md",
+    "notes/quick start guide.md",
+    "notes/features.md",
+    "notes/why bqt.md",
+    "notes/contribute guidelines.md",
+>>>>>>> wiki
     "README.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/why bqt.md",
     "notes/widget disappears.md",
+<<<<<<< HEAD
     "notes/Sync the wiki and wiki-branch.md",
     "notes/style QWidgets with Blender stylesheet.md",
+=======
+    "notes/alternatives to bqt.md",
+>>>>>>> wiki
     "notes/show QWidgets without freezing Blender.md",
     "notes/setup bqt develop environment.md",
     "notes/Releasing a new version.md",

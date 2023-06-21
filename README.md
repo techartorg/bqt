@@ -1,6 +1,6 @@
 # bqt
 
-[![PyPI version](https://img.shields.io/PyPI/v/bqt)](https://pypi.org/project/bqt/)
+[![PyPI version](https://img.shields.io/pypi/v/bqt)](https://pypi.org/project/bqt/)
 [![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github)](https://github.com/techartorg/bqt)
 [![](https://img.shields.io/badge/GitHub-Wiki-blue)](https://github.com/techartorg/bqt/wiki)
 

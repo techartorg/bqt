@@ -97,7 +97,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "todo",
+                "query": "tag:#TODO",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -114,8 +114,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -198,22 +197,23 @@
   },
   "active": "011bbfdab593abd8",
   "lastOpenFiles": [
+    "notes/blender input bug.md",
+    "notes/Blender python interpreter.md",
+    "Home.md",
+    "notes/why bqt.md",
+    "notes/bqt pypi setup.md",
+    "notes/bqt as a dependency.md",
+    "notes/Installation.md",
+    "notes/install bqt addon.md",
+    "notes/install bqt module.md",
+    "README.md",
     "notes/setup bqt develop environment.md",
     "notes/widget disappears.md",
-    "Home.md",
-    "blender input bug.md",
     "notes/operator issues.md",
     "notes/quick start guide.md",
-    "README.md",
-    "notes/install as module.md",
-    "notes/install as addon.md",
-    "notes/Installation.md",
-    "Blender python interpreter.md",
-    "notes/why bqt.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/Environment variables.md",
     "notes/Releasing a new version.md",
-    "bqt pypi setup.md",
     "notes/starter tips for doc writers.md",
     "notes/Sync the wiki and wiki-branch.md",
     "www.obsidian.md",

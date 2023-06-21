@@ -19,9 +19,9 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 
 
 ## Requirements
-Blender `2.83`or higher.
-Windows (stable) or Mac (experimental)
-
+- Blender `2.83`or higher.
+- Windows (stable) or Mac (experimental)
+- PySide2
 
 ## Installation  
 see [installation docs](https://github.com/techartorg/bqt/wiki/Installation)
@@ -33,12 +33,11 @@ The [bqt env vars](https://github.com/techartorg/bqt/wiki/Environment-variables)
 ### Sample code
 [bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
 
+### contribute
+- i'm a technical writer and want to contribute to the docs. see [readme](https://github.com/techartorg/bqt/wiki/README) on the wiki.
+- i'm a dev and want to contribute to bqt code, see [contribute guidelines](https://github.com/techartorg/bqt/wiki/contribute-guidelines).
+
 ### Community
 Discuss BQT on 
 - the BlenderArtists [thread](https://blenderartists.org/t/bqt-custom-ui-for-add-ons-tool-in-blender-with-pyqt-or-pyside/1458808)
 - [Ynput  thread](https://community.ynput.io/t/use-bqt-for-blender-qt-integration/127)
-
-### Alternatives
-- Custom (non qt) Blender UI: https://github.com/mmmrqs/bl_ui_widgets
-- Blender native UI (N-Panel etc.) [tutorial1](https://b3d.interplanety.org/en/creating-custom-ui-panels-in-blender/) [tutorial2](https://medium.com/geekculture/creating-a-custom-panel-with-blenders-python-api-b9602d890663) 
-- Cookie cutter, need to find the link. Some blender devs made a more low level custom UI solution for Blender. Seen at blendcon 22, was a bit buggy though.

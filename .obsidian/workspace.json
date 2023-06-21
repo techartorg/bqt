@@ -73,7 +73,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Home.md",
+                "file": "notes/alternatives to bqt.md",
                 "mode": "source",
                 "source": false
               }
@@ -126,8 +126,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -147,7 +146,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Home.md",
+                "file": "notes/alternatives to bqt.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -164,7 +163,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Home.md",
+                "file": "notes/alternatives to bqt.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -187,7 +186,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Home.md"
+                "file": "notes/alternatives to bqt.md"
               }
             }
           }
@@ -208,20 +207,20 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3fa95d65f63d8d57",
+  "active": "b286b842012cf051",
   "lastOpenFiles": [
-    "notes/quick start guide.md",
     "Home.md",
-    "features.md",
+    "notes/quick start guide.md",
+    "notes/features.md",
     "notes/why bqt.md",
-    "contribute guidelines.md",
+    "notes/contribute guidelines.md",
     "README.md",
     "notes/setup bqt develop environment.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/Sync the wiki and wiki-branch.md",
     "notes/tips for bqt doc writers.md",
     "notes/widget disappears.md",
-    "alternatives to bqt.md",
+    "notes/alternatives to bqt.md",
     "notes/show QWidgets without freezing Blender.md",
     "notes/keep QtWidgets in foreground.md",
     "notes/close dialogue in foreground.md",

@@ -73,7 +73,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "contribute guidelines.md",
+                "file": "Home.md",
                 "mode": "source",
                 "source": false
               }
@@ -146,7 +146,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "contribute guidelines.md",
+                "file": "Home.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -163,7 +163,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "contribute guidelines.md",
+                "file": "Home.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -186,7 +186,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "contribute guidelines.md"
+                "file": "Home.md"
               }
             }
           }
@@ -209,9 +209,13 @@
   },
   "active": "3fa95d65f63d8d57",
   "lastOpenFiles": [
+    "notes/why bqt.md",
     "Home.md",
     "contribute guidelines.md",
     "README.md",
+    "notes/quick start guide.md",
+    "alternatives to bqt.md",
+    "notes/setup bqt develop environment.md",
     "notes/show QWidgets without freezing Blender.md",
     "notes/keep QtWidgets in foreground.md",
     "notes/close dialogue in foreground.md",
@@ -221,20 +225,16 @@
     "notes/how to contribute to bqt documentation.md",
     "notes/blender input bug.md",
     "notes/Blender python interpreter.md",
-    "notes/why bqt.md",
     "notes/bqt pypi setup.md",
     "notes/bqt as a dependency.md",
     "notes/Installation.md",
     "notes/install bqt addon.md",
     "notes/install bqt module.md",
-    "notes/setup bqt develop environment.md",
     "notes/widget disappears.md",
     "notes/operator issues.md",
-    "notes/quick start guide.md",
     "notes/Environment variables.md",
     "notes/Releasing a new version.md",
     "notes/starter tips for doc writers.md",
-    "notes/Sync the wiki and wiki-branch.md",
     "notes"
   ]
 }

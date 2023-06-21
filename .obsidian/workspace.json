@@ -61,7 +61,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "notes/Installation.md",
                 "mode": "source",
                 "source": false
               }
@@ -134,7 +134,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "notes/Installation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +151,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "notes/Installation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +174,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md"
+                "file": "notes/Installation.md"
               }
             }
           }
@@ -197,20 +197,20 @@
   },
   "active": "011bbfdab593abd8",
   "lastOpenFiles": [
-    "notes/Environment variables.md",
+    "notes/setup bqt develop environment.md",
+    "notes/Installation.md",
     "Home.md",
+    "notes/why bqt.md",
+    "notes/how to contribute to bqt documentation.md",
+    "notes/Environment variables.md",
     "notes/Releasing a new version.md",
     "bqt pypi setup.md",
     "README.md",
-    "notes/why-bqt.md",
     "notes/widget disappears.md",
     "notes/starter tips for doc writers.md",
-    "notes/how to contribute to bqt documentation.md",
-    "notes/setup bqt develop environment.md",
     "notes/quick start guide.md",
     "notes/Sync the wiki and wiki-branch.md",
     "notes/Operator-issues.md",
-    "notes/Installation.md",
     "www.obsidian.md",
     "obsidian.md",
     "notes",

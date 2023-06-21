@@ -9,8 +9,14 @@ A better workflow is to either:
 
 ## Sym link
 - You can create a symlink from your repo to blender's add-on or modules path.
-Then any update in your repo will auto reflect in Blender on restart of Blender.
+Then any update in the repo auto reflect in Blender on restart of Blender.
+
+```bash
+mklink /J "C:\Users\USERNAME\AppData\Roaming\Blender Foundation\Blender\2.93\scripts\addons\bqt" "C:\Users\hanne\OneDrive\Documents\repos\_Blender\bqt\bqt"
+```
+Pros
 - can be used to install bqt as an addon or a module
+- saves time copy pasting folders over every time you want to test a change
 
 Cons
 - If you symlink the addon and uninstall the addon in Blender, your repo folder might be deleted resulting in loss of uncommitted work.
@@ -18,6 +24,8 @@ Cons
 
 ## Editable package install
 
+Pros
+- saves time copy pasting folders over every time you want to test a change
 - Cleaner than symlink, doesn't accidentally deletes your work.
 - Only works for Python packages. So you can only install bqt as a module, not an add-on. Bqt comes pre-packaged already, with it's `setup.py` file.
 

@@ -4,7 +4,7 @@ Welcome to the bqt wiki!
 Check out [[how to contribute to bqt documentation]]
 
 - [[why bqt]]
-- TODO [[Installation]]
+- [[Installation]]
 - TODO [[quick start guide]] get started tutorial
 
 ### Gotchas

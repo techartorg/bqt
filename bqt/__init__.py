@@ -24,8 +24,8 @@ bl_info = {
         "blender": (2, 80, 0),
         # "location": "",
         # "warning": "", # used for warning icon and text in add-ons panel
-        # "wiki_url": "http://my.wiki.url",
-        # "tracker_url": "http://my.bugtracker.url",
+        "wiki_url": "https://github.com/techartorg/bqt/wiki",
+        "tracker_url": "https://github.com/techartorg/bqt/issues",
         "support": "COMMUNITY",
         "category": "UI"
         }

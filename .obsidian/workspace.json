@@ -61,14 +61,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Home.md",
+                "file": "notes/close dialogue in foreground.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "3fa95d65f63d8d57",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "contribute guidelines.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -134,7 +146,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Home.md",
+                "file": "contribute guidelines.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +163,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Home.md",
+                "file": "contribute guidelines.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +186,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Home.md"
+                "file": "contribute guidelines.md"
               }
             }
           }
@@ -195,30 +207,34 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "011bbfdab593abd8",
+  "active": "3fa95d65f63d8d57",
   "lastOpenFiles": [
+    "Home.md",
+    "contribute guidelines.md",
+    "README.md",
+    "notes/show QWidgets without freezing Blender.md",
+    "notes/keep QtWidgets in foreground.md",
+    "notes/close dialogue in foreground.md",
+    "notes/prevent open same widget twice.md",
+    "notes/create cross app tools.md",
+    "notes/style QWidgets with Blender stylesheet.md",
+    "notes/how to contribute to bqt documentation.md",
     "notes/blender input bug.md",
     "notes/Blender python interpreter.md",
-    "Home.md",
     "notes/why bqt.md",
     "notes/bqt pypi setup.md",
     "notes/bqt as a dependency.md",
     "notes/Installation.md",
     "notes/install bqt addon.md",
     "notes/install bqt module.md",
-    "README.md",
     "notes/setup bqt develop environment.md",
     "notes/widget disappears.md",
     "notes/operator issues.md",
     "notes/quick start guide.md",
-    "notes/how to contribute to bqt documentation.md",
     "notes/Environment variables.md",
     "notes/Releasing a new version.md",
     "notes/starter tips for doc writers.md",
     "notes/Sync the wiki and wiki-branch.md",
-    "www.obsidian.md",
-    "obsidian.md",
-    "notes",
-    "notes.md"
+    "notes"
   ]
 }

@@ -8,6 +8,18 @@ Check out [[how to contribute to bqt documentation]]
 - [[quick start guide]] #TODO 👷
 - I'm a dev and want to use bqt in my tool [[bqt as a dependency]] #TODO 👷
 
+## features
+#TODO 👷see [[Environment variables]] for explanation of features.  
+copy instructions to individual page (don't delete from env var page though.)
+and add images
+
+- [[show QWidgets without freezing Blender]]
+- [[style QWidgets with Blender stylesheet]]
+- [[keep QtWidgets in foreground]]
+- [[create cross app tools]]
+- [[close dialogue in foreground]]
+- [[prevent open same widget twice]]
+
 ### Gotchas
 - I get an error about the context, see [[operator issues]]
 - My widget briefly shows, and then the [[widget disappears]]
@@ -15,7 +27,7 @@ Check out [[how to contribute to bqt documentation]]
 - If you experience a new issue, report it [here](https://github.com/techartorg/bqt/issues)
 
 ### Contribute to bqt
-- contribute guidelines #TODO 👷
+- [[contribute guidelines]] #TODO 👷
 - [[setup bqt develop environment]]
 - (admin only) [[Releasing a new version]] to github and pypi 
 

@@ -1,8 +1,3 @@
----
-aliases:
-- "contribute guidelines for devs"
----
-
 hey and welcome 👋
 
 #todo 👷 (this page could use some improvement)

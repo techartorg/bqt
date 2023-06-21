@@ -109,7 +109,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "sync",
+                "query": "alias",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -208,17 +208,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3fa95d65f63d8d57",
+  "active": "842eb0fb36cfb5bb",
   "lastOpenFiles": [
-    "notes/setup bqt develop environment.md",
+    "contribute guidelines.md",
     "Home.md",
     "README.md",
+    "notes/setup bqt develop environment.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/Sync the wiki and wiki-branch.md",
     "notes/tips for bqt doc writers.md",
     "notes/widget disappears.md",
     "notes/why bqt.md",
-    "contribute guidelines.md",
     "notes/quick start guide.md",
     "alternatives to bqt.md",
     "notes/show QWidgets without freezing Blender.md",

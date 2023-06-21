@@ -28,8 +28,8 @@ and add images
 - If you experience a new issue, report it [here](https://github.com/techartorg/bqt/issues)
 
 ### Contribute to bqt
-- [[contribute guidelines|contribute guidelines for devs]]
-- [[README|contribute guidelines for technical writers]]
+- [[contribute guidelines]] for devs
+- contribute guidelines for technical writers, see [[README]]
 - (admin only) [[Releasing a new version]] to github and pypi 
 
 ### other

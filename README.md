@@ -1,8 +1,3 @@
----
-aliases:
-- "contribute guidelines for technical writers"
----
-
 Hello fellow doc writer.
 
 - The current page you're on, is [the front page](https://github.com/techartorg/bqt/tree/wiki) on the GitHub repo in the `wiki` branch, and is aimed at people who want to contribute to the documentation. Private notes for documentation contributors go here.

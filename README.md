@@ -13,5 +13,6 @@ Hello fellow doc writer.
 ## doc write notes
 - [[starter tips for doc writers]]
 
+search for the #todo hashtag
 
 

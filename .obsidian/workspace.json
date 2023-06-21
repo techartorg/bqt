@@ -61,7 +61,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Installation.md",
+                "file": "Home.md",
                 "mode": "source",
                 "source": false
               }
@@ -97,7 +97,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "todo",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -114,7 +114,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -134,7 +135,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/Installation.md",
+                "file": "Home.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +152,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/Installation.md",
+                "file": "Home.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +175,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/Installation.md"
+                "file": "Home.md"
               }
             }
           }
@@ -198,19 +199,23 @@
   "active": "011bbfdab593abd8",
   "lastOpenFiles": [
     "notes/setup bqt develop environment.md",
-    "notes/Installation.md",
+    "notes/widget disappears.md",
     "Home.md",
+    "blender input bug.md",
+    "notes/operator issues.md",
+    "notes/quick start guide.md",
+    "README.md",
+    "notes/install as module.md",
+    "notes/install as addon.md",
+    "notes/Installation.md",
+    "Blender python interpreter.md",
     "notes/why bqt.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/Environment variables.md",
     "notes/Releasing a new version.md",
     "bqt pypi setup.md",
-    "README.md",
-    "notes/widget disappears.md",
     "notes/starter tips for doc writers.md",
-    "notes/quick start guide.md",
     "notes/Sync the wiki and wiki-branch.md",
-    "notes/Operator-issues.md",
     "www.obsidian.md",
     "obsidian.md",
     "notes",

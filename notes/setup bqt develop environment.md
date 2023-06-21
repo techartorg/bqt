@@ -34,5 +34,6 @@ Cons
 - Blender doesn't like editable installs by default, you need to append `sitedir` to the `sys.path` on startup. This can be done automatically on startup with a script in [blender's startup path](https://docs.blender.org/manual/en/latest/advanced/blender_directory_layout.html#path-layout) `./scripts/startup/*.py`
 
 ## VS-Code Blender extension
-TODO investigate, might be able to cleanly install bqt as addon, and trigger real time refresh of script code in Blender.
+#TODO 👷
+investigate, might be able to cleanly install bqt as addon, and trigger real time refresh of script code in Blender.
 But you have to start Blender through VS code

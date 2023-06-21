@@ -21,15 +21,12 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 - Windows (stable) or Mac (experimental)
 - PySide2
 
-## Installation  
-see [installation docs](https://github.com/techartorg/bqt/wiki/Installation)
+## How to use
+1. Install & enable the bqt addon (see [installation docs](https://github.com/techartorg/bqt/wiki/Installation))
+2. Create & show your Qt widget, bqt will automatically register it with it's widget manager.
 
-
-### Environment variables
-The [bqt env vars](https://github.com/techartorg/bqt/wiki/Environment-variables) let you toggle bqt features on and off
-
-### Sample code
-[bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
+- The [bqt env vars](https://github.com/techartorg/bqt/wiki/Environment-variables) let you toggle bqt features on and off
+- sample code: [bqt_demo](bqt_demo) shows you how to use bqt with several qt demos you can run in Blender
 
 ### contribute
 - i'm a technical writer and want to contribute to the docs. see [readme](https://github.com/techartorg/bqt/wiki/README) on the wiki.

@@ -1,10 +1,8 @@
 # bqt
 
-
-
 [![PyPI version](https://img.shields.io/pypi/v/bqt)](https://pypi.org/project/bqt/)
 [![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github)](https://github.com/techartorg/bqt)
-
+[![](https://img.shields.io/badge/GitHub-Wiki-blue)](https://github.com/techartorg/bqt/wiki)
 
 Add QT support to Blender, letting you create custom UI for your addons with PySide2 QtWidgets.
 ![custom ui sample](https://user-images.githubusercontent.com/3758308/192096952-e9ed73be-26e4-4ad8-a85f-be4175cebbda.gif)

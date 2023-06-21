@@ -61,7 +61,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Home.md",
+                "file": "notes/how to contribute to bqt documentation.md",
                 "mode": "source",
                 "source": false
               }
@@ -134,7 +134,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Home.md",
+                "file": "notes/how to contribute to bqt documentation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +151,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Home.md",
+                "file": "notes/how to contribute to bqt documentation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +174,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Home.md"
+                "file": "notes/how to contribute to bqt documentation.md"
               }
             }
           }
@@ -197,13 +197,13 @@
   },
   "active": "011bbfdab593abd8",
   "lastOpenFiles": [
-    "notes/Releasing a new version.md",
+    "notes/Environment variables.md",
     "Home.md",
+    "notes/Releasing a new version.md",
     "bqt pypi setup.md",
     "README.md",
     "notes/why-bqt.md",
     "notes/widget disappears.md",
-    "notes/Environment variables.md",
     "notes/starter tips for doc writers.md",
     "notes/how to contribute to bqt documentation.md",
     "notes/setup bqt develop environment.md",

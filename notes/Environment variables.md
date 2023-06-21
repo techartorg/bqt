@@ -13,11 +13,19 @@ The env variables are mostly used as feature toggles, letting you turn off certa
 |BQT_AUTO_ADD|defaults to `1`, if `0` top level widgets won't automatically be added to bqt.|
 |BQT_UNIQUE_OBJECTNAME|defaults to `1`, 1 or 0, automatically delete widgets with same objectName, preventing you from opening multiple versions of the same widget window. Great if you want to ensure that clicking "my window" activates "mywindow" if already open, instead of making a new one|
 
-## How to edit env variables?
-It's quite a common thing, a google search should help you when stuck.
+### Legacy
+Outdated env vars go here, currently no outdated env vars
+
+# FAQ
+### How to edit env variables?
+It's quite a common thing, a google search for `set environment variable` should help you.
 - a [tutorial](https://www.howtogeek.com/787217/how-to-edit-environment-variables-on-windows-10-or-11/) for windows users with images
+
+### Restart after edit env vars.
+Don't forget to click the OK button on Windows. (I've done it 😅)
 
 After editing env variables, you have to restart Blender, or the launcher that launches Blender. e.g. `steam` or `blender launcher`. Closing these launchers often just hides them in the background, and doesn't really restarts them. Which means edits to the env vars wont show. If you don't know how to restart it, just restart your computer.
 
-## Legacy
-Outdated env vars go here, currently no outdated env vars
+### dynamically set env vars
+You can also do this with a startup script.  
+If you modify env vars in code, ensure they're strings!

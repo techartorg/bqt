@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md"
+                "file": "README.md"
               }
             }
           }
@@ -148,11 +148,11 @@
   },
   "active": "698c7fb2551cc302",
   "lastOpenFiles": [
-    "notes/why bqt.md",
-    "Home.md",
-    "README.md",
-    "notes/widget disappears.md",
     "notes/tips for bqt doc writers.md",
+    "README.md",
+    "notes/how to contribute to bqt documentation.md",
+    "notes/why bqt.md",
+    "notes/widget disappears.md",
     "notes/Sync the wiki and wiki-branch.md",
     "notes/style QWidgets with Blender stylesheet.md",
     "notes/show QWidgets without freezing Blender.md",
@@ -165,15 +165,34 @@
     "notes/Installation.md",
     "notes/install bqt module.md",
     "notes/install bqt addon.md",
-    "notes/how to contribute to bqt documentation.md",
     "notes/features.md",
     "notes/Environment variables.md",
-    "notes/contribute guidelines.md",
     "notes/close dialogue in foreground.md",
-    "notes/bqt as a dependency.md",
+    "notes/contribute guidelines.md",
     "notes/Blender python interpreter.md",
+    "notes/bqt as a dependency.md",
     "notes/blender input bug.md",
     "notes/alternatives to bqt.md",
-    "notes"
+    "notes",
+    "Home.md",
+    "setup.py",
+    "bqt/widget_manager.py",
+    "bqt_demo/__init__.py",
+    "bqt_demo/timer.py",
+    "bqt_demo/pyside_widgets.py",
+    "bqt_demo/hello_world.py",
+    "bqt_demo/demo.py",
+    "bqt_demo/anim_bar.py",
+    "bqt_demo",
+    "bqt/images/question.svg",
+    "bqt/images/QSpinBox_up_arrow.png",
+    "bqt/images/QSpinBox_down_arrow.png",
+    "bqt/images/QRadioButton_unchecked_hover.png",
+    "bqt/images/QRadioButton_unchecked.png",
+    "bqt/images/QRadioButton_checked_hover.png",
+    "bqt/images/QRadioButton_checked.png",
+    "bqt/images/QComboBox_down_arrow.png",
+    "bqt/images/QCheckBox_unchecked.png",
+    "bqt/images/QCheckbox_unchecked_hover.png"
   ]
 }

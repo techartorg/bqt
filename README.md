@@ -15,3 +15,6 @@ When writing the docs, try to always keep the following in mind:
 - [[tips for bqt doc writers]]
 - [[how to contribute to bqt documentation]]
 
+## Test change for initial test PR
+- took some time to figure out and get setup
+- but finally reached this step!

@@ -109,7 +109,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#TODO",
+                "query": "sync",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -126,7 +126,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -209,20 +210,23 @@
   },
   "active": "3fa95d65f63d8d57",
   "lastOpenFiles": [
-    "notes/why bqt.md",
+    "notes/setup bqt develop environment.md",
     "Home.md",
-    "contribute guidelines.md",
     "README.md",
+    "notes/how to contribute to bqt documentation.md",
+    "notes/Sync the wiki and wiki-branch.md",
+    "notes/tips for bqt doc writers.md",
+    "notes/widget disappears.md",
+    "notes/why bqt.md",
+    "contribute guidelines.md",
     "notes/quick start guide.md",
     "alternatives to bqt.md",
-    "notes/setup bqt develop environment.md",
     "notes/show QWidgets without freezing Blender.md",
     "notes/keep QtWidgets in foreground.md",
     "notes/close dialogue in foreground.md",
     "notes/prevent open same widget twice.md",
     "notes/create cross app tools.md",
     "notes/style QWidgets with Blender stylesheet.md",
-    "notes/how to contribute to bqt documentation.md",
     "notes/blender input bug.md",
     "notes/Blender python interpreter.md",
     "notes/bqt pypi setup.md",
@@ -230,11 +234,8 @@
     "notes/Installation.md",
     "notes/install bqt addon.md",
     "notes/install bqt module.md",
-    "notes/widget disappears.md",
     "notes/operator issues.md",
     "notes/Environment variables.md",
-    "notes/Releasing a new version.md",
-    "notes/starter tips for doc writers.md",
     "notes"
   ]
 }

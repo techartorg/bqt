@@ -5,3 +5,4 @@ These docs are edited with [Obsidian](http://www.obsidian.md):
 - use `# `, `## `or `### ` in front of a sentence to create a header.
 - GitHub wiki is less advanced than Obsidian, avoid fancy features that only work in Obsidian. 
 - A new line in GitHub requires the previous line to end in 2 spaces. This wont show in Obsidian.
+- chapters that need more work are flagged with the #todo 👷 hashtag. Search for it in Obsidian by clicking the tag.

@@ -1,7 +1,7 @@
 First, read the [[README]]
 
 ## First time contributor, help?
-This will sound complex, and like a lot, but if you try step by step and google when you get stuck, or ask questions [here](https://github.com/techartorg/bqt/issues/92), you ll get there. 
+This will sound complex, and like a lot, but if you try step by step and google when you get stuck, or ask questions [here](https://github.com/techartorg/bqt/issues/92), you'll get there. 
 (Don't be afraid of making a mistake, you can't break the project if you're not admin.)
 Here we go 🚶:  
 - you will need to fork the repo with all branches
@@ -17,3 +17,6 @@ Review it with a maintainer, maybe implement their feedback, and iterate on it u
 
 ## What should I work on
 Check out the [issues](https://github.com/techartorg/bqt/issues) with the  `documentation` tag.
+
+## How is the wiki setup
+see [[Sync the wiki and wiki-branch]]

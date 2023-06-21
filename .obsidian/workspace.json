@@ -49,14 +49,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "Home.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "011bbfdab593abd8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Home.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -122,7 +134,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "Home.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -139,7 +151,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "Home.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -162,7 +174,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "Home.md"
               }
             }
           }
@@ -183,21 +195,25 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "ed54599862696a0b",
+  "active": "011bbfdab593abd8",
   "lastOpenFiles": [
-    "www.obsidian.md",
-    "README.md",
-    "obsidian.md",
-    "notes/how to contribute to bqt documentation.md",
-    "notes/widget disappears.md",
+    "notes/Releasing a new version.md",
     "Home.md",
-    "notes/Installation.md",
+    "bqt pypi setup.md",
+    "README.md",
+    "notes/why-bqt.md",
+    "notes/widget disappears.md",
     "notes/Environment variables.md",
+    "notes/starter tips for doc writers.md",
+    "notes/how to contribute to bqt documentation.md",
     "notes/setup bqt develop environment.md",
     "notes/quick start guide.md",
-    "notes",
-    "notes.md",
+    "notes/Sync the wiki and wiki-branch.md",
     "notes/Operator-issues.md",
-    "notes/why-bqt.md"
+    "notes/Installation.md",
+    "www.obsidian.md",
+    "obsidian.md",
+    "notes",
+    "notes.md"
   ]
 }

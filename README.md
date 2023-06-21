@@ -24,34 +24,8 @@ Windows (stable) or Mac (experimental)
 
 
 ## Installation  
+see [installation docs](https://github.com/techartorg/bqt/wiki/Installation)
 
-### install as addon (recommended)
-1. Download the latest release. You can download the zip from the repo.
-2. Extract the zip and copy the `bqt` folder to your blender addons folder.
-3. Enable the addon by going to `Edit > Preferences > Add-ons` and search for `qt`
-
-### PIP install
-The installation of bqt with automatic setup for Blender requires the usage of the integrated python
-interpreter found within `../Blender Foundation/<version>/Python/bin`
-```commandline
-python.exe -m pip install bqt
-```
-
-### Installing from Source
-If you are installing from a clone of the repository you can easily install by navigating
-to bqt's root folder and running:
-```commandline
-python setup.py install
-```
-
-## Develop setup
-When working on the bqt code from a repo, to prevent having to reinstall bqt every time you make a change,
-you can symlink the bqt folder to your blender addons folder to develop bqt. 
-Any updates in the repo are then reflected in blender on restart.
-e.g.:
-```commandline
-mklink /J "C:\Users\USERNAME\AppData\Roaming\Blender Foundation\Blender\2.93\scripts\addons\bqt" "C:\Users\hanne\OneDrive\Documents\repos\_Blender\bqt\bqt"
-```
 
 ### Environment variables
 The [bqt env vars](https://github.com/techartorg/bqt/wiki/Environment-variables) let you toggle bqt features on and off

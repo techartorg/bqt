@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-paste-png-to-jpeg",
+	"name": "Paste image Png to Jpeg",
+	"version": "1.0.4",
+	"minAppVersion": "0.14.0",
+	"description": "Screenshot png to jpeg and compress and rename",
+	"author": "musug",
+	"authorUrl": "https://github.com/musug",
+	"isDesktopOnly": false
+}

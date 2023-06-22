@@ -145,11 +145,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "698c7fb2551cc302",
+  "active": "6d100b129568e310",
   "lastOpenFiles": [
-    "addon_install2.png",
-    "addon_install1.png",
-    "addon_install.png",
+    "images",
+    "images/addon_install2.png",
+    "images/addon_install1.png",
+    "images/addon_install.png",
     "notes/Sync the wiki and wiki-branch.md",
     "notes/Install bqt addon.md",
     "notes/Install bqt addon.md",
@@ -191,7 +192,6 @@
     "bqt/images/QRadioButton_unchecked_hover.png",
     "bqt/images/QRadioButton_unchecked.png",
     "bqt/images/QRadioButton_checked.png",
-    "bqt/images/QRadioButton_checked_hover.png",
-    "bqt/images/QComboBox_down_arrow.png"
+    "bqt/images/QRadioButton_checked_hover.png"
   ]
 }

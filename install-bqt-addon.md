@@ -7,7 +7,8 @@ You can either install through plugget or manually install the addon and its dep
 ## Plugget  (recommended)
 
 1. Install the [plugget blender addon](https://github.com/hannesdelbeke/plugget-blender-addon) by clicking on the linked page.
-2. Click on the download link after going to the linked page in step 1.![[addon_install.png]]
+2. Click on the download link after going to the linked page in step 1.  
+  [[images/addon_install.png]]
 3. Find the install file in your downloads folder.![[addon_install1.png]]
 4. Double-clicking the file will automatically open it in Blender.
 5. Run the scripts inside to install the addon.

@@ -1,15 +1,21 @@
 Installing bqt as an addon means less coding for you.
 - The bqt startup code automatically runs on Blender startup.  
-- you can disable bqt by disabling the addon
+- You can disable bqt by disabling the addon.
 
-You can either install through plugget, or manually install the addon and it's dependencies.
+You can either install through plugget or manually install the addon and its dependencies.
 
 ## Plugget  (recommended)
 
 #TODO 👷add step by step images
 
-1. Install the [plugget blender addon](https://github.com/hannesdelbeke/plugget-blender-addon)
-2. search bqt and click install. This auto installs the bqt addon and all it's dependencies.
+1. Install the [plugget blender addon](https://github.com/hannesdelbeke/plugget-blender-addon)by clicking on the linked page.
+2. Click on the download link after going to the linked page in step 1.![[addon_install.png]]
+3. Find the install file in your downloads folder.![[addon_install1.png]]
+4. Double-clicking the file will automatically open it in Blender.
+5. Run the scripts inside to install the addon.
+6. Find the Plugget addon by going to `Edit > Preferences > Add-ons`.
+7. Type bqt into the search box and click search.
+8. Click install. This installs the bqt addon and all its dependencies.![[addon_install2.png]]
 
 
 ## manual add-on install

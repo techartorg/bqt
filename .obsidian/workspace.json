@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/install bqt addon.md",
+                "file": "notes/Install bqt addon.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/install bqt addon.md",
+                "file": "notes/Install bqt addon.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/install bqt addon.md",
+                "file": "notes/Install bqt addon.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/install bqt addon.md"
+                "file": "notes/Install bqt addon.md"
               }
             }
           }
@@ -147,51 +147,51 @@
   },
   "active": "698c7fb2551cc302",
   "lastOpenFiles": [
-    "notes/how to contribute to bqt documentation.md",
-    "notes/Sync the wiki and wiki-branch.md",
-    "notes/install bqt addon.md",
-    "notes/Installation.md",
-    "notes/install bqt module.md",
-    "notes/quick start guide.md",
-    "notes/Blender python interpreter.md",
-    "notes/bqt as a dependency.md",
-    "notes/blender input bug.md",
-    "notes/alternatives to bqt.md",
-    "README.md",
-    "Home.md",
-    "notes/Install bqt addon.md",
     "addon_install2.png",
     "addon_install1.png",
     "addon_install.png",
+    "notes/Sync the wiki and wiki-branch.md",
+    "notes/Install bqt addon.md",
+    "notes/Install bqt addon.md",
     "notes/widget disappears.md",
     "notes/why bqt.md",
     "notes/tips for bqt doc writers.md",
     "notes/style QWidgets with Blender stylesheet.md",
     "notes/show QWidgets without freezing Blender.md",
-    "notes/Releasing a new version.md",
     "notes/setup bqt develop environment.md",
+    "notes/Releasing a new version.md",
     "notes/prevent open same widget twice.md",
+    "notes/quick start guide.md",
     "notes/operator issues.md",
     "notes/keep QtWidgets in foreground.md",
+    "notes/Installation.md",
+    "notes/install bqt module.md",
+    "notes/how to contribute to bqt documentation.md",
     "notes/features.md",
     "notes/Environment variables.md",
+    "notes/contribute guidelines.md",
     "notes/close dialogue in foreground.md",
+    "notes/Blender python interpreter.md",
+    "notes/bqt as a dependency.md",
+    "notes/blender input bug.md",
+    "notes/alternatives to bqt.md",
     "notes",
     "setup.py",
-    "LICENSE",
     "requirements.txt",
     "MANIFEST.in",
+    "LICENSE",
     "bqt_demo/__init__.py",
     "bqt_demo/timer.py",
     "bqt_demo/pyside_widgets.py",
     "bqt_demo/hello_world.py",
-    "bqt_demo/anim_bar.py",
+    "bqt_demo/demo.py",
     "bqt/images/question.svg",
     "bqt/images/QSpinBox_up_arrow.png",
     "bqt/images/QSpinBox_down_arrow.png",
     "bqt/images/QRadioButton_unchecked_hover.png",
     "bqt/images/QRadioButton_unchecked.png",
+    "bqt/images/QRadioButton_checked.png",
     "bqt/images/QRadioButton_checked_hover.png",
-    "bqt/images/QRadioButton_checked.png"
+    "bqt/images/QComboBox_down_arrow.png"
   ]
 }

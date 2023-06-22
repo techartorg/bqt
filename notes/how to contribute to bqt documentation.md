@@ -19,4 +19,4 @@ Review it with a maintainer, maybe implement their feedback, and iterate on it u
 Check out the [issues](https://github.com/techartorg/bqt/issues) with the  `documentation` tag.
 
 ## How is the wiki setup
-see [[Sync the wiki and wiki-branch]]
+See [[Sync the wiki and wiki-branch]]

@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "notes/install bqt addon.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "notes/install bqt addon.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md",
+                "file": "notes/install bqt addon.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/how to contribute to bqt documentation.md"
+                "file": "notes/install bqt addon.md"
               }
             }
           }
@@ -147,19 +147,25 @@
   },
   "active": "698c7fb2551cc302",
   "lastOpenFiles": [
-    "notes/Install bqt addon.md",
+    "notes/how to contribute to bqt documentation.md",
+    "notes/Sync the wiki and wiki-branch.md",
     "notes/install bqt addon.md",
+    "notes/Installation.md",
+    "notes/install bqt module.md",
+    "notes/quick start guide.md",
+    "notes/Blender python interpreter.md",
+    "notes/bqt as a dependency.md",
+    "notes/blender input bug.md",
+    "notes/alternatives to bqt.md",
+    "README.md",
+    "Home.md",
+    "notes/Install bqt addon.md",
     "addon_install2.png",
     "addon_install1.png",
     "addon_install.png",
-    "notes/how to contribute to bqt documentation.md",
-    "Home.md",
-    "notes/quick start guide.md",
-    "README.md",
     "notes/widget disappears.md",
     "notes/why bqt.md",
     "notes/tips for bqt doc writers.md",
-    "notes/Sync the wiki and wiki-branch.md",
     "notes/style QWidgets with Blender stylesheet.md",
     "notes/show QWidgets without freezing Blender.md",
     "notes/Releasing a new version.md",
@@ -167,15 +173,9 @@
     "notes/prevent open same widget twice.md",
     "notes/operator issues.md",
     "notes/keep QtWidgets in foreground.md",
-    "notes/Installation.md",
-    "notes/install bqt module.md",
-    "notes/blender input bug.md",
     "notes/features.md",
     "notes/Environment variables.md",
     "notes/close dialogue in foreground.md",
-    "notes/contribute guidelines.md",
-    "notes/bqt as a dependency.md",
-    "notes/Blender python interpreter.md",
     "notes",
     "setup.py",
     "LICENSE",

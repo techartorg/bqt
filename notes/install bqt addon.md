@@ -26,4 +26,3 @@ cd "your/bqt/folder/path"
 python -m pip install -r requirements.txt
 ```
 4. Enable the addon by going to `Edit > Preferences > Add-ons` and search for `qt`
-

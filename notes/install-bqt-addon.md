@@ -14,7 +14,7 @@ You can either install through plugget or manually install the addon and its dep
 5. Find the Plugget addon by going to `Edit > Preferences > Add-ons`.
 6. Type bqt into the search box and click search.
 7. Click install. This installs the bqt addon and all its dependencies.
-  ![[images/addon_install2.png]]
+  ![](images/addon_install2.png)
 
 
 ## manual add-on install

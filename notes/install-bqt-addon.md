@@ -8,13 +8,13 @@ You can either install through plugget or manually install the addon and its dep
 
 1. Download the [plugget blender addon](https://github.com/hannesdelbeke/plugget-blender-addon/raw/main/installer/install_plugget_addon.blend) by clicking on the link.
 2. Find the install file in your downloads folder.
-  [[addon_install1.png]]
+  [[images/addon_install1.png]]
 3. Double-clicking the file will automatically open it in Blender.
 4. Run the scripts inside to install the addon.
 5. Find the Plugget addon by going to `Edit > Preferences > Add-ons`.
 6. Type bqt into the search box and click search.
 7. Click install. This installs the bqt addon and all its dependencies.
-  [[addon_install2.png]]
+  [[images/addon_install2.png]]
 
 
 ## manual add-on install

@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/Install bqt addon.md",
+                "file": "install-bqt-addon.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/Install bqt addon.md",
+                "file": "install-bqt-addon.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "notes/Install bqt addon.md",
+                "file": "install-bqt-addon.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "notes/Install bqt addon.md"
+                "file": "install-bqt-addon.md"
               }
             }
           }
@@ -145,15 +145,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "6d100b129568e310",
+  "active": "698c7fb2551cc302",
   "lastOpenFiles": [
+    "images/addon_install1.png",
+    "install-bqt-addon.md",
+    "images/addon_install.png",
+    "notes/Install bqt addon.md",
     "images",
     "images/addon_install2.png",
-    "images/addon_install1.png",
-    "images/addon_install.png",
     "notes/Sync the wiki and wiki-branch.md",
-    "notes/Install bqt addon.md",
-    "notes/Install bqt addon.md",
     "notes/widget disappears.md",
     "notes/why bqt.md",
     "notes/tips for bqt doc writers.md",
@@ -185,7 +185,6 @@
     "bqt_demo/timer.py",
     "bqt_demo/pyside_widgets.py",
     "bqt_demo/hello_world.py",
-    "bqt_demo/demo.py",
     "bqt/images/question.svg",
     "bqt/images/QSpinBox_up_arrow.png",
     "bqt/images/QSpinBox_down_arrow.png",

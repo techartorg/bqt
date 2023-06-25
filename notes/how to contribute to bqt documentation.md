@@ -3,17 +3,23 @@ Read the [[README]] first. This will sound complex, and like a lot, but if you t
 ### Prerequisites
 Before you start your first contribution, install the following tools:
  - Git
- - A Git client , like Fork or Github Desktop
+ - A Git client, like Fork or GitHub Desktop
  - Obsidian
 
 ## Your first contribution
 Here we go 🚶:  
-1. Fork the repo with all branches.
-2. Clone the forked repo (big green button at the top on the front page).
-3. Swap branch to the wiki branch.
-4. Open the folder in obsidian, and edit the text files (make a test change to anything).
-5. Make a single edit, push it to your fork.
-6. Create a Pull Request.
+1. Navigate to [bqt's repository].(https://github.com/techartorg/bqt)
+2. Click Fork.
+3. Uncheck the "Copy the master branch only" option.
+4. Click the < > Code button above your forked repository.
+5. Open the repository in your chosen Git client and switch to the “wiki” branch.
+7. Open Obsidian, and choose "Open folder as vault."
+8. Select the bqt folder on your file explorer and click "Open."
+9. Look through the wiki files and choose one that interests you.
+10. Make a small edit, such as changing the capitalization of a word or adding punctuation.
+11. Return to your git client and commit the change to the wiki branch.
+12. Navigate back to [bqt's repository].(https://github.com/techartorg/bqt).
+13. Click the "Compare & pull request" button to begin a pull request.
 Once you successfully created a PR, feel free to close it. You are now ready to make real PRs.
 
 For your next steps, make actual changes to the docs.

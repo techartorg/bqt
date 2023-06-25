@@ -1,9 +1,10 @@
-
-## Getting started
 Read the [[README]] first. This will sound complex, and like a lot, but if you try step by step and google when you get stuck, or ask questions [here](https://github.com/techartorg/bqt/issues/92), you'll get there. Don't be afraid of making a mistake, you can't break the project if you're not admin.
 
-### What you'll need
-
+### Prerequisites
+Before you start your first contribution, install the following tools:
+ - Git
+ - A Git client , like Fork or Github Desktop
+ - Obsidian
 
 ## Your first contribution
 Here we go 🚶:  

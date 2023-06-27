@@ -8,23 +8,44 @@ Before you start your first contribution, install the following tools:
 
 ## Your first contribution
 Here we go 🚶:  
+### Fork the repository
 1. Navigate to [bqt's repository].(https://github.com/techartorg/bqt)
-2. Click Fork.
-3. Uncheck the "Copy the master branch only" option.
-4. Click the < > Code button above your forked repository.
-5. Open the repository in your chosen Git client and switch to the “wiki” branch.
-7. Open Obsidian, and choose "Open folder as vault."
-8. Select the bqt folder on your file explorer and click "Open."
-9. Look through the wiki files and choose one that interests you.
-10. Make a small edit, such as changing the capitalization of a word or adding punctuation.
-11. Return to your git client and commit the change to the wiki branch.
-12. Navigate back to [bqt's repository].(https://github.com/techartorg/bqt).
-13. Click the "Compare & pull request" button to begin a pull request.
-Once you successfully created a PR, feel free to close it. You are now ready to make real PRs.
+2. Click **Fork** in the upper right corner.
+3. Uncheck the "Copy the master branch only" option and click **Create fork**.
 
-For your next steps, make actual changes to the docs.
-Then repeat the above steps to push the changes, and create a PR.
-Review it with a maintainer, maybe implement their feedback, and iterate on it until it get's merged in.
+### Clone the forked repository
+Click the **< > Code** button above your forked repository. Under the Clone tab, you are presented with the following options:
+-
+-
+-
+-
+-
+### Open the repository with your Git client
+1. Access your cloned bqt repository with your chosen Git client.
+2. Switch to the “wiki” branch.
+3. Minimize your Git client window.
+
+### Open the wiki text files in Obsidian
+1. Open Obsidian.
+2. Click the “Open folder as vault” option.
+3. Locate and select the bqt folder on your machine.
+4. Use the left-sidebar to navigate the wiki files and choose one that interests you.
+
+### Make your first edit
+Once you have chosen a wiki file in Obsidian, make a minor edit to the text. For example, you can change the capitalization of a letter or add punctuation.
+
+### Commit your change
+1. Maximize your Git client window.
+2. Commit your change to the wiki branch.
+3. Minimize your Git client again.
+
+### Create a pull request 
+1. Navigate back to [bqt's repository].([https://github.com/techartorg/bqt](https://github.com/techartorg/bqt))
+2. Click the "Compare & pull request" button located near the top of the page.
+3. Add a title and description for your pull request.
+4. Click Create Pull Request. This sends the request to a bqt admin for approval.
+
+Congratulations! You made your first contribution to bqt’s documentation. Feel free to close it. You are now ready to make meaningful changes.
 
 ## Next steps
 Check out the [issues](https://github.com/techartorg/bqt/issues) with the  `documentation` tag.

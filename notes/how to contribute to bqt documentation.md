@@ -4,13 +4,13 @@ Thank you for your interest in contributing to bqt's documentation! To get start
 Before you start your first contribution, install the following tools:
  - Git
  - A Git client, like [Fork](https://git-fork.com/) or [GitHub Desktop](https://desktop.github.com/)
- - [Obsidian](https://obsidian.md/)
+ - [Obsidian](https://obsidian.md/)  
 If you are new to using Git and GitHub, please read [about Git](https://docs.github.com/en/get-started/using-git/about-git).
 
 ## Your first contribution
 The following steps are geared toward complete beginners. If you get lost or stuck, please feel free to ask questions [in this thread](https://github.com/techartorg/bqt/issues/92) or troubleshoot with Google search. Let's go! 🚶:  
 #### Fork the repository
-1. Navigate to [bqt's repository].(https://github.com/techartorg/bqt)
+1. Navigate to [bqt's repository](https://github.com/techartorg/bqt).
 2. Click **Fork** in the upper right corner.
 3. Uncheck the "**Copy the master branch only**" option and click **Create fork**.
 
@@ -40,9 +40,9 @@ Once you have chosen a wiki file in Obsidian, make a minor edit to the text. For
 
 #### Create a pull request 
 1. Navigate back to [bqt's repository].([https://github.com/techartorg/bqt](https://github.com/techartorg/bqt))
-2. Click the "Compare & pull request" button located near the top of the page.
+2. Click the "**Compare & pull request**" button located near the top of the page.
 3. Add a title and description for your pull request.
-4. Click Create Pull Request. This sends the request to a bqt admin for approval.
+4. Click **Create Pull Request**. This sends the request to a bqt admin for approval.
 
 Congratulations! You made your first contribution to bqt’s documentation. Feel free to close the pull request. You are now ready to make meaningful changes.
 

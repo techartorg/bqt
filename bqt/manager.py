@@ -4,7 +4,7 @@ widget manager to register your widgets with bqt
 - parent widget to blender window (blender_widget)
 - keep widget in front of Blender window only, even when bqt is not wrapped in qt
 """
-from PySide2.QtWidgets import QApplication
+from PySide2.QtWidgets import QApplication, QDockWidget
 from PySide2.QtCore import Qt
 import logging
 import os
@@ -18,6 +18,33 @@ class WidgetData():
     def __init__(self, widget, visible):
         self.widget = widget
         self.visible = visible
+
+
+def make_widget_dockable(widget):
+    """wrap widget in QDockWidget if not already"""
+    if not isinstance(widget, QDockWidget):
+        logging.debug("wrapping widget in QDockWidget")
+
+        dock_widget = QDockWidget()
+        dock_widget.setWindowFlags(widget.windowFlags())
+        dock_widget.setWidget(widget)
+        widget.setParent(dock_widget)
+
+        # title
+        title = widget.windowTitle() or widget.objectName() or "widget"
+        dock_widget.setWindowTitle(title)
+
+        # object name
+        obj_name = widget.objectName()
+        if obj_name:
+            dock_widget.setObjectName(f"dockable_{obj_name}")
+
+        # bit hacky todo cleanup
+        widget.show()
+        dock_widget.show()
+
+        return dock_widget
+    return widget
 
 
 def register(widget, exclude=None, parent=True, manage=True, unique=True):
@@ -40,6 +67,9 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
     if widget == parent_widget:
         logging.warning("widget equals parent, skipping registration")
         return
+
+    if os.getenv("BQT_DOCKABLE_WRAP", "1") == "1":
+        widget = make_widget_dockable(widget)
 
     # prevent registering a new widget with the same objectName
     if unique and os.getenv("BQT_UNIQUE_OBJECTNAME", "1") == "1":
@@ -148,7 +178,8 @@ def parent_orphan_widgets(exclude=None):
     for widget in _orphan_toplevel_widgets():
 
         # check if widget is window type, else skip and exclude
-        if not widget.windowType() == Qt.Window:
+        if not widget.windowType() in (Qt.Window, Qt.Dialog):
+            print(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
             __excluded_widgets.append(widget)
             continue
         # todo test with various widgets, we likely exclude some valid widgets

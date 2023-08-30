@@ -23,13 +23,26 @@ class WidgetData():
 def make_widget_dockable(widget):
     """wrap widget in QDockWidget if not already"""
     if not isinstance(widget, QDockWidget):
-        # parent_widget = QApplication.instance().blender_widget
-        # dock_widget = QDockWidget(parent=parent_widget, flags=Qt.Window)
+        logging.debug("wrapping widget in QDockWidget")
+
         dock_widget = QDockWidget()
+        dock_widget.setWindowFlags(widget.windowFlags())
         dock_widget.setWidget(widget)
         widget.setParent(dock_widget)
+
+        # title
+        title = widget.windowTitle() or widget.objectName() or "widget"
+        dock_widget.setWindowTitle(title)
+
+        # object name
+        obj_name = widget.objectName()
+        if obj_name:
+            dock_widget.setObjectName(f"dockable_{obj_name}")
+
+        # bit hacky todo cleanup
         widget.show()
         dock_widget.show()
+
         return dock_widget
     return widget
 
@@ -56,7 +69,6 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
         return
 
     if os.getenv("BQT_DOCKABLE_WRAP", "1") == "1":
-        print("bqt: wrapping widget in QDockWidget", widget)
         widget = make_widget_dockable(widget)
 
     # prevent registering a new widget with the same objectName
@@ -166,7 +178,8 @@ def parent_orphan_widgets(exclude=None):
     for widget in _orphan_toplevel_widgets():
 
         # check if widget is window type, else skip and exclude
-        if not widget.windowType() == Qt.Window:
+        if not widget.windowType() in (Qt.Window, Qt.Dialog):
+            print(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
             __excluded_widgets.append(widget)
             continue
         # todo test with various widgets, we likely exclude some valid widgets

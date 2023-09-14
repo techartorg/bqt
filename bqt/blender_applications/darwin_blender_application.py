@@ -12,6 +12,7 @@ import bpy
 with suppress(ModuleNotFoundError):
     import AppKit
     import objc
+    # this is only supressed so it doesnt crash windows, we do need this, not optional
 
 from PySide2.QtGui import QIcon
 from PySide2.QtCore import QObject
@@ -27,7 +28,7 @@ class DarwinBlenderApplication(BlenderApplication):
 
     def __init__(self, *args, **kwargs):
         # OSX Specific - Needs to initialize first
-        self._ns_window = self.__get_application_window() or None
+        self._ns_window = self._get_application_window() or None
 
         super().__init__(*args, **kwargs)
 
@@ -41,7 +42,7 @@ class DarwinBlenderApplication(BlenderApplication):
 
         # Check to ensure ns_window is set
         if self._ns_window is None:
-            self._ns_window = self.__get_application_window()
+            self._ns_window = self._get_application_window()
 
         return objc.pyobjc_id(self._ns_window.contentView())
 

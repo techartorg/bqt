@@ -37,18 +37,19 @@ class BlenderApplication(QApplication):
 
         self._active_window_hwnd = 0
 
+
         if STYLESHEET_PATH.exists():
             self.setStyleSheet(STYLESHEET_PATH.read_text())
 
         QApplication.setWindowIcon(self._get_application_icon())
 
         # Blender Window
-        self._hwnd = self._get_blender_hwnd()
-        failed_to_get_handle = self._hwnd is None
-
         self.window_container: QWidget = None
-
-        if os.getenv("BQT_DISABLE_WRAP") == "1" or failed_to_get_handle:
+        self._hwnd = None
+        if os.getenv("BQT_DISABLE_WRAP") != "1":
+            self._hwnd = self._get_blender_hwnd()
+        failed_to_get_handle = self._hwnd is None
+        if failed_to_get_handle:
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:

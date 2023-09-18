@@ -16,7 +16,7 @@ with suppress(ModuleNotFoundError):
 
 from PySide2.QtGui import QIcon
 from PySide2.QtCore import QObject
-
+import logging
 from .blender_application import BlenderApplication
 import bqt.focus
 
@@ -28,7 +28,7 @@ class DarwinBlenderApplication(BlenderApplication):
 
     def __init__(self, *args, **kwargs):
         # OSX Specific - Needs to initialize first
-        self._ns_window = self._get_application_window() or None
+        self._ns_window = self._get_application_window() or None  # todo not needed when we disable wrapping
 
         super().__init__(*args, **kwargs)
 
@@ -40,9 +40,11 @@ class DarwinBlenderApplication(BlenderApplication):
         Returns int: Handler Window ID
         """
 
-        # Check to ensure ns_window is set
         if self._ns_window is None:
             self._ns_window = self._get_application_window()
+        if self._ns_window is None:
+            logging.warning("Blender Application Window not found")
+            return None
 
         return objc.pyobjc_id(self._ns_window.contentView())
 

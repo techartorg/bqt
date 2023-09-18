@@ -6,7 +6,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 from contextlib import suppress
 from pathlib import Path
-
+import os
 import bpy
 
 with suppress(ModuleNotFoundError):
@@ -68,7 +68,12 @@ class DarwinBlenderApplication(BlenderApplication):
         Returns: Main NSWindow of the application
         """
 
-        ns_window = AppKit.NSApp.mainWindow()
+        if os.getenv("BQT_DISABLE_WRAP") == "1":
+            return None
+
+        ns_window = AppKit.NSApp.mainWindow()  # returns 'None' on startup, likely cause Blender hasn't finished startup
+        if ns_window is None:
+            return None
         ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)
         return ns_window
 
@@ -79,5 +84,6 @@ class DarwinBlenderApplication(BlenderApplication):
         """
 
         if focus_object is self.blender_widget:
-            self._ns_window.makeKey()
+            if self._ns_window:
+                self._ns_window.makeKey()
             bqt.focus._detect_keyboard(self._hwnd)

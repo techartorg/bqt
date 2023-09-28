@@ -32,6 +32,7 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 ### contribute
 - i'm a technical writer and want to contribute to the docs. see [readme](https://github.com/techartorg/bqt/wiki/README) on the wiki.
 - i'm a dev and want to contribute to bqt code, see [contribute guidelines](https://github.com/techartorg/bqt/wiki/contribute-guidelines).
+- i'm a user or tester and want to report a bug or request a feature, please post [here](https://github.com/techartorg/bqt/issues)
 
 ### Community
 Discuss BQT on 

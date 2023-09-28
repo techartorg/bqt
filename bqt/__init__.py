@@ -63,7 +63,7 @@ def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
     elif operating_system == "win32":
         from .blender_applications.win32_blender_application import Win32BlenderApplication
 
-        return Win32BlenderApplication(sys.argv)
+        return Win32BlenderApplication(sys.argv + ['-platform', 'windows:darkmode=2'])
 
 
 @bpy.app.handlers.persistent

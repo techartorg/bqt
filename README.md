@@ -1,4 +1,4 @@
-# bqt
+# BQt
 
 [![PyPI version](https://img.shields.io/pypi/v/bqt)](https://pypi.org/project/bqt/)
 [![latest tag](https://img.shields.io/github/v/tag/techartorg/bqt?label=Github)](https://github.com/techartorg/bqt)
@@ -13,7 +13,7 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 |fully custom UI |Instead of feeling limited by N-Panel only UI. Do whatever you want. |
 | cross app | Qt widgets run nativaly in Krita, 3ds Max, Maya, … and are great to use in cross dcc pipelines |
 | existing community | hundreds of QT widgets on GitHub you can reuse, and lots of stack exchange questions answered regarding qt.|
-|Themed | BQT ships with a basic blender theme, so qt widgets will by default look similar to Blender.|
+|Themed | BQt ships with a basic blender theme, so qt widgets will by default look similar to Blender.|
 
 
 ## Requirements
@@ -35,6 +35,6 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 - i'm a user or tester and want to report a bug or request a feature, please post [here](https://github.com/techartorg/bqt/issues)
 
 ### Community
-Discuss BQT on 
+Discuss BQt on 
 - the BlenderArtists [thread](https://blenderartists.org/t/bqt-custom-ui-for-add-ons-tool-in-blender-with-pyqt-or-pyside/1458808)
 - [Ynput  thread](https://community.ynput.io/t/use-bqt-for-blender-qt-integration/127)

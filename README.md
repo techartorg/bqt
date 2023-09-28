@@ -18,7 +18,7 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 
 ## Requirements
 - Blender `2.83`or higher.
-- Windows (stable) or Mac (experimental)
+- Windows or Mac
 - PySide2
 - `PyObjC` & `iterm2` (Mac only)
 

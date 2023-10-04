@@ -15,8 +15,8 @@ import blender_stylesheet
 
 
 bl_info = {
-        "name": "PySide2 Qt wrapper (bqt)",
-        "description": "Enable PySide2 QtWidgets in Blender",
+        "name": "PySide Qt wrapper (bqt)",
+        "description": "Enable PySide QtWidgets in Blender",
         "author": "tech-artists.org",
         "version": (1, 3, 0),
         "blender": (2, 80, 0),

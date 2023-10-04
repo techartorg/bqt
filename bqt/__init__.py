@@ -9,12 +9,10 @@ import bqt.manager
 import os
 import sys
 import bpy
-import PySide2.QtCore as QtCore
-from PySide2.QtWidgets import QApplication
-from PySide2.QtCore import QDir
+from bqt.qt_core import QtCore, QApplication
 import logging
-from pathlib import Path
 import blender_stylesheet
+
 
 bl_info = {
         "name": "PySide2 Qt wrapper (bqt)",
@@ -68,7 +66,6 @@ def _create_global_app():
     Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
     """
-    # global qapp
     qapp = _instantiate_QApplication()
     # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
     # for some reason this works here, but not in the blender_applications init as a class attribute (self),

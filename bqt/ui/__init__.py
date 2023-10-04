@@ -1,6 +1,5 @@
 from pathlib import Path
-from PySide2.QtGui import QImage, QPixmap
-import PySide2.QtCore as QtCore
+from bqt.qt_core import QtCore, QImage, QPixmap
 
 
 def get_question_pixmap() -> QPixmap:

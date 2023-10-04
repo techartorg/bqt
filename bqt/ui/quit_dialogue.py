@@ -1,6 +1,5 @@
 import bpy
-from PySide2.QtWidgets import QMessageBox
-from PySide2.QtCore import Qt
+from bqt.qt_core import QMessageBox, Qt
 import os
 import bqt.ui
 

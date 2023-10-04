@@ -4,8 +4,7 @@ widget manager to register your widgets with bqt
 - parent widget to blender window (blender_widget)
 - keep widget in front of Blender window only, even when bqt is not wrapped in qt
 """
-from PySide2.QtWidgets import QApplication, QDockWidget
-from PySide2.QtCore import Qt
+from bqt.qt_core import QApplication, QDockWidget, QtCore
 import logging
 import os
 
@@ -97,7 +96,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
     if parent:
         logging.debug("parenting widget to blender window")
         vis = widget.isVisible()
-        widget.setParent(parent_widget, Qt.Window)  # default set flag to window
+        widget.setParent(parent_widget, QtCore.Qt.Window)  # default set flag to window
         widget.setVisible(vis)  # parenting hides the widget, restore visibility
 
     # save widget so we can manage the focus and visibility
@@ -109,7 +108,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
         if os.getenv("BQT_DISABLE_WRAP", "0") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1":
             logging.debug("setting widget WindowStaysOnTopHint")
             vis = widget.isVisible()
-            widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)
+            widget.setWindowFlags(widget.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
             widget.setVisible(vis)
 
 
@@ -146,7 +145,7 @@ def _blender_window_change(hwnd: int):
         if focussed_on_a_blender_window:
 
             # add top flag, ensure the widget stays in front of the blender window
-            # widget.setWindowFlags(widget.windowFlags() | Qt.WindowStaysOnTopHint)  # todo move this to register?
+            # widget.setWindowFlags(widget.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)  # todo move this to register?
 
             # restore visibility state of the widget
             if widget_data.visible:
@@ -157,7 +156,7 @@ def _blender_window_change(hwnd: int):
             widget_data.visible = widget.isVisible()
 
             # remove top flag, allow the widget to be hidden behind the blender window
-            # self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~Qt.WindowStaysOnTopHint)
+            # self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
             widget.hide()  # todo since we hide do we need to remove flag?
 
     # todo right now widgets stay in front of other blender windows,
@@ -178,7 +177,7 @@ def parent_orphan_widgets(exclude=None):
     for widget in _orphan_toplevel_widgets():
 
         # check if widget is window type, else skip and exclude
-        if not widget.windowType() in (Qt.Window, Qt.Dialog, Qt.WindowType.ToolTip):
+        if not widget.windowType() in (QtCore.Qt.Window, QtCore.Qt.Dialog, QtCore.Qt.WindowType.ToolTip):
             print(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
             __excluded_widgets.append(widget)
             continue

@@ -3,16 +3,17 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-import bpy
-from PySide2.QtCore import QObject
+from bqt.qt_core import QObject
 from .blender_application import BlenderApplication
 import ctypes
 import os
 from collections import namedtuple
-import logging
 import bqt.focus
 from ctypes import wintypes
+
+
 user32 = ctypes.windll.user32
+
 
 def get_class_name(hwnd):
     # returns "GHOST_WindowClass" for Blender and BlenderWindows (e.g. Preferences),

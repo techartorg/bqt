@@ -12,10 +12,8 @@ import bpy
 with suppress(ModuleNotFoundError):
     import AppKit
     import objc
-    # this is only supressed so it doesnt crash windows, we do need this, not optional
-
-from PySide2.QtGui import QIcon
-from PySide2.QtCore import QObject
+    # this is only suppressed, so it doesn't crash windows, we do need this, not optional
+from bqt.qt_core import QIcon, QObject
 import logging
 from .blender_application import BlenderApplication
 import bqt.focus

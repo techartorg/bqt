@@ -5,12 +5,9 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
-from pathlib import Path
 import os
-from PySide2.QtWidgets import QApplication, QWidget, QMainWindow
-from PySide2.QtGui import QCloseEvent, QIcon, QWindow
-from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer
 from bqt.ui.quit_dialogue import BlenderClosingDialog
+from bqt.qt_core import QEvent, QObject, QRect, QSettings, QTimer, QCloseEvent, QIcon, QWindow, QApplication, QWidget, QMainWindow
 import bpy
 import bqt.manager
 

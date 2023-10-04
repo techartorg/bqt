@@ -14,7 +14,7 @@ from PySide2.QtWidgets import QApplication
 from PySide2.QtCore import QDir
 import logging
 from pathlib import Path
-
+import blender_stylesheet
 
 bl_info = {
         "name": "PySide2 Qt wrapper (bqt)",
@@ -39,12 +39,8 @@ def _instantiate_QApplication() -> "bqt.blender_applications.BlenderApplication"
     QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
-
-    # add image directory to Qt search path, for blender_stylesheet
-    image_directory = str(Path(__file__).parent / "images")
-    QDir.addSearchPath('images', image_directory)  # todo this is generic, might clash with other qt scripts
-
     app = _load_os_module()
+    blender_stylesheet.setup()
     return app
 
 
@@ -74,7 +70,6 @@ def _create_global_app():
     """
     # global qapp
     qapp = _instantiate_QApplication()
-
     # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
     # for some reason this works here, but not in the blender_applications init as a class attribute (self),
     # and saving it in a global in blender_applications.py causes blender to crash on startup
@@ -87,7 +82,6 @@ def register():
     Runs on enabling the add-on.
     setup bqt, wrap blender in qt, register operators
     """
-
     # hacky way to check if we already are waiting on bqt setup, or bqt is already setup
     if QApplication.instance():
         logging.warning("bqt: QApplication already exists, skipping bqt registration")

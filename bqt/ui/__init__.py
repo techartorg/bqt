@@ -5,7 +5,7 @@ import PySide2.QtCore as QtCore
 
 def get_question_pixmap() -> QPixmap:
     """Return the question image used in the quit dialogue"""
-    icon_filepath = Path(__file__).parents[1] / "images" / "question.svg"
+    icon_filepath = Path(__file__).parent / "question.svg"
     pixmap = QPixmap()
     if icon_filepath.exists():
         image = QImage(str(icon_filepath))

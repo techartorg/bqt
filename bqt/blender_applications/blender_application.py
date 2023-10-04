@@ -7,15 +7,14 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 from pathlib import Path
 import os
-from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QDockWidget, QMainWindow
-from PySide2.QtGui import QCloseEvent, QIcon, QImage, QPixmap, QWindow
-from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer, Qt
+from PySide2.QtWidgets import QApplication, QWidget, QMainWindow
+from PySide2.QtGui import QCloseEvent, QIcon, QWindow
+from PySide2.QtCore import QEvent, QObject, QRect, QSettings, QTimer
 from bqt.ui.quit_dialogue import BlenderClosingDialog
 import bpy
 import bqt.manager
 
 
-STYLESHEET_PATH = Path(__file__).parents[1] / "blender_stylesheet.qss"
 ORGANISATION = "Tech-Artists.org"
 APP = "Blender Qt"
 WINDOW_TITLE = "Blender Qt"
@@ -37,11 +36,7 @@ class BlenderApplication(QApplication):
 
         self._active_window_hwnd = 0
 
-
-        if STYLESHEET_PATH.exists():
-            self.setStyleSheet(STYLESHEET_PATH.read_text())
-
-        QApplication.setWindowIcon(self._get_application_icon())
+        # QApplication.setWindowIcon(self._get_application_icon())
 
         # Blender Window
         self.window_container: QWidget = None
@@ -114,16 +109,7 @@ class BlenderApplication(QApplication):
 
         Returns QIcon: Application Icon
         """
-
-        icon_filepath = Path(__file__).parents[1] / "images" / "blender_icon_16.png"
-        icon = QIcon()
-
-        if icon_filepath.exists():
-            image = QImage(str(icon_filepath))
-            if not image.isNull():
-                icon = QIcon(QPixmap().fromImage(image))
-
-        return icon
+        pass
 
     @abstractmethod
     def _on_focus_object_changed(self, focus_object: QObject):

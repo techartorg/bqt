@@ -175,10 +175,11 @@ def parent_orphan_widgets(exclude=None):
     exclude = exclude or []
     __excluded_widgets.extend(exclude)
     for widget in _orphan_toplevel_widgets():
-
-        # check if widget is window type, else skip and exclude
-        if not widget.windowType() in (QtCore.Qt.Window, QtCore.Qt.Dialog, QtCore.Qt.WindowType.ToolTip):
-            print(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
+        if widget.windowType() in (QtCore.Qt.WindowType.ToolTip, ):
+            __excluded_widgets.append(widget)
+            continue
+        elif not widget.windowType() in (QtCore.Qt.Window, QtCore.Qt.Dialog, ):
+            logging.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
             __excluded_widgets.append(widget)
             continue
         # todo test with various widgets, we likely exclude some valid widgets

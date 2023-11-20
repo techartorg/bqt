@@ -31,21 +31,26 @@ bl_info = {
 
 add = bqt.manager.register
 
-# CORE FUNCTIONS #
 
-def _instantiate_QApplication() -> "bqt.blender_applications.BlenderApplication":
-    # enable dpi scale, run before creating QApplication
-    QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
-    app = _load_os_module()
-
+def _apply_stylesheet():
+    """Styles the QApplication"""
     try:
         import blender_stylesheet
         blender_stylesheet.setup()
     except ImportError:
         logger.warning("blender-qt-stylesheet not found, using default style")
 
+
+def _enable_dpi_scale():
+    QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
+
+
+def _instantiate_q_application() -> "bqt.blender_applications.BlenderApplication":
+    _enable_dpi_scale()
+    app = _load_os_module()
+    _apply_stylesheet()
     return app
 
 
@@ -78,7 +83,7 @@ def _create_global_app():
     Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
     """
-    qapp = _instantiate_QApplication()
+    qapp = _instantiate_q_application()
     # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
     # for some reason this works here, but not in the blender_applications init as a class attribute (self),
     # and saving it in a global in blender_applications.py causes blender to crash on startup

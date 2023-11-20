@@ -11,7 +11,6 @@ import sys
 import bpy
 from bqt.qt_core import QtCore, QApplication
 import logging
-import blender_stylesheet
 
 logger = logging.getLogger("bqt")
 
@@ -40,7 +39,13 @@ def _instantiate_QApplication() -> "bqt.blender_applications.BlenderApplication"
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
     app = _load_os_module()
-    blender_stylesheet.setup()
+
+    try:
+        import blender_stylesheet
+        blender_stylesheet.setup()
+    except ImportError:
+        logger.warning("blender-qt-stylesheet not found, using default style")
+
     return app
 
 

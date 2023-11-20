@@ -19,7 +19,7 @@ bl_info = {
         "name": "PySide Qt wrapper (bqt)",
         "description": "Enable PySide QtWidgets in Blender",
         "author": "tech-artists.org",
-        "version": (1, 3, 0),
+        "version": (1, 4, 1),
         "blender": (2, 80, 0),
         # "location": "",
         # "warning": "", # used for warning icon and text in add-ons panel

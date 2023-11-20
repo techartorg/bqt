@@ -38,11 +38,11 @@ class CustomInstall(install):
 setup(
     # Metadata
     name="bqt",
-    version="1.4.0",
+    version="1.4.1",  # don't forget to update the bl_info version
     description="Files to help bootstrap PySide2 with an event loop within Blender.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    keywords=["Technical", "Art", "TechArt", "TechArtOrg", "Blender", "Qt", "PySide"],
+    keywords=["Technical", "Art", "TechArt", "TechArtOrg", "Blender", "Qt", "PySide", "tool", "pipeline", "gamedev", "vfx", "3d"],
     license="Mozilla Public License 2.0 (MPL 2.0)",
     url="https://github.com/techartorg/bqt",
     author="tech-artists.org",

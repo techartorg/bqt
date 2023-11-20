@@ -17,6 +17,7 @@ from bqt.qt_core import QIcon, QObject
 import logging
 from .blender_application import BlenderApplication
 import bqt.focus
+logger = logging.getLogger("bqt")
 
 
 class DarwinBlenderApplication(BlenderApplication):
@@ -41,7 +42,7 @@ class DarwinBlenderApplication(BlenderApplication):
         if self._ns_window is None:
             self._ns_window = self._get_application_window()
         if self._ns_window is None:
-            logging.warning("Blender Application Window not found")
+            logger.warning("Blender Application Window not found")
             return None
 
         return objc.pyobjc_id(self._ns_window.contentView())

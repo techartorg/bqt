@@ -3,13 +3,14 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-
+import logging
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 import os
 from bqt.ui.quit_dialogue import BlenderClosingDialog
 from bqt.qt_core import QEvent, QObject, QRect, QSettings, QTimer, QCloseEvent, QIcon, QWindow, QApplication, QWidget, QMainWindow
 import bpy
 import bqt.manager
+logger = logging.getLogger("bqt")
 
 
 ORGANISATION = "Tech-Artists.org"
@@ -31,6 +32,8 @@ class BlenderApplication(QApplication):
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
+        logger.debug("initializing BlenderApplication")
+
         self._active_window_hwnd = 0
 
         # QApplication.setWindowIcon(self._get_application_icon())
@@ -39,12 +42,17 @@ class BlenderApplication(QApplication):
         self.window_container: QWidget = None
         self._hwnd = None
         if os.getenv("BQT_DISABLE_WRAP") != "1":
+            logger.debug("wrapping enabled, getting blender hwnd")
             self._hwnd = self._get_blender_hwnd()
+        else:
+            logger.debug("wrapping disabled, not getting blender hwnd")
         failed_to_get_handle = self._hwnd is None
         if failed_to_get_handle:
+            logger.warning("failed to get blender hwnd, creating new window")
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:
+            logger.debug(f"successfully got blender hwnd '{self._hwnd}', wrapping window in QMainWindow")
             self.blender_widget = QMainWindow()
             self.blender_widget.setWindowTitle(WINDOW_TITLE)
             self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
@@ -53,6 +61,7 @@ class BlenderApplication(QApplication):
 
             self._set_window_geometry()
             self.blender_widget.show()
+            logger.debug("hooking up _on_focus_object_changed")
             self.focusObjectChanged.connect(self._on_focus_object_changed)
 
         # hookup event loop
@@ -61,10 +70,13 @@ class BlenderApplication(QApplication):
         tick = int(1000 / FOCUS_FRAMERATE)  # tick 1000 / frames per second
         self.timer.start(tick)
 
+        logger.debug("successfully initialized BlenderApplication")
+
     def on_update(self):
         """qt event loop"""
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
+            logger.debug("foreground window changed, managing")
             bqt.manager._blender_window_change(self._active_window_hwnd)
 
         if os.getenv("BQT_AUTO_ADD", "1") == "1":

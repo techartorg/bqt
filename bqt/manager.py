@@ -7,6 +7,8 @@ widget manager to register your widgets with bqt
 from bqt.qt_core import QApplication, QDockWidget, QtCore
 import logging
 import os
+logger = logging.getLogger("bqt")
+
 
 
 __widgets = []
@@ -22,7 +24,7 @@ class WidgetData():
 def make_widget_dockable(widget):
     """wrap widget in QDockWidget if not already"""
     if not isinstance(widget, QDockWidget):
-        logging.debug("wrapping widget in QDockWidget")
+        logger.debug("wrapping widget in QDockWidget")
 
         dock_widget = QDockWidget()
         dock_widget.setWindowFlags(widget.windowFlags())
@@ -57,14 +59,15 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
         unique: if True, prevent registering a new widget with the same objectName
     """
     exclude = exclude or []
+    logger.debug(f"registering widget with bqt '{widget}'")
 
     if not widget:
-        logging.warning("widget is None, skipping registration")
+        logger.warning("widget is None, skipping registration")
         return
 
     parent_widget = QApplication.instance().blender_widget
     if widget == parent_widget:
-        logging.warning("widget equals parent, skipping registration")
+        logger.warning("widget equals parent, skipping registration")
         return
 
     if os.getenv("BQT_DOCKABLE_WRAP", "1") == "1":
@@ -80,7 +83,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
                     old_widget = data.widget
                     break
         if old_widget:
-            logging.warning("bqt: widget is already registered, skipping widget registration")
+            logger.warning("widget is already registered, skipping widget registration")
             # show old widget, delete new widget
             old_widget.show()
             old_widget.activateWindow()
@@ -89,12 +92,12 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
             return
 
     if widget in exclude:
-        logging.warning("bqt: widget is in exclude list, skipping widget registration")
+        logger.warning("widget is in exclude list, skipping widget registration")
         return
 
     # parent to blender window
     if parent:
-        logging.debug("parenting widget to blender window")
+        logger.debug("parenting widget to blender window")
         vis = widget.isVisible()
         widget.setParent(parent_widget, QtCore.Qt.Window)  # default set flag to window
         widget.setVisible(vis)  # parenting hides the widget, restore visibility
@@ -106,7 +109,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
 
         # ensure widget stays in foreground if blender is not wrapped in qt
         if os.getenv("BQT_DISABLE_WRAP", "0") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1":
-            logging.debug("setting widget WindowStaysOnTopHint")
+            logger.debug("setting widget WindowStaysOnTopHint")
             vis = widget.isVisible()
             widget.setWindowFlags(widget.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
             widget.setVisible(vis)
@@ -172,6 +175,7 @@ def _orphan_toplevel_widgets():
 
 def parent_orphan_widgets(exclude=None):
     """Find and parent orphan widgets to the blender widget"""
+    # this runs every frame, don't print or log in this method
     exclude = exclude or []
     __excluded_widgets.extend(exclude)
     for widget in _orphan_toplevel_widgets():
@@ -179,7 +183,7 @@ def parent_orphan_widgets(exclude=None):
             __excluded_widgets.append(widget)
             continue
         elif not widget.windowType() in (QtCore.Qt.Window, QtCore.Qt.Dialog, ):
-            logging.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
+            logger.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
             __excluded_widgets.append(widget)
             continue
         # todo test with various widgets, we likely exclude some valid widgets

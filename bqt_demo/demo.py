@@ -3,7 +3,7 @@ demo to show widget always on top
 """
 
 import sys
-from PySide2 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets
 
 
 class mymainwindow(QtWidgets.QWidget):

@@ -34,6 +34,10 @@ class CustomInstall(install):
         # Run the standard PyPi Copy
         install.run(self)
 
+def read_requirements():
+    with open('requirements.txt') as reqs:
+        return reqs.read().splitlines()
+
 
 setup(
     # Metadata

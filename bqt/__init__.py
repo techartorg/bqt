@@ -37,36 +37,34 @@ def _create_translations_wrapper(original):
                 setattr(self._orig, name, value)
 
         def __dir__(self):
-            orig_attrs = dir(self._orig) if hasattr(self._orig, '__dir__') else []
-            extra_attrs = ['__name__', '__module__', '__qualname__', '_ne_', '__doc__']
+            orig_attrs = (dir(self._orig)
+                          if hasattr(self._orig, '__dir__') else [])
+            extra_attrs = ['__name__', '__module__', '__qualname__',
+                           '_ne_', '__doc__']
             return list(set(orig_attrs + extra_attrs))
 
     return TranslationsWrapper(original)
 
 
-def _patch_sys_modules():
-    """Patch sys.modules to intercept bpy.app.translations registration"""
-    original_update = dict.update
-
-    def patched_update(self, *args, **kwargs):
-        result = original_update(self, *args, **kwargs)
-
-        # Check if bpy.app.translations was just registered
-        if "bpy.app.translations" in self:
-            translations = self["bpy.app.translations"]
+def _patch_bpy_translations_in_sys_modules():
+    """Directly patch bpy.app.translations in sys.modules if it exists"""
+    try:
+        # Check if bpy.app.translations is already in sys.modules
+        if "bpy.app.translations" in sys.modules:
+            translations = sys.modules["bpy.app.translations"]
             required_attrs = ['__name__', '__module__', '__qualname__', '_ne_']
 
             # Check if any required attributes are missing
             if any(not hasattr(translations, attr) for attr in required_attrs):
                 try:
-                    self["bpy.app.translations"] = _create_translations_wrapper(translations)
+                    wrapped = _create_translations_wrapper(translations)
+                    sys.modules["bpy.app.translations"] = wrapped
+                    return True
                 except Exception:
                     pass
-
-        return result
-
-    dict.update = patched_update
-    return original_update
+        return False
+    except Exception:
+        return False
 
 
 def _fix_existing_translations():
@@ -106,7 +104,7 @@ def _fix_existing_translations():
 
 
 # Apply patches immediately - order matters!
-_patch_sys_modules()  # Patch sys.modules first to catch future registrations
+_patch_bpy_translations_in_sys_modules()  # Check sys.modules first
 _fix_existing_translations()  # Fix existing translations if available
 
 import bqt

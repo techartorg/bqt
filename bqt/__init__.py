@@ -3,6 +3,110 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+
+# CRITICAL: Fix bpy.app.translations BEFORE importing any Qt/PySide modules
+# This prevents Shiboken from failing when it tries to introspect bpy.app.translations
+import sys
+
+
+def _create_translations_wrapper(original):
+    """Create a compatibility wrapper for bpy.app.translations"""
+    class TranslationsWrapper:
+        def __init__(self, orig):
+            self._orig = orig
+
+        def __getattr__(self, name):
+            # Provide missing attributes that Shiboken expects
+            if name == '__name__':
+                return 'bpy.app.translations'
+            elif name == '__module__':
+                return 'bpy.app'
+            elif name == '__qualname__':
+                return 'translations'
+            elif name == '_ne_':
+                return lambda x, y: x != y
+            elif name == '__doc__':
+                return 'Blender translations compatibility wrapper'
+            else:
+                return getattr(self._orig, name)
+
+        def __setattr__(self, name, value):
+            if name == '_orig':
+                super().__setattr__(name, value)
+            else:
+                setattr(self._orig, name, value)
+
+        def __dir__(self):
+            orig_attrs = (dir(self._orig)
+                          if hasattr(self._orig, '__dir__') else [])
+            extra_attrs = ['__name__', '__module__', '__qualname__',
+                           '_ne_', '__doc__']
+            return list(set(orig_attrs + extra_attrs))
+
+    return TranslationsWrapper(original)
+
+
+def _patch_bpy_translations_in_sys_modules():
+    """Directly patch bpy.app.translations in sys.modules if it exists"""
+    try:
+        # Check if bpy.app.translations is already in sys.modules
+        if "bpy.app.translations" in sys.modules:
+            translations = sys.modules["bpy.app.translations"]
+            required_attrs = ['__name__', '__module__', '__qualname__', '_ne_']
+
+            # Check if any required attributes are missing
+            if any(not hasattr(translations, attr) for attr in required_attrs):
+                try:
+                    wrapped = _create_translations_wrapper(translations)
+                    sys.modules["bpy.app.translations"] = wrapped
+                    return True
+                except Exception:
+                    pass
+        return False
+    except Exception:
+        return False
+
+
+def _fix_existing_translations():
+    """Fix bpy.app.translations if it already exists"""
+    try:
+        import bpy
+        if not hasattr(bpy.app, 'translations'):
+            return
+
+        translations = bpy.app.translations
+        required_attrs = ['__name__', '__module__', '__qualname__', '_ne_']
+
+        # Check if any required attributes are missing
+        if any(not hasattr(translations, attr) for attr in required_attrs):
+            try:
+                # Try direct attribute setting first
+                attrs_to_add = {
+                    '__name__': 'bpy.app.translations',
+                    '__module__': 'bpy.app',
+                    '__qualname__': 'translations',
+                    '_ne_': lambda x, y: x != y,
+                }
+
+                for attr_name, attr_value in attrs_to_add.items():
+                    if not hasattr(translations, attr_name):
+                        setattr(translations, attr_name, attr_value)
+
+            except (AttributeError, TypeError):
+                # If direct setting fails, use wrapper
+                try:
+                    bpy.app.translations = _create_translations_wrapper(translations)
+                except Exception:
+                    pass
+
+    except Exception:
+        pass
+
+
+# Apply patches immediately - order matters!
+_patch_bpy_translations_in_sys_modules()  # Check sys.modules first
+_fix_existing_translations()  # Fix existing translations if available
+
 import bqt
 import bqt.focus
 import bqt.manager

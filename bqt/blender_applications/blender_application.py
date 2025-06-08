@@ -192,8 +192,11 @@ class BlenderApplication(QApplication):
 
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed
-                with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
-                    bpy.ops.wm.quit_blender("INVOKE_DEFAULT")
+                if bpy.app.version >= (4, 0, 0):
+                    with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+                        bpy.ops.wm.quit_blender("INVOKE_DEFAULT")
+                else:
+                    bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
             else:
                 closing_dialog = BlenderClosingDialog(self.blender_widget)
                 closing_dialog.execute()

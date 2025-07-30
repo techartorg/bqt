@@ -13,22 +13,6 @@ from bqt.qt_core import QtCore, QApplication
 import logging
 
 logger = logging.getLogger("bqt")
-
-
-bl_info = {
-        "name": "PySide Qt wrapper (bqt)",
-        "description": "Enable PySide QtWidgets in Blender",
-        "author": "tech-artists.org",
-        "version": (1, 4, 2),
-        "blender": (2, 80, 0),
-        # "location": "",
-        # "warning": "", # used for warning icon and text in add-ons panel
-        "wiki_url": "https://github.com/techartorg/bqt/wiki",
-        "tracker_url": "https://github.com/techartorg/bqt/issues",
-        "support": "COMMUNITY",
-        "category": "UI"
-        }
-
 add = bqt.manager.register
 
 

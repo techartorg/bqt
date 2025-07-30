@@ -3,11 +3,21 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+
+import os
+import sys
+from pathlib import Path
+
+
+# add to sys path so we can import bqt
+current_dir = str(Path(__file__).parent.parent)
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
+
 import bqt
 import bqt.focus
 import bqt.manager
-import os
-import sys
 import bpy
 from bqt.qt_core import QtCore, QApplication
 import logging

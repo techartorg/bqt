@@ -4,12 +4,19 @@ import os
 import bqt.ui
 
 
-def shutdown_blender(*args):
-    # By default changes to preferences are saved on exit, this can be toggled off in the preferences
+def shutdown_blender(*args, **kwargs):
+    def _quit():
+        """Quit blender.
+
+        This is to make sure that the method we register to app.timers returns None.
+        """
+        bpy.ops.wm.quit_blender(*args, **kwargs)
+
+    # By default, changes to preferences are saved on exit, this can be toggled off in the preferences
     if bpy.context.preferences.use_preferences_save:
         bpy.ops.wm.save_userpref()
 
-    bpy.ops.wm.quit_blender()
+    bpy.app.timers.register(_quit)
 
 
 class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):

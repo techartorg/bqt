@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bqt"
+version = "1.4.2" # don't forget to update the version in blender_manifest.toml
+description = "Files to help bootstrap PySide2 with an event loop within Blender."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+authors = [
+    {name="tech-artists.org"}
+]
+keywords = ["Technical", "Art", "TechArt", "TechArtOrg", "Blender", "Qt", "PySide", "tool", "pipeline", "gamedev", "vfx", "3d"]
+license = "MPL-2.0"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+    "PySide6",
+    "blender-qt-stylesheet",
+]
+
+[project.urls]
+Homepage = "https://github.com/techartorg/bqt"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+bqt = ["ui/*.svg"]
+
+[tool.setuptools.packages.find]
+include = ["bqt"]

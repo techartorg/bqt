@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "bqt"
-version = "2.0.0"
+version = "1.4.2"
 name = "PySide Qt wrapper (bqt)"
 tagline = "Enable PySide QtWidgets in Blender"
 maintainer = "tech-artists.org"

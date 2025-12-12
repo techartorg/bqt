@@ -97,8 +97,11 @@ def setup_logger():
     # print(f"BQT_LOG_LEVEL is set to '{log_level_name}'")
     log_level = logging.getLevelName(log_level_name)
     logger.setLevel(log_level)
-    logging.basicConfig(encoding='utf-8')
-
+    if bpy.app.version >= (2, 93, 0):
+        # encoding argument was added in python 3.9
+        logging.basicConfig(encoding='utf-8')
+    else:
+        logging.basicConfig()
 
 def register():
     """

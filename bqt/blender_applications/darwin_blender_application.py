@@ -13,7 +13,8 @@ with suppress(ModuleNotFoundError):
     import AppKit
     import objc
     # this is only suppressed, so it doesn't crash windows, we do need this, not optional
-from bqt.qt_core import QIcon, QObject
+from Qt.QtCore import QObject
+from Qt.QtGui import QIcon
 import logging
 from .blender_application import BlenderApplication
 import bqt.focus

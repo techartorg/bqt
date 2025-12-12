@@ -4,7 +4,8 @@ widget manager to register your widgets with bqt
 - parent widget to blender window (blender_widget)
 - keep widget in front of Blender window only, even when bqt is not wrapped in qt
 """
-from bqt.qt_core import QApplication, QDockWidget, QtCore
+from Qt import QtCore
+from Qt.QtWidgets import QApplication, QDockWidget
 import logging
 import os
 logger = logging.getLogger("bqt")

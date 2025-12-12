@@ -19,7 +19,8 @@ import bqt
 import bqt.focus
 import bqt.manager
 import bpy
-from bqt.qt_core import QtCore, QApplication
+from Qt import QtCore
+from Qt.QtWidgets import QApplication
 import logging
 
 logger = logging.getLogger("bqt")

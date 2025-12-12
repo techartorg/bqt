@@ -7,7 +7,9 @@ import logging
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 import os
 from bqt.ui.quit_dialogue import BlenderClosingDialog
-from bqt.qt_core import QEvent, QObject, QRect, QSettings, QTimer, QCloseEvent, QIcon, QWindow, QApplication, QWidget, QMainWindow
+from Qt.QtCore import QEvent, QObject, QRect, QSettings, QTimer
+from Qt.QtGui import QCloseEvent, QIcon, QWindow
+from Qt.QtWidgets import QApplication, QWidget, QMainWindow
 import bpy
 import bqt.manager
 logger = logging.getLogger("bqt")

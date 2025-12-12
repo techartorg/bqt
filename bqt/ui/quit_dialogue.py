@@ -1,5 +1,6 @@
 import bpy
-from bqt.qt_core import QMessageBox, Qt
+from Qt.QtCore import Qt
+from Qt.QtWidgets import QMessageBox
 import os
 import bqt.ui
 

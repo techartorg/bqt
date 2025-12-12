@@ -1,5 +1,6 @@
 from pathlib import Path
-from bqt.qt_core import QtCore, QImage, QPixmap
+from Qt import QtCore
+from Qt.QtGui import QImage, QPixmap
 
 
 def get_question_pixmap() -> QPixmap:

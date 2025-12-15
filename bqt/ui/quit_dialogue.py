@@ -39,13 +39,19 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
     bl_label = "Save_from_Qt"
 
     def execute(self, context):
-        # TODO not sure what we are doing here, Friederman?
-        if context.blend_data.is_saved:
-            bpy.ops.wm.save_mainfile({"window": bpy.context.window_manager.windows[0]}, 'EXEC_AREA', check_existing=False)
-        else:
-            bpy.ops.wm.save_mainfile({"window": bpy.context.window_manager.windows[0]}, 'INVOKE_AREA', check_existing=False)
-        # https://docs.blender.org/api/current/bpy.ops.html
-        # EXEC_AREA - execute the operator in a certain context
+
+        # context override is needed, without a UI, the operators are likely to fail/ no dialogue shows.
+        with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+            
+            # EXEC_AREA = run the operator directly, saves without dialogue
+            # INVOKE_AREA = behave like a user clicked File → Save, show file browser
+            if context.blend_data.is_saved:
+                # save file
+                bpy.ops.wm.save_mainfile('EXEC_AREA', check_existing=False)
+            else:
+                # ask user where to save the file
+                bpy.ops.wm.save_mainfile('INVOKE_AREA', check_existing=False)
+                
         return {'FINISHED'}
 
 # todo

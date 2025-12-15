@@ -9,7 +9,7 @@ this module fixes the bug by sending a key release event to the window
 import ctypes
 
 
-def _detect_keyboard(hwnd=None):
+def _detect_keyboard(hwnd: int | None = None) -> None:
     """
     force a release of 'stuck' keys
     """

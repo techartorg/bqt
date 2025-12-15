@@ -3,11 +3,13 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+from __future__ import annotations
 
 import os
 import sys
 from pathlib import Path
 import logging
+from typing import TYPE_CHECKING
 
 # add to sys path so we can import bqt
 current_dir = str(Path(__file__).parent.parent)
@@ -22,11 +24,14 @@ import bqt
 import bqt.focus
 import bqt.manager
 
+if TYPE_CHECKING:
+    from bqt.blender_applications.blender_application import BlenderApplication
+
 logger = logging.getLogger("bqt")
 add = bqt.manager.register
 
 
-def _apply_stylesheet():
+def _apply_stylesheet() -> None:
     """Styles the QApplication"""
     try:
         import blender_stylesheet
@@ -36,7 +41,7 @@ def _apply_stylesheet():
         logger.warning("blender-qt-stylesheet not found, using default style")
 
 
-def _enable_dpi_scale():
+def _enable_dpi_scale() -> None:
     QApplication.setHighDpiScaleFactorRoundingPolicy(
         Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
     )
@@ -44,14 +49,14 @@ def _enable_dpi_scale():
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
 
 
-def _instantiate_q_application() -> "bqt.blender_applications.BlenderApplication":
+def _instantiate_q_application() -> BlenderApplication:
     _enable_dpi_scale()
     app = _load_os_module()
     _apply_stylesheet()
     return app
 
 
-def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
+def _load_os_module() -> BlenderApplication:
     """Loads the correct OS platform Application Class"""
     operating_system = sys.platform
     logger.debug(f"loading OS module for '{operating_system}'")
@@ -63,9 +68,8 @@ def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
         return DarwinBlenderApplication(sys.argv)
 
     elif operating_system in ["linux", "linux2"]:
-        raise NotImplementedError("Linux is not supported yet")
         # TODO: LINUX module
-        pass
+        raise NotImplementedError("Linux is not supported yet")
 
     elif operating_system == "win32":
         from .blender_applications.win32_blender_application import (
@@ -79,7 +83,7 @@ def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
 
 
 @bpy.app.handlers.persistent
-def _create_global_app():
+def _create_global_app() -> None:
     """
     Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
@@ -92,7 +96,7 @@ def _create_global_app():
     parent_window = qapp._blender_window.parent()
 
 
-def setup_logger():
+def setup_logger() -> None:
     """setup logger, using BQT_LOG_LEVEL env var"""
     log_level_name = os.getenv("BQT_LOG_LEVEL", -1)
     if log_level_name == -1:
@@ -109,7 +113,7 @@ def setup_logger():
     logging.basicConfig(encoding="utf-8")
 
 
-def register():
+def register() -> None:
     """
     Runs on enabling the add-on.
     setup bqt, wrap blender in qt, register operators
@@ -126,7 +130,7 @@ def register():
     _create_global_app()
 
 
-def unregister():
+def unregister() -> None:
     """
     Runs on disabling the add-on.
     """

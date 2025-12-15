@@ -3,6 +3,7 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+from __future__ import annotations
 
 from PySide6.QtCore import QObject
 from .blender_application import BlenderApplication
@@ -15,8 +16,9 @@ from ctypes import wintypes
 
 user32 = ctypes.windll.user32
 
+_WindowInfo = namedtuple("WindowInfo", "title hwnd")
 
-def get_class_name(hwnd):
+def get_class_name(hwnd) -> int:
     # returns "GHOST_WindowClass" for Blender and BlenderWindows (e.g. Preferences),
     # returns "PseudoConsoleWindow" for the terminal window
     buf_len = 256
@@ -25,7 +27,7 @@ def get_class_name(hwnd):
     return buf.value
 
 
-def get_process_hwnds():
+def get_process_hwnds() -> list[_WindowInfo]:
     # https://stackoverflow.com/questions/37501191/how-to-get-windows-window-names-with-ctypes-in-python
 
     def check_zero(result, func, args):
@@ -38,7 +40,6 @@ def get_process_hwnds():
     if not hasattr(wintypes, "LPDWORD"):  # PY2
         wintypes.LPDWORD = ctypes.POINTER(wintypes.DWORD)
 
-    WindowInfo = namedtuple("WindowInfo", "title hwnd")
 
     WNDENUMPROC = ctypes.WINFUNCTYPE(
         wintypes.BOOL,
@@ -87,7 +88,7 @@ def get_process_hwnds():
 
                 current_pid = os.getpid()
                 if pid.value == current_pid:
-                    result.append(WindowInfo(title.value, hWnd))
+                    result.append(_WindowInfo(title.value, hWnd))
             return True
 
         user32.EnumWindows(enum_proc, 0)
@@ -118,16 +119,16 @@ class Win32BlenderApplication(BlenderApplication):
     Windows implementation of BlenderApplication
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def _get_blender_hwnd() -> int or None:
+    def _get_blender_hwnd() -> int | None:
         """Get the handler window ID for the blender application window"""
         hwnd = get_blender_window()
         return hwnd
 
-    def _on_focus_object_changed(self, focus_object: QObject):
+    def _on_focus_object_changed(self, focus_object: QObject) -> None:
         """
         Args:
             QObject focus_object: Object to track focus change
@@ -137,7 +138,7 @@ class Win32BlenderApplication(BlenderApplication):
             bqt.focus._detect_keyboard(self._hwnd)
 
     @staticmethod
-    def _get_active_window_handle():
+    def _get_active_window_handle() -> int:
         """
         Get the handle from the window that's currently in focus.
         Returns 0 for active windows not managed by Blender
@@ -146,7 +147,7 @@ class Win32BlenderApplication(BlenderApplication):
         return user32.GetActiveWindow()
 
     @staticmethod
-    def _focus_window(hwnd):
+    def _focus_window(hwnd: int) -> None:
         """Focus the window with the given handle."""
         user32.SetForegroundWindow(hwnd)
         # user32.SetFocus(hwnd)

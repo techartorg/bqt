@@ -3,10 +3,13 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+from __future__ import annotations
 
 import os
 import logging
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
+
+from typing import Literal
 
 from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
@@ -15,7 +18,6 @@ from PySide6.QtGui import QCloseEvent, QIcon, QWindow
 import bpy
 
 from bqt.ui.quit_dialogue import BlenderClosingDialog, shutdown_blender
-import bpy
 import bqt.manager
 
 logger = logging.getLogger("bqt")
@@ -36,7 +38,7 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
@@ -86,7 +88,7 @@ class BlenderApplication(QApplication):
 
         logger.debug("successfully initialized BlenderApplication")
 
-    def on_update(self):
+    def on_update(self) -> None:
         """qt event loop"""
         # we only need foreground managing if blender is not wrapped
         if (
@@ -106,7 +108,7 @@ class BlenderApplication(QApplication):
                 ]
             )  # auto parent any orphaned widgets
 
-    def blender_focus_toggled(self):
+    def blender_focus_toggled(self) -> bool:
         """returns true the first frame the blender window is focussed or unfoccused"""
         current_active_hwnd = self._get_active_window_handle()
         handle_changed = self._active_window_hwnd != current_active_hwnd
@@ -122,16 +124,16 @@ class BlenderApplication(QApplication):
             return non_blender_toggle
 
     @staticmethod
-    def _get_active_window_handle():
+    def _get_active_window_handle() -> Literal[0]:
         # override this method to get the active window handle
         return 0
 
     @staticmethod
-    def _focus_window():
+    def _focus_window() -> None:
         pass
 
     @abstractstaticmethod
-    def _get_blender_hwnd() -> int:
+    def _get_blender_hwnd() -> Literal[-1]:
         """Get the handler window ID for the blender application window"""
         return -1
 
@@ -146,7 +148,7 @@ class BlenderApplication(QApplication):
         pass
 
     @abstractmethod
-    def _on_focus_object_changed(self, focus_object: QObject):
+    def _on_focus_object_changed(self, focus_object: QObject) -> None:
         """
         Args:
             focus_object: Object to track focus event
@@ -172,7 +174,7 @@ class BlenderApplication(QApplication):
         y += 56  # title bar offset
         return QRect(x, y, widht, height)
 
-    def _set_window_geometry(self):
+    def _set_window_geometry(self) -> None:
         """
         Loads stored window geometry preferences and applies them to the QWindow.
         .setGeometry() sets the size of the window minus the window frame.
@@ -236,7 +238,7 @@ class BlenderApplication(QApplication):
 
         return super().notify(receiver, event)
 
-    def store_window_geometry(self):
+    def store_window_geometry(self) -> None:
         """
         Stores the current window geometry for the QWindow
         The .geometry() method on QWindow includes the size of the application minus the window frame.

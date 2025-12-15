@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import os
+from typing import Literal
 
 import bpy
 from PySide6.QtWidgets import QMessageBox
@@ -30,7 +33,7 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
     bl_idname = "wm.save_from_qt"
     bl_label = "Save_from_Qt"
 
-    def execute(self, context):
+    def execute(self, context) -> set:
         # TODO: Not sure what we are doing here, Friederman?
         if context.blend_data.is_saved:
             bpy.ops.wm.save_mainfile(
@@ -59,7 +62,7 @@ class BlenderClosingDialog(QMessageBox):
     """
     The default Blender closing dialog recreated with Qt, to ensure correct window parenting
     """
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         super().__init__(
             parent
         )  # , Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowStaysOnTopHint)
@@ -83,13 +86,13 @@ class BlenderClosingDialog(QMessageBox):
         self.setDefaultButton(QMessageBox.StandardButton.Save)
         self.setIconPixmap(question_icon)
 
-    def execute(self):
+    def execute(self) -> None | Literal[QMessageBox.StandardButton.Save, QMessageBox.StandardButton.Discard] | int:
         """
         Show the dialog and handle the user's choice: Save, Discard, or Cancel.
         """
         if not bpy.data.is_dirty:
             shutdown_blender()
-            return
+            return None
 
         choice = super().exec_()
         if choice == QMessageBox.StandardButton.Save:

@@ -22,7 +22,10 @@ class HelloWorldDialog(QDialog):
     """
 
     def __init__(self, parent):
-        super().__init__(parent, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
+        super().__init__(
+            parent,
+            Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint,
+        )
 
         self.resize(200, 50)
         self.setWindowTitle("Qt for Python in Blender")

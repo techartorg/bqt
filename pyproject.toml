@@ -42,3 +42,19 @@ bqt = ["ui/*.svg"]
 
 [tool.setuptools.packages.find]
 include = ["bqt*"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D100",   # Missing docstring in public module
+  "D104",   # Missing docstring in public package
+  "D105",   # Missing docstring in magic method
+  "D107",   # Missing docstring in `__init__`
+  "D203",   # Incorrect blank line before class
+  "D213",   # Multi line summary second line
+  "PD",     # pandas-vet linter
+  "TD002",  # Missing author in TODO
+  "TD003",  # Missing issue link on the line following this TODO
+  "FBT003", # Boolean positional value in function call
+  "PLC0415",  # 'import ' should be at the top-level of a file
+]

@@ -1,13 +1,12 @@
-"""
-This Source Code Form is subject to the terms of the Mozilla Public
+"""This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
+import logging
 import os
 import sys
 from pathlib import Path
-import logging
 
 # add to sys path so we can import bqt
 current_dir = str(Path(__file__).parent.parent)
@@ -15,8 +14,8 @@ if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 import bpy
-from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication
 
 import bqt
 import bqt.focus
@@ -30,13 +29,16 @@ def _apply_stylesheet():
     """Styles the QApplication"""
     try:
         import blender_stylesheet
+
         blender_stylesheet.setup()
     except ImportError:
         logger.warning("blender-qt-stylesheet not found, using default style")
 
 
 def _enable_dpi_scale():
-    QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough,
+    )
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
 
@@ -49,32 +51,33 @@ def _instantiate_q_application() -> "bqt.blender_applications.BlenderApplication
 
 
 def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
-    """Loads the correct OS platform Application Class"""
+    """Loads the correct OS platform Application Class."""
     operating_system = sys.platform
     logger.debug(f"loading OS module for '{operating_system}'")
     if operating_system == "darwin":
-        from .blender_applications.darwin_blender_application import DarwinBlenderApplication
+        from .blender_applications.darwin_blender_application import (
+            DarwinBlenderApplication,
+        )
 
         return DarwinBlenderApplication(sys.argv)
 
-    elif operating_system in ["linux", "linux2"]:
+    if operating_system in ["linux", "linux2"]:
         raise NotImplementedError("Linux is not supported yet")
         # TODO: LINUX module
-        pass
 
-    elif operating_system == "win32":
-        from .blender_applications.win32_blender_application import Win32BlenderApplication
+    if operating_system == "win32":
+        from .blender_applications.win32_blender_application import (
+            Win32BlenderApplication,
+        )
 
-        return Win32BlenderApplication(sys.argv + ['-platform', 'windows:darkmode=2'])
+        return Win32BlenderApplication(sys.argv + ["-platform", "windows:darkmode=2"])
 
-    else:
-        raise OSError(f"OS module for '{operating_system}' not found")
+    raise OSError(f"OS module for '{operating_system}' not found")
 
 
 @bpy.app.handlers.persistent
 def _create_global_app():
-    """
-    Create a global QApplication instance, that's maintained between Blender sessions.
+    """Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
     """
     qapp = _instantiate_q_application()
@@ -86,23 +89,24 @@ def _create_global_app():
 
 
 def setup_logger():
-    """setup logger, using BQT_LOG_LEVEL env var"""
+    """Setup logger, using BQT_LOG_LEVEL env var"""
     log_level_name = os.getenv("BQT_LOG_LEVEL", -1)
     if log_level_name == -1:
         logger.debug("BQT_LOG_LEVEL not set, using default 'WARNING'")
         log_level_name = "WARNING"
     if log_level_name not in ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
-        logger.warning(f"BQT_LOG_LEVEL is set to invalid value '{log_level_name}', using default 'WARNING'")
+        logger.warning(
+            f"BQT_LOG_LEVEL is set to invalid value '{log_level_name}', using default 'WARNING'",
+        )
         log_level_name = "WARNING"
     # print(f"BQT_LOG_LEVEL is set to '{log_level_name}'")
     log_level = logging.getLevelName(log_level_name)
     logger.setLevel(log_level)
-    logging.basicConfig(encoding='utf-8')
+    logging.basicConfig(encoding="utf-8")
 
 
 def register():
-    """
-    Runs on enabling the add-on.
+    """Runs on enabling the add-on.
     setup bqt, wrap blender in qt, register operators
     """
     setup_logger()
@@ -118,10 +122,8 @@ def register():
 
 
 def unregister():
-    """
-    Runs on disabling the add-on.
-    """
-    # todo, as long as blender is wrapped in qt, unregistering operator & callback will cause issues,
+    """Runs on disabling the add-on."""
+    # TODO, as long as blender is wrapped in qt, unregistering operator & callback will cause issues,
     #  for now we just return since unregister should not be called partially
     logger.debug("unregistering bqt add-on")
     logger.warning("unregistering bqt is not supported yet, skipping")

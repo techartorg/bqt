@@ -1,19 +1,22 @@
-"""
-This Source Code Form is subject to the terms of the Mozilla Public
+"""This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-import os
+
 import logging
-from abc import abstractmethod, abstractstaticmethod, ABCMeta
+import os
+from abc import ABCMeta, abstractmethod, abstractstaticmethod
 
-from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
-from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
-from PySide6.QtGui import QCloseEvent, QIcon, QWindow
 import bpy
+from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
+from PySide6.QtGui import QCloseEvent, QIcon, QWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
 
-from bqt.ui.quit_dialogue import BlenderClosingDialog, shutdown_blender_with_save_dialogue
 import bqt.manager
+from bqt.ui.quit_dialogue import (
+    BlenderClosingDialog,
+    shutdown_blender_with_save_dialogue,
+)
 
 logger = logging.getLogger("bqt")
 
@@ -29,9 +32,7 @@ FOCUS_FRAMERATE = 15
 
 
 class BlenderApplication(QApplication):
-    """
-    Base Implementation for QT Blender Window Container
-    """
+    """Base Implementation for QT Blender Window Container"""
 
     def __init__(self, *args, **kwargs):
         __metaclass__ = ABCMeta
@@ -57,11 +58,17 @@ class BlenderApplication(QApplication):
             self._blender_window = QWindow()
             self.blender_widget = QWidget.createWindowContainer(self._blender_window)
         else:
-            logger.debug(f"successfully got blender hwnd '{self._hwnd}', wrapping window in QMainWindow")
+            logger.debug(
+                f"successfully got blender hwnd '{self._hwnd}', wrapping window in QMainWindow",
+            )
             self.blender_widget = QMainWindow()
             self.blender_widget.setWindowTitle(WINDOW_TITLE)
-            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
-            self.window_container = QMainWindow.createWindowContainer(self._blender_window)
+            self._blender_window = QWindow.fromWinId(
+                self._hwnd,
+            )  # also sets flag to Qt.ForeignWindow
+            self.window_container = QMainWindow.createWindowContainer(
+                self._blender_window,
+            )
             self.blender_widget.setCentralWidget(self.window_container)
 
             self._set_window_geometry()
@@ -78,28 +85,36 @@ class BlenderApplication(QApplication):
         logger.debug("successfully initialized BlenderApplication")
 
     def on_update(self):
-        """qt event loop"""
+        """Qt event loop"""
         # we only need foreground managing if blender is not wrapped
-        if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
+        if (
+            os.getenv("BQT_DISABLE_WRAP") == "1"
+            and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1"
+            and self.blender_focus_toggled()
+        ):
             logger.debug("foreground window changed, managing")
             bqt.manager._blender_window_change(self._active_window_hwnd)
 
         if os.getenv("BQT_AUTO_ADD", "1") == "1":
-            bqt.manager.parent_orphan_widgets(exclude=[self.blender_widget, self._blender_window, self.window_container])  # auto parent any orphaned widgets
+            bqt.manager.parent_orphan_widgets(
+                exclude=[
+                    self.blender_widget,
+                    self._blender_window,
+                    self.window_container,
+                ],
+            )  # auto parent any orphaned widgets
 
     def blender_focus_toggled(self):
-        """returns true the first frame the blender window is focussed or unfoccused"""
+        """Returns true the first frame the blender window is focussed or unfoccused"""
         current_active_hwnd = self._get_active_window_handle()
         handle_changed = self._active_window_hwnd != current_active_hwnd
         if not handle_changed:
             self._active_window_hwnd = current_active_hwnd
             return False
-        else:
-            # we toggled between 2 windows, but we only care if we toggled in or out of blender
-            non_blender_toggle = self._active_window_hwnd == 0 or current_active_hwnd == 0
-            self._active_window_hwnd = current_active_hwnd
-            return non_blender_toggle
-
+        # we toggled between 2 windows, but we only care if we toggled in or out of blender
+        non_blender_toggle = self._active_window_hwnd == 0 or current_active_hwnd == 0
+        self._active_window_hwnd = current_active_hwnd
+        return non_blender_toggle
 
     @staticmethod
     def _get_active_window_handle():
@@ -117,43 +132,38 @@ class BlenderApplication(QApplication):
 
     @staticmethod
     def _get_application_icon() -> QIcon:
-        """
-        This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
+        """This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.
         It then creates a QIcon with that data and returns it.
 
         Returns QIcon: Application Icon
         """
-        pass
 
     @abstractmethod
     def _on_focus_object_changed(self, focus_object: QObject):
-        """
-        Args:
-            focus_object: Object to track focus event
-        """
+        """Args:
+        focus_object: Object to track focus event
 
-        pass
+        """
 
     def _unwrapped_window_geometry(self) -> QRect:
-        """
-        Get the window geometry from the Blender window before it was wrapped in a QWidgetContainer
+        """Get the window geometry from the Blender window before it was wrapped in a QWidgetContainer
         Run this before wrapping the window in a QWidgetContainer
         Returns QRect(x, y, width, height)
         """
         window = bpy.context.window_manager.windows[0]
         height, widht = window.height, window.width
         x = window.x
-        y = window.y  # blender y relative from bottom of screen to bottom of Blender window
+        y = (
+            window.y
+        )  # blender y relative from bottom of screen to bottom of Blender window
         # convert y to be relative from the top
         current_screen_rect = self.primaryScreen().availableGeometry()
         y = current_screen_rect.height() - y - height
         y += 56  # title bar offset
         return QRect(x, y, widht, height)
 
-
     def _set_window_geometry(self):
-        """
-        Loads stored window geometry preferences and applies them to the QWindow.
+        """Loads stored window geometry preferences and applies them to the QWindow.
         .setGeometry() sets the size of the window minus the window frame.
         For this reason it should be set on self.blender_widget.
         """
@@ -172,23 +182,27 @@ class BlenderApplication(QApplication):
             self.blender_widget.showMaximized()
             return
 
-
-        unwrapped_geometry = self._unwrapped_window_geometry()  # maintain unwrapped window size & pos
-        geometry = saved_geometry or unwrapped_geometry  # if no saved geometry, use previous blender window size
-        self.blender_widget.setGeometry(geometry)  # setGeometry is relative to its parent
-
+        unwrapped_geometry = (
+            self._unwrapped_window_geometry()
+        )  # maintain unwrapped window size & pos
+        geometry = (
+            saved_geometry or unwrapped_geometry
+        )  # if no saved geometry, use previous blender window size
+        self.blender_widget.setGeometry(
+            geometry,
+        )  # setGeometry is relative to its parent
 
     def notify(self, receiver: QObject, event: QEvent) -> bool:
-        """
-        Args:
-            receiver: Object to receive event
-            event: Event
+        """Override Notify event.
 
-        Returns: bool
+        Intercept close event to properly save geometry and close Blender.
         """
-        # todo believe this func sometimes freezes blender, ctrl-c keyboard interrupt in console shows this func as the culprit
+        # TODO believe this func sometimes freezes blender, ctrl-c keyboard interrupt in console shows this func as the culprit
 
-        if isinstance(event, QCloseEvent) and receiver in (self.blender_widget, self._blender_window):
+        if isinstance(event, QCloseEvent) and receiver in (
+            self.blender_widget,
+            self._blender_window,
+        ):
             # catch the close event when clicking close on the qt window,
             # ignore the event, and ask user if they want to close blender if unsaved changes.
             event.ignore()
@@ -207,12 +221,11 @@ class BlenderApplication(QApplication):
         return super().notify(receiver, event)
 
     def store_window_geometry(self):
-        """
-        Stores the current window geometry for the QWindow
+        """Stores the current window geometry for the QWindow.
+
         The .geometry() method on QWindow includes the size of the application minus the window frame.
         For that reason the _blender_widget should be used.
         """
-
         settings = QSettings(ORGANISATION, APP)
         settings.beginGroup(WINDOW_GROUP_NAME)
         settings.setValue(GEOMETRY, self.blender_widget.geometry())

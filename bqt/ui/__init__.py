@@ -1,5 +1,6 @@
 from pathlib import Path
-from bqt.qt_core import QtCore, QImage, QPixmap
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QImage, QPixmap
 
 
 def get_question_pixmap() -> QPixmap:
@@ -10,5 +11,5 @@ def get_question_pixmap() -> QPixmap:
         image = QImage(str(icon_filepath))
         if not image.isNull():
             pixmap = pixmap.fromImage(image)
-            pixmap = pixmap.scaledToWidth(64, QtCore.Qt.SmoothTransformation)
+            pixmap = pixmap.scaledToWidth(64, Qt.TransformationMode.SmoothTransformation)
     return pixmap

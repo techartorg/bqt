@@ -13,27 +13,52 @@ on:
     types: [published]
 
 permissions:
-  contents: read
+  contents: write   # needed for pushing version bump
 
 jobs:
   deploy:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0   # required for pushing commits
+
+    - name: Extract version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+    - name: Update pyproject.toml version
+      run: |
+        sed -i "s/^version = \".*\"/version = \"${VERSION}\"/" pyproject.toml
+
+    - name: Update blender_manifest.toml version
+      run: |
+        sed -i "s/^version = \".*\"/version = \"${VERSION}\"/" bqt/blender_manifest.toml
+
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.x'
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build
+
     - name: Build package
       run: python -m build
+
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
+
+    - name: Commit version bump
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add pyproject.toml bqt/blender_manifest.toml
+        git commit -m "Bump version to ${VERSION}"
+        git push

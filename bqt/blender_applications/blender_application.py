@@ -3,13 +3,18 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+import os
 import logging
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
-import os
-from bqt.ui.quit_dialogue import BlenderClosingDialog
-from bqt.qt_core import QEvent, QObject, QRect, QSettings, QTimer, QCloseEvent, QIcon, QWindow, QApplication, QWidget, QMainWindow
+
+from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
+from PySide6.QtGui import QCloseEvent, QIcon, QWindow
 import bpy
+
+from bqt.ui.quit_dialogue import BlenderClosingDialog, shutdown_blender_with_save_dialogue
 import bqt.manager
+
 logger = logging.getLogger("bqt")
 
 
@@ -192,7 +197,7 @@ class BlenderApplication(QApplication):
 
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed
-                bpy.ops.wm.quit_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
+                shutdown_blender_with_save_dialogue()
             else:
                 closing_dialog = BlenderClosingDialog(self.blender_widget)
                 closing_dialog.execute()

@@ -4,14 +4,7 @@ import os
 import bqt.ui
 
 
-
-def shutdown_blender(*args, **kwargs):
-    """Custom shutdown function for Blender, imitating the default Blender shutdown"""
-
-    # By default, changes to preferences are saved on exit, this can be toggled off in the preferences
-    if bpy.context.preferences.use_preferences_save:
-        bpy.ops.wm.save_userpref()
-    
+def quit_blender_from_main_thread(*args, **kwargs):
     # https://github.com/techartorg/bqt/issues/131
     # running bpy.ops.wm.quit_blender, runs it from the Qt thread.
     # this can cause an EXCEPTION_ACCESS_VIOLATION on closing blender
@@ -21,6 +14,24 @@ def shutdown_blender(*args, **kwargs):
         # this method needs to return None, to correcly register with bpy.app.timers
         bpy.ops.wm.quit_blender(*args, **kwargs)
     bpy.app.timers.register(__quit_blender)
+
+
+def shutdown_blender(*args, **kwargs):
+    """
+    Quit blender, without triggering the save dialogue
+    
+    :param args: catches any arguments passed by bpy handlers, and option to pass args to bpy.ops.wm.quit_blender
+    """
+    # By default changes to preferences are saved on exit, this can be toggled off in the preferences
+    if bpy.context.preferences.use_preferences_save:
+        bpy.ops.wm.save_userpref()
+        
+    quit_blender_from_main_thread(*args, **kwargs)
+
+
+def shutdown_blender_with_save_dialogue():
+    with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+        quit_blender_from_main_thread("INVOKE_DEFAULT")
 
 
 class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
@@ -44,9 +55,6 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
 
 
 class BlenderClosingDialog(QMessageBox):
-    """
-    The default Blender closing dialog recreated with Qt, to ensure correct window parenting
-    """
     def __init__(self, parent):
         super().__init__(parent) #, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowStaysOnTopHint)
 
@@ -66,9 +74,6 @@ class BlenderClosingDialog(QMessageBox):
         self.setIconPixmap(question_icon)
 
     def execute(self):
-        """
-        Show the dialog and handle the user's choice: Save, Discard, or Cancel.
-        """
         if not bpy.data.is_dirty:
             shutdown_blender()
             return

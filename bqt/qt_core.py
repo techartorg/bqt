@@ -12,5 +12,12 @@ except ImportError:
         from PySide2.QtGui import QCloseEvent, QIcon, QWindow,  QImage, QPixmap
         print("BQT imported PySide2")
     except ImportError:
-        print("BQT failed to import PySide")
-        pass
+        raise ImportError("BQT failed to import PySide")
+
+# __all__ enables support for import from, e.g. 'from qt_core import QWindow'
+# the above import adds it to the local namespace, _all__ adds it to the module public namespace
+__all__ = [
+    "Qt", "QEvent", "QObject", "QRect", "QSettings", "QTimer", "QDir",
+    "QApplication", "QWidget", "QMainWindow", "QDockWidget", "QMessageBox",
+    "QCloseEvent", "QIcon", "QWindow", "QImage", "QPixmap", "QtCore"
+]

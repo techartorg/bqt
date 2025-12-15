@@ -4,12 +4,23 @@ import os
 import bqt.ui
 
 
-def shutdown_blender(*args):
-    # By default changes to preferences are saved on exit, this can be toggled off in the preferences
+
+def shutdown_blender(*args, **kwargs):
+    """Custom shutdown function for Blender, imitating the default Blender shutdown"""
+
+    # By default, changes to preferences are saved on exit, this can be toggled off in the preferences
     if bpy.context.preferences.use_preferences_save:
         bpy.ops.wm.save_userpref()
-
-    bpy.ops.wm.quit_blender()
+    
+    # https://github.com/techartorg/bqt/issues/131
+    # running bpy.ops.wm.quit_blender, runs it from the Qt thread.
+    # this can cause an EXCEPTION_ACCESS_VIOLATION on closing blender
+    # bpy.app.timers.register forces method to run in blender main thread instead of qt thread.
+    # TODO but only for blender 4.2 or higher? test this
+    def __quit_blender():
+        # this method needs to return None, to correcly register with bpy.app.timers
+        bpy.ops.wm.quit_blender(*args, **kwargs)
+    bpy.app.timers.register(__quit_blender)
 
 
 class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
@@ -33,6 +44,9 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
 
 
 class BlenderClosingDialog(QMessageBox):
+    """
+    The default Blender closing dialog recreated with Qt, to ensure correct window parenting
+    """
     def __init__(self, parent):
         super().__init__(parent) #, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowStaysOnTopHint)
 
@@ -52,6 +66,9 @@ class BlenderClosingDialog(QMessageBox):
         self.setIconPixmap(question_icon)
 
     def execute(self):
+        """
+        Show the dialog and handle the user's choice: Save, Discard, or Cancel.
+        """
         if not bpy.data.is_dirty:
             shutdown_blender()
             return

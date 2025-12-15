@@ -6,7 +6,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import logging
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 import os
-from bqt.ui.quit_dialogue import BlenderClosingDialog
+from bqt.ui.quit_dialogue import BlenderClosingDialog, shutdown_blender
 from bqt.qt_core import QEvent, QObject, QRect, QSettings, QTimer, QCloseEvent, QIcon, QWindow, QApplication, QWidget, QMainWindow
 import bpy
 import bqt.manager
@@ -192,8 +192,7 @@ class BlenderApplication(QApplication):
 
             if os.getenv("BQT_DISABLE_CLOSE_DIALOGUE") == "1":
                 # this triggers the default blender close event, showing the save dialog if needed
-                with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
-                    bpy.ops.wm.quit_blender("INVOKE_DEFAULT")
+                shutdown_blender({"window": bpy.context.window_manager.windows[0]}, "INVOKE_DEFAULT")
             else:
                 closing_dialog = BlenderClosingDialog(self.blender_widget)
                 closing_dialog.execute()

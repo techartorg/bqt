@@ -2,6 +2,7 @@
 from bqt_demo import anim_bar
 anim_bar.main()
 """
+
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QTimer
 import bpy
@@ -12,8 +13,12 @@ class Window(QtWidgets.QWidget):
         super().__init__(parent)
         self.setWindowFlags(Qt.Tool | Qt.WindowStaysOnTopHint)
 
-        self.label1 = QtWidgets.QLabel("Changing the current frame in blender updates this slider.")
-        self.label2 = QtWidgets.QLabel("Changing this slider updates the current frame in blender.")
+        self.label1 = QtWidgets.QLabel(
+            "Changing the current frame in blender updates this slider."
+        )
+        self.label2 = QtWidgets.QLabel(
+            "Changing this slider updates the current frame in blender."
+        )
         self.slider = QtWidgets.QSlider(Qt.Horizontal)
 
         with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
@@ -44,7 +49,7 @@ class Window(QtWidgets.QWidget):
         # note that if this fails blender will crash, to prevent you can use try/except
         bpy.context.scene.frame_set(value)
 
-        # TODO add click support, currently it only works when you drag the slider
+        # TODO: Add click support, currently it only works when you drag the slider
 
 
 def main():

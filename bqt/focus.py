@@ -29,7 +29,7 @@ def _detect_keyboard(hwnd=None):
 
     # print("event.type", event.type, type(event.type))
     for name, code in keycodes:
-        # todo this bug fix is not perfect yet, blender works better without this atm
+        # TODO: This bug fix is not perfect yet, blender works better without this atm
         # # if the first key pressed is one of the following,
         # # don't simulate a key release, since it causes this bug:
         # # the first keypress on re-focus blender will be ignored, e.g. ctrl + v will just be v
@@ -40,7 +40,7 @@ def _detect_keyboard(hwnd=None):
         # safely release all other keys that might be stuck down
         ctypes.windll.user32.keybd_event(code, 0, 2, 0)  # release key
 
-    # todo, fix: blender occasionally still frozen input, despite having run the above code
+    # TODO: fix: blender occasionally still frozen input, despite having run the above code
     # but when we click the mouse, it starts working again
     # simulate a right mouse click did not work ...
     # ctypes.windll.user32.mouse_event(0x0008, 0, 0, 0, 0)  # right mouse click

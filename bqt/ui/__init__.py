@@ -11,5 +11,7 @@ def get_question_pixmap() -> QPixmap:
         image = QImage(str(icon_filepath))
         if not image.isNull():
             pixmap = pixmap.fromImage(image)
-            pixmap = pixmap.scaledToWidth(64, Qt.TransformationMode.SmoothTransformation)
+            pixmap = pixmap.scaledToWidth(
+                64, Qt.TransformationMode.SmoothTransformation
+            )
     return pixmap

@@ -20,6 +20,7 @@ from PySide6.QtGui import QIcon
 
 from bqt.blender_applications.blender_application import BlenderApplication
 import bqt.focus
+
 logger = logging.getLogger("bqt")
 
 
@@ -30,7 +31,9 @@ class DarwinBlenderApplication(BlenderApplication):
 
     def __init__(self, *args, **kwargs):
         # OSX Specific - Needs to initialize first
-        self._ns_window = self._get_application_window() or None  # todo not needed when we disable wrapping
+        self._ns_window = (
+            self._get_application_window() or None
+        )  # TODO: Not needed when we disable wrapping
 
         super().__init__(*args, **kwargs)
 
@@ -75,7 +78,9 @@ class DarwinBlenderApplication(BlenderApplication):
         if os.getenv("BQT_DISABLE_WRAP") == "1":
             return None
 
-        ns_window = AppKit.NSApp.mainWindow()  # returns 'None' on startup, likely cause Blender hasn't finished startup
+        ns_window = (
+            AppKit.NSApp.mainWindow()
+        )  # returns 'None' on startup, likely cause Blender hasn't finished startup
         if ns_window is None:
             return None
         ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)

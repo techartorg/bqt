@@ -5,6 +5,7 @@ anim_bar.main()
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QTimer
 import bpy
+import bqt.utils
 
 
 class Window(QtWidgets.QWidget):
@@ -16,7 +17,7 @@ class Window(QtWidgets.QWidget):
         self.label2 = QtWidgets.QLabel("Changing this slider updates the current frame in blender.")
         self.slider = QtWidgets.QSlider(Qt.Horizontal)
 
-        with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+        with bpy.context.temp_override(window=bqt.utils.main_blender_window()):
             self.slider.setMinimum(bpy.context.scene.frame_start)
             self.slider.setMaximum(bpy.context.scene.frame_end)
 

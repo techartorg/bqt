@@ -14,6 +14,7 @@ import bpy
 
 from bqt.ui.quit_dialogue import BlenderClosingDialog, shutdown_blender_with_save_dialogue
 import bqt.manager
+import bqt.utils
 
 logger = logging.getLogger("bqt")
 
@@ -140,7 +141,7 @@ class BlenderApplication(QApplication):
         Run this before wrapping the window in a QWidgetContainer
         Returns QRect(x, y, width, height)
         """
-        window = bpy.context.window_manager.windows[0]
+        window = bqt.utils.main_blender_window()
         height, widht = window.height, window.width
         x = window.x
         y = window.y  # blender y relative from bottom of screen to bottom of Blender window

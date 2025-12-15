@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QMessageBox
 from PySide6.QtCore import Qt
 
 import bqt.ui
+import bqt.utils
 
 
 def quit_blender_from_main_thread(*args, **kwargs):
@@ -33,7 +34,7 @@ def shutdown_blender(*args, **kwargs):
 
 
 def shutdown_blender_with_save_dialogue():
-    with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+    with bpy.context.temp_override(window=bqt.utils.main_blender_window()):
         quit_blender_from_main_thread("INVOKE_DEFAULT")
 
 
@@ -44,7 +45,7 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
     def execute(self, context):
 
         # context override is needed, without a UI, the operators are likely to fail/ no dialogue shows.
-        with bpy.context.temp_override(window=bpy.context.window_manager.windows[0]):
+        with bpy.context.temp_override(window=bqt.utils.main_blender_window()):
             
             # EXEC_AREA = run the operator directly, saves without dialogue
             # INVOKE_AREA = behave like a user clicked File → Save, show file browser

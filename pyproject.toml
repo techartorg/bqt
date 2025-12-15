@@ -5,16 +5,18 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bqt"
 version = "1.4.2" # don't forget to update the version in blender_manifest.toml
-description = "Files to help bootstrap PySide2 with an event loop within Blender."
+description = "Files to help bootstrap PySide6 with an event loop within Blender."
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
 ]
 authors = [
     {name="tech-artists.org"}
@@ -29,6 +31,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/techartorg/bqt"
+Repository = "https://github.com/techartorg/bqt"
+Issues = "https://github.com/techartorg/bqt/issues"
+Documentation = "https://github.com/techartorg/bqt/wiki"
 
 [tool.setuptools]
 include-package-data = true
@@ -37,4 +42,4 @@ include-package-data = true
 bqt = ["ui/*.svg"]
 
 [tool.setuptools.packages.find]
-include = ["bqt"]
+include = ["bqt*"]

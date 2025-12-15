@@ -44,6 +44,6 @@ Recommended version of `bqt` for legacy Blender versions.
 
 | Blender       | `bqt` |  notes |
 |---------------|-------|--------| 
-| 4.2+          | 2.0.0 | Moving from addon to Blender extensions |
-| 2.93 -> 4.1   | 1.4.2 | Dropped support for PySide2 |
+| 4.2+          | 2.0.0 | Moving from addon to Blender extensions<br>Dropped support for PySide2 |
+| 2.93 -> 4.1   | 1.4.2 |  |
 | 2.83 -> 2.92  | 1.4.0 | Uncompatible logging option used |

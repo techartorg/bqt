@@ -103,7 +103,7 @@ def _fix_existing_bpy_module(module_name):
         return True
 
 
-def _apply_bpy_app_patches():
+def apply_bpy_app_patches():
     """Apply all bpy.app module patches. Order matters!"""
     # First patch sys.modules
     for module_name in _BPY_APP_MODULES_TO_PATCH:

@@ -7,15 +7,18 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 from contextlib import suppress
 from pathlib import Path
 import os
-import bpy
+import logging
 
 with suppress(ModuleNotFoundError):
     import AppKit
     import objc
     # this is only suppressed, so it doesn't crash windows, we do need this, not optional
-from bqt.qt_core import QIcon, QObject
-import logging
-from .blender_application import BlenderApplication
+
+import bpy
+from PySide6.QtCore import QObject
+from PySide6.QtGui import QIcon
+
+from bqt.blender_applications.blender_application import BlenderApplication
 import bqt.focus
 logger = logging.getLogger("bqt")
 

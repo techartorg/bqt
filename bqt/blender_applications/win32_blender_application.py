@@ -1,16 +1,18 @@
-"""
-This Source Code Form is subject to the terms of the Mozilla Public
+"""This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
-from PySide6.QtCore import QObject
-from .blender_application import BlenderApplication
+
 import ctypes
 import os
 from collections import namedtuple
-import bqt.focus
 from ctypes import wintypes
 
+from PySide6.QtCore import QObject
+
+import bqt.focus
+
+from .blender_application import BlenderApplication
 
 user32 = ctypes.windll.user32
 
@@ -113,9 +115,7 @@ def get_blender_window():
 
 
 class Win32BlenderApplication(BlenderApplication):
-    """
-    Windows implementation of BlenderApplication
-    """
+    """Windows implementation of BlenderApplication."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -127,9 +127,9 @@ class Win32BlenderApplication(BlenderApplication):
         return hwnd
 
     def _on_focus_object_changed(self, focus_object: QObject):
-        """
-        Args:
-            QObject focus_object: Object to track focus change
+        """On focus hook.
+
+        Attempts to fix a stuck key bug.
         """
         if focus_object is self.blender_widget:
             ctypes.windll.user32.SetFocus(self._hwnd)
@@ -137,8 +137,8 @@ class Win32BlenderApplication(BlenderApplication):
 
     @staticmethod
     def _get_active_window_handle():
-        """
-        Get the handle from the window that's currently in focus.
+        """Get the handle from the window that's currently in focus.
+
         Returns 0 for active windows not managed by Blender
         """
         # note that negative values are also possible

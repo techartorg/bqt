@@ -1,14 +1,14 @@
-"""
-widget manager to register your widgets with bqt
+"""widget manager to register your widgets with bqt
 
 - parent widget to blender window (blender_widget)
 - keep widget in front of Blender window only, even when bqt is not wrapped in qt
 """
+
 import logging
 import os
 
-from PySide6.QtWidgets import QApplication, QDockWidget
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QDockWidget
 
 logger = logging.getLogger("bqt")
 
@@ -16,14 +16,14 @@ __widgets = []
 __excluded_widgets = []
 
 
-class WidgetData():
+class WidgetData:
     def __init__(self, widget, visible):
         self.widget = widget
         self.visible = visible
 
 
 def make_widget_dockable(widget):
-    """wrap widget in QDockWidget if not already"""
+    """Wrap widget in QDockWidget if it isn't already."""
     if not isinstance(widget, QDockWidget):
         logger.debug("wrapping widget in QDockWidget")
 
@@ -50,14 +50,15 @@ def make_widget_dockable(widget):
 
 
 def register(widget, exclude=None, parent=True, manage=True, unique=True):
-    """
-    parent widget to blender window
+    """Parent widget to blender window.
+
     Args:
         widget: child widget to parent
         parent: if True, parent the widget to the blender window
         exclude: widgets to exclude from being parented to the blender window
         manage: if True, manage the visibility of the widget
         unique: if True, prevent registering a new widget with the same objectName
+
     """
     exclude = exclude or []
     logger.debug(f"registering widget with bqt '{widget}'")
@@ -100,24 +101,35 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
     if parent:
         logger.debug("parenting widget to blender window")
         vis = widget.isVisible()
-        widget.setParent(parent_widget, Qt.WindowType.Window)  # default set flag to window
+        widget.setParent(
+            parent_widget,
+            Qt.WindowType.Window,
+        )  # default set flag to window
         widget.setVisible(vis)  # parenting hides the widget, restore visibility
 
     # save widget so we can manage the focus and visibility
     if manage:
-        data = WidgetData(widget, widget.isVisible())  # todo can we init vis state to false?
+        data = WidgetData(
+            widget,
+            widget.isVisible(),
+        )  # TODO can we init vis state to false?
         __widgets.append(data)
 
         # ensure widget stays in foreground if blender is not wrapped in qt
-        if os.getenv("BQT_DISABLE_WRAP", "0") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1":
+        if (
+            os.getenv("BQT_DISABLE_WRAP", "0") == "1"
+            and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1"
+        ):
             logger.debug("setting widget WindowStaysOnTopHint")
             vis = widget.isVisible()
-            widget.setWindowFlags(widget.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+            widget.setWindowFlags(
+                widget.windowFlags() | Qt.WindowType.WindowStaysOnTopHint,
+            )
             widget.setVisible(vis)
 
 
 def iter_widget_data():
-    """iterate over all registered widgets, remove widgets that have been removed"""
+    """Iterate over all registered widgets, remove widgets that have been removed."""
     cleanup = []
     for widget_data in __widgets:
         if not widget_data.widget:
@@ -136,8 +148,7 @@ def iter_widget_data():
 
 
 def _blender_window_change(hwnd: int):
-    """
-    hide widgets when blender is not focussed,
+    """Hide widgets when blender is not focussed,
     keep widgets in front of the Blender window when Blender is focussed
     run when changing between a blender & non-blender window
     """
@@ -147,9 +158,8 @@ def _blender_window_change(hwnd: int):
         widget = widget_data.widget
 
         if focussed_on_a_blender_window:
-
             # add top flag, ensure the widget stays in front of the blender window
-            # widget.setWindowFlags(widget.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)  # todo move this to register?
+            # widget.setWindowFlags(widget.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)  # TODO move this to register?
 
             # restore visibility state of the widget
             if widget_data.visible:
@@ -161,34 +171,41 @@ def _blender_window_change(hwnd: int):
 
             # remove top flag, allow the widget to be hidden behind the blender window
             # self.blender_widget2.setWindowFlags(self.blender_widget2.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
-            widget.hide()  # todo since we hide do we need to remove flag?
+            widget.hide()  # TODO since we hide do we need to remove flag?
 
-    # todo right now widgets stay in front of other blender windows,
+    # TODO right now widgets stay in front of other blender windows,
     #  e.g. the preferences window, ideally we handle this
 
 
 def _orphan_toplevel_widgets():
-    return [widget for widget in QApplication.instance().topLevelWidgets() if
-            not widget.parent()
-            and widget not in __widgets
-            and widget not in __excluded_widgets]
+    return [
+        widget
+        for widget in QApplication.instance().topLevelWidgets()
+        if not widget.parent()
+        and widget not in __widgets
+        and widget not in __excluded_widgets
+    ]
 
 
 def parent_orphan_widgets(exclude=None):
-    """Find and parent orphan widgets to the blender widget"""
+    """Find and parent orphan widgets to the blender widget."""
     # this runs every frame, don't print or log in this method
     exclude = exclude or []
     __excluded_widgets.extend(exclude)
     for widget in _orphan_toplevel_widgets():
-        if widget.windowType() in (Qt.WindowType.ToolTip, ):
+        if widget.windowType() in (Qt.WindowType.ToolTip,):
             __excluded_widgets.append(widget)
             continue
-        elif widget.windowType() not in (Qt.WindowType.Window, Qt.WindowType.Dialog, ):
-            logger.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
+        if widget.windowType() not in (
+            Qt.WindowType.Window,
+            Qt.WindowType.Dialog,
+        ):
+            logger.warning(
+                f"skipping widget: '{widget}' not window type but {widget.windowType()}",
+            )
             __excluded_widgets.append(widget)
             continue
-        # todo test with various widgets, we likely exclude some valid widgets
+        # TODO test with various widgets, we likely exclude some valid widgets
         #  this should fail with a combobox (dropdown) and menu
 
         register(widget, exclude=exclude)
-

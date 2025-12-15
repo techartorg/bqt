@@ -23,6 +23,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0   # required for pushing commits
+        ref: ${{ github.event.release.target_commitish }}  # checkout branch instead of tag so we can push
 
     - name: Extract version from tag
       id: get_version

@@ -4,12 +4,13 @@ widget manager to register your widgets with bqt
 - parent widget to blender window (blender_widget)
 - keep widget in front of Blender window only, even when bqt is not wrapped in qt
 """
-from bqt.qt_core import QApplication, QDockWidget, QtCore
 import logging
 import os
+
+from PySide6.QtWidgets import QApplication, QDockWidget
+from PySide6.QtCore import Qt
+
 logger = logging.getLogger("bqt")
-
-
 
 __widgets = []
 __excluded_widgets = []
@@ -99,7 +100,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
     if parent:
         logger.debug("parenting widget to blender window")
         vis = widget.isVisible()
-        widget.setParent(parent_widget, QtCore.Qt.Window)  # default set flag to window
+        widget.setParent(parent_widget, Qt.WindowType.Window)  # default set flag to window
         widget.setVisible(vis)  # parenting hides the widget, restore visibility
 
     # save widget so we can manage the focus and visibility
@@ -111,7 +112,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
         if os.getenv("BQT_DISABLE_WRAP", "0") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1":
             logger.debug("setting widget WindowStaysOnTopHint")
             vis = widget.isVisible()
-            widget.setWindowFlags(widget.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+            widget.setWindowFlags(widget.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
             widget.setVisible(vis)
 
 
@@ -179,10 +180,10 @@ def parent_orphan_widgets(exclude=None):
     exclude = exclude or []
     __excluded_widgets.extend(exclude)
     for widget in _orphan_toplevel_widgets():
-        if widget.windowType() in (QtCore.Qt.WindowType.ToolTip, ):
+        if widget.windowType() in (Qt.WindowType.ToolTip, ):
             __excluded_widgets.append(widget)
             continue
-        elif not widget.windowType() in (QtCore.Qt.Window, QtCore.Qt.Dialog, ):
+        elif widget.windowType() not in (Qt.WindowType.Window, Qt.WindowType.Dialog, ):
             logger.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
             __excluded_widgets.append(widget)
             continue

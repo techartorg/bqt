@@ -1,6 +1,9 @@
-import bpy
-from bqt.qt_core import QMessageBox, Qt
 import os
+
+import bpy
+from PySide6.QtWidgets import QMessageBox
+from PySide6.QtCore import Qt
+
 import bqt.ui
 
 
@@ -65,7 +68,7 @@ class BlenderClosingDialog(QMessageBox):
         super().__init__(parent) #, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowStaysOnTopHint)
 
         # hide title bar
-        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
 
         filepath = bpy.data.filepath
         if not filepath:
@@ -75,8 +78,8 @@ class BlenderClosingDialog(QMessageBox):
         question_icon = bqt.ui.get_question_pixmap()
 
         self.setText("Save changes before closing?\n\n" + filename)
-        self.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
-        self.setDefaultButton(QMessageBox.Save)
+        self.setStandardButtons(QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Discard | QMessageBox.StandardButton.Cancel)
+        self.setDefaultButton(QMessageBox.StandardButton.Save)
         self.setIconPixmap(question_icon)
 
     def execute(self):
@@ -85,11 +88,11 @@ class BlenderClosingDialog(QMessageBox):
             return
 
         choice = super().exec_()
-        if choice == QMessageBox.Save:
+        if choice == QMessageBox.StandardButton.Save:
             bpy.utils.register_class(WINDOW_OT_SaveFileFromQt)
             bpy.app.handlers.save_post.append(shutdown_blender)
             bpy.ops.wm.save_from_qt()
-        elif choice == QMessageBox.Discard:
+        elif choice == QMessageBox.StandardButton.Discard:
             shutdown_blender()
         else:  # user clicked cancel
             pass

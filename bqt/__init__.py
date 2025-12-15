@@ -7,20 +7,20 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import os
 import sys
 from pathlib import Path
-
+import logging
 
 # add to sys path so we can import bqt
 current_dir = str(Path(__file__).parent.parent)
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
+import bpy
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
 
 import bqt
 import bqt.focus
 import bqt.manager
-import bpy
-from bqt.qt_core import QtCore, QApplication
-import logging
 
 logger = logging.getLogger("bqt")
 add = bqt.manager.register
@@ -36,9 +36,9 @@ def _apply_stylesheet():
 
 
 def _enable_dpi_scale():
-    QApplication.setHighDpiScaleFactorRoundingPolicy(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
-    QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps)
+    QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
 
 
 def _instantiate_q_application() -> "bqt.blender_applications.BlenderApplication":

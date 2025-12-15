@@ -4,6 +4,10 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 
+import bqt.pyside_compatibility
+# Apply patches immediately before any Qt/PySide imports
+bqt.pyside_compatibility._apply_bpy_app_patches()
+
 import os
 import sys
 from pathlib import Path

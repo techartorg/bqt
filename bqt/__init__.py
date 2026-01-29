@@ -55,6 +55,8 @@ def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
     if operating_system == "darwin":
         from .blender_applications.darwin_blender_application import DarwinBlenderApplication
 
+        DarwinBlenderApplication.setStyle("Fusion")
+
         return DarwinBlenderApplication(sys.argv)
 
     elif operating_system in ["linux", "linux2"]:
@@ -65,7 +67,9 @@ def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
     elif operating_system == "win32":
         from .blender_applications.win32_blender_application import Win32BlenderApplication
 
-        return Win32BlenderApplication(sys.argv + ['-platform', 'windows:darkmode=2'])
+        Win32BlenderApplication.setStyle("Fusion")
+
+        return Win32BlenderApplication(sys.argv)
 
     else:
         raise OSError(f"OS module for '{operating_system}' not found")

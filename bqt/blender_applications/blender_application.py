@@ -5,12 +5,14 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 import os
 import logging
+from pathlib import Path
 from abc import abstractmethod, abstractstaticmethod, ABCMeta
 
 from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
 from PySide6.QtGui import QCloseEvent, QIcon, QWindow
 import bpy
+from bpy.app.handlers import persistent
 
 from bqt.ui.quit_dialogue import BlenderClosingDialog, shutdown_blender_with_save_dialogue
 import bqt.manager
@@ -77,6 +79,34 @@ class BlenderApplication(QApplication):
         self.timer.start(tick)
 
         logger.debug("successfully initialized BlenderApplication")
+
+    @staticmethod
+    def _title(check_dirty = True):
+        # Standard title is like "Blender Qt 5.10"
+        title = f"{WINDOW_TITLE} {bpy.app.version_string}"
+        if not bpy.data.is_saved:
+            # This happens for new unsaved files.
+            title = f"(Unsaved) - {title}"
+        else:
+            # Add the current file path to the name
+            f = Path(bpy.data.filepath)
+            title = f"{f.stem} [{f.as_posix()}] - {title}"
+        if check_dirty and bpy.data.is_dirty:
+            # add dirty indicator
+            title = f"* {title}"
+        return title
+
+    @persistent
+    def update_window_title(self, *_):
+        title = self._title()
+        self.blender_widget.setWindowTitle(title)
+
+    @persistent
+    def update_window_title_post_save(self, *_):
+        # It seems like the `is_dirty` flag is clear AFTER the post save handler.
+        # This is only used in the post save, it shouldn't have unsaved changes.
+        title = self._title(check_dirty=False)
+        self.blender_widget.setWindowTitle(title)
 
     def on_update(self):
         """qt event loop"""

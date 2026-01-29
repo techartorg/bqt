@@ -83,6 +83,9 @@ def _create_global_app():
     # and saving it in a global in blender_applications.py causes blender to crash on startup
     global parent_window
     parent_window = qapp._blender_window.parent()
+    bpy.app.handlers.depsgraph_update_post.append(qapp.update_window_title)
+    bpy.app.handlers.load_post.append(qapp.update_window_title)
+    bpy.app.handlers.save_post.append(qapp.update_window_title_post_save)
 
 
 def setup_logger():

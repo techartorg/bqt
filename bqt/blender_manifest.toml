@@ -12,7 +12,7 @@ website = "https://github.com/techartorg/bqt"
 
 # # Optional: tag list defined by Blender and server, see:
 # # https://docs.blender.org/manual/en/dev/advanced/extensions/tags.html
-tags = ["Tools", "UI", "Qt"]
+tags = ["Pipeline", "User Interface"]
 
 blender_version_min = "4.2.0"
 

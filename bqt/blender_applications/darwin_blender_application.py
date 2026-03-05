@@ -19,8 +19,10 @@ import bpy
 from PySide6.QtCore import QObject
 from PySide6.QtGui import QIcon
 
-from bqt.blender_applications.blender_application import BlenderApplication
 import bqt.focus
+from bqt.blender_applications.blender_application import BlenderApplication
+
+
 logger = logging.getLogger("bqt")
 
 

@@ -8,7 +8,7 @@ from __future__ import annotations
 import functools
 import os
 import sys
-import typing
+from typing import TYPE_CHECKING
 from pathlib import Path
 import logging
 
@@ -24,11 +24,13 @@ if current_dir not in sys.path:
 import bqt.focus
 import bqt.manager
 
+
+if TYPE_CHECKING:
+    import bqt.blender_applications.blender_application
+
+
 logger = logging.getLogger("bqt")
 add = bqt.manager.register
-
-if typing.TYPE_CHECKING:
-    import bqt.blender_applications.blender_application
 
 
 def _apply_stylesheet() -> None:

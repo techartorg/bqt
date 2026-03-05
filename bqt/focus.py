@@ -5,6 +5,7 @@ not being able to use blender on refocus
 
 this module fixes the bug by sending a key release event to the window
 """
+from __future__ import annotations
 
 import ctypes
 

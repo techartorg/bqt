@@ -8,10 +8,16 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Iterator
+from typing import TYPE_CHECKING
 
-from PySide6.QtWidgets import QApplication, QDockWidget, QWidget
+from PySide6.QtWidgets import QApplication, QDockWidget
 from PySide6.QtCore import Qt
+
+
+if TYPE_CHECKING:
+    from typing import Iterator
+    from PySide6.QtWidgets import QWidget
+
 
 logger = logging.getLogger("bqt")
 

@@ -1,7 +1,12 @@
-from typing import Callable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 import traceback
 
 import bpy
+
+if TYPE_CHECKING:
+    from typing import Callable
 
 
 def try_except(func) -> Callable:

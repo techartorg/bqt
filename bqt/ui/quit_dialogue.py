@@ -1,11 +1,17 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 import os
 
 import bpy
-from PySide6.QtWidgets import QMessageBox, QWidget
+from PySide6.QtWidgets import QMessageBox
 from PySide6.QtCore import Qt
 
 import bqt.ui
 import bqt.utils
+
+if TYPE_CHECKING:
+    from PySide6.QtWidgets import QWidget
 
 
 def quit_blender_from_main_thread(*args, **kwargs) -> None:

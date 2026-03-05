@@ -6,7 +6,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 import os
 import logging
 from pathlib import Path
-from abc import abstractmethod, abstractstaticmethod, ABCMeta
+from abc import abstractmethod, ABCMeta
 
 from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
@@ -31,13 +31,12 @@ FULL_SCREEN = "IsFullScreen"
 FOCUS_FRAMERATE = 15
 
 
-class BlenderApplication(QApplication):
+class BlenderApplication(QApplication, metaclass=ABCMeta):
     """
     Base Implementation for QT Blender Window Container
     """
 
     def __init__(self, *args, **kwargs):
-        __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
         logger.debug("initializing BlenderApplication")
@@ -141,12 +140,14 @@ class BlenderApplication(QApplication):
     def _focus_window():
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def _get_blender_hwnd() -> int:
         """Get the handler window ID for the blender application window"""
         return -1
 
     @staticmethod
+    @abstractmethod
     def _get_application_icon() -> QIcon:
         """
         This finds the running blender process, extracts the blender icon from the blender.exe file on disk and saves it to the user's temp folder.

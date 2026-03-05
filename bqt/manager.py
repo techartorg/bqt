@@ -17,12 +17,13 @@ from PySide6.QtCore import Qt
 if TYPE_CHECKING:
     from typing import Iterator
     from PySide6.QtWidgets import QWidget
+    from PySide6.QtGui import QWindow
 
 
 logger = logging.getLogger("bqt")
 
 __widgets: list[WidgetData] = []
-__excluded_widgets: list[QWidget | None] = []
+__excluded_widgets: list[QWindow | QWidget | None] = []
 
 
 class WidgetData:
@@ -60,7 +61,7 @@ def make_widget_dockable(widget) -> QWidget:
 
 def register(
         widget: QWidget,
-        exclude: list[QWidget | None] | None = None,
+        exclude: list[QWindow | QWidget | None] | None = None,
         parent: bool = True,
         manage: bool = True,
         unique: bool = True
@@ -189,7 +190,7 @@ def _orphan_toplevel_widgets() -> list[QWidget]:
             and widget not in __excluded_widgets]
 
 
-def parent_orphan_widgets(exclude: list[QWidget | None] | None = None) -> None:
+def parent_orphan_widgets(exclude: list[QWindow | QWidget | None] | None = None) -> None:
     """Find and parent orphan widgets to the blender widget"""
     # this runs every frame, don't print or log in this method
     exclude = exclude or []

@@ -59,13 +59,13 @@ class BlenderApplication(QApplication):
 
         if self._hwnd is None:  # Failed to get handle
             logger.warning("failed to get blender hwnd, creating new window")
-            self._blender_window = QWindow()
-            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+            self._blender_window: QWindow = QWindow()
+            self.blender_widget: QWidget = QWidget.createWindowContainer(self._blender_window)
         else:
             logger.debug(f"successfully got blender hwnd '{self._hwnd}', wrapping window in QMainWindow")
-            self.blender_widget = QMainWindow()
+            self.blender_widget: QMainWindow = QMainWindow()
             self.blender_widget.setWindowTitle(WINDOW_TITLE)
-            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
+            self._blender_window: QWindow = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
             self.window_container = QMainWindow.createWindowContainer(self._blender_window)
             self.blender_widget.setCentralWidget(self.window_container)
 

@@ -6,6 +6,7 @@ widget manager to register your widgets with bqt
 """
 import logging
 import os
+from weakref import WeakSet
 
 from PySide6.QtWidgets import QApplication, QDockWidget
 from PySide6.QtCore import Qt
@@ -13,7 +14,7 @@ from PySide6.QtCore import Qt
 logger = logging.getLogger("bqt")
 
 __widgets = []
-__excluded_widgets = []
+__excluded_widgets = WeakSet()
 
 
 class WidgetData():
@@ -89,7 +90,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
             old_widget.show()
             old_widget.activateWindow()
             widget.deleteLater()  # delete duplicate widget, todo dangerous?
-            __excluded_widgets.append(widget)
+            __excluded_widgets.add(widget)
             return
 
     if widget in exclude:
@@ -178,14 +179,15 @@ def parent_orphan_widgets(exclude=None):
     """Find and parent orphan widgets to the blender widget"""
     # this runs every frame, don't print or log in this method
     exclude = exclude or []
-    __excluded_widgets.extend(exclude)
+    for w in exclude:
+        __excluded_widgets.add(w)
     for widget in _orphan_toplevel_widgets():
         if widget.windowType() in (Qt.WindowType.ToolTip, ):
-            __excluded_widgets.append(widget)
+            __excluded_widgets.add(widget)
             continue
         elif widget.windowType() not in (Qt.WindowType.Window, Qt.WindowType.Dialog, ):
             logger.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
-            __excluded_widgets.append(widget)
+            __excluded_widgets.add(widget)
             continue
         # todo test with various widgets, we likely exclude some valid widgets
         #  this should fail with a combobox (dropdown) and menu

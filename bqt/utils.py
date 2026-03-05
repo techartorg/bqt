@@ -1,8 +1,10 @@
-import bpy
+from typing import Callable
 import traceback
 
+import bpy
 
-def try_except(func) -> "callable":
+
+def try_except(func) -> Callable:
     """
     Prevent blender from crashing on an exception.
     Decorator to wrap a function in try except and print the traceback
@@ -26,8 +28,7 @@ def main_blender_window() -> bpy.types.Window:
         if window.parent is None:
             return window
         
-        
-def context_window(func) -> "callable":
+def context_window(func) -> Callable:
     """
     Support running operators from QT (ex. on button click).
     Decorator to override the context window for a function,

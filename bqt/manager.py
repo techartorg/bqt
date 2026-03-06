@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger("bqt")
 
 __widgets: list[WidgetData] = []
-__excluded_widgets = WeakSet()
+__excluded_widgets: WeakSet[QWindow | QWidget | None] = WeakSet()
 
 
 class WidgetData:

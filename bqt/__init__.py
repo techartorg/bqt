@@ -5,7 +5,6 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 from __future__ import annotations
 
-import functools
 import os
 import sys
 from typing import TYPE_CHECKING

@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 import os
 
 import bpy
@@ -7,8 +10,11 @@ from PySide6.QtCore import Qt
 import bqt.ui
 import bqt.utils
 
+if TYPE_CHECKING:
+    from PySide6.QtWidgets import QWidget
 
-def quit_blender_from_main_thread(*args, **kwargs):
+
+def quit_blender_from_main_thread(*args, **kwargs) -> None:
     # https://github.com/techartorg/bqt/issues/131
     # running bpy.ops.wm.quit_blender, runs it from the Qt thread.
     # this can cause an EXCEPTION_ACCESS_VIOLATION on closing blender
@@ -20,7 +26,7 @@ def quit_blender_from_main_thread(*args, **kwargs):
     bpy.app.timers.register(__quit_blender)
 
 
-def shutdown_blender(*args, **kwargs):
+def shutdown_blender(*args, **kwargs) -> None:
     """
     Quit blender, without triggering the save dialogue
     
@@ -33,7 +39,7 @@ def shutdown_blender(*args, **kwargs):
     quit_blender_from_main_thread(*args, **kwargs)
 
 
-def shutdown_blender_with_save_dialogue():
+def shutdown_blender_with_save_dialogue() -> None:
     with bpy.context.temp_override(window=bqt.utils.main_blender_window()):
         quit_blender_from_main_thread("INVOKE_DEFAULT")
 
@@ -42,7 +48,7 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
     bl_idname = "wm.save_from_qt"
     bl_label = "Save_from_Qt"
 
-    def execute(self, context):
+    def execute(self, context) -> set:
 
         # context override is needed, without a UI, the operators are likely to fail/ no dialogue shows.
         with bpy.context.temp_override(window=bqt.utils.main_blender_window()):
@@ -65,7 +71,7 @@ class WINDOW_OT_SaveFileFromQt(bpy.types.Operator):
 
 
 class BlenderClosingDialog(QMessageBox):
-    def __init__(self, parent):
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent) #, Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint | Qt.WindowTitleHint | Qt.WindowStaysOnTopHint)
 
         # hide title bar
@@ -83,10 +89,10 @@ class BlenderClosingDialog(QMessageBox):
         self.setDefaultButton(QMessageBox.StandardButton.Save)
         self.setIconPixmap(question_icon)
 
-    def execute(self):
+    def execute(self) -> int | None:
         if not bpy.data.is_dirty:
             shutdown_blender()
-            return
+            return None
 
         choice = super().exec_()
         if choice == QMessageBox.StandardButton.Save:

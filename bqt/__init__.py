@@ -3,30 +3,36 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+from __future__ import annotations
 
 import os
 import sys
+from typing import TYPE_CHECKING
 from pathlib import Path
 import logging
+
+import bpy
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
 
 # add to sys path so we can import bqt
 current_dir = str(Path(__file__).parent.parent)
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-import bpy
-from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt
-
-import bqt
 import bqt.focus
 import bqt.manager
+
+
+if TYPE_CHECKING:
+    import bqt.blender_applications.blender_application
+
 
 logger = logging.getLogger("bqt")
 add = bqt.manager.register
 
 
-def _apply_stylesheet():
+def _apply_stylesheet() -> None:
     """Styles the QApplication"""
     try:
         import blender_stylesheet
@@ -35,20 +41,20 @@ def _apply_stylesheet():
         logger.warning("blender-qt-stylesheet not found, using default style")
 
 
-def _enable_dpi_scale():
+def _enable_dpi_scale() -> None:
     QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
     QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
 
 
-def _instantiate_q_application() -> "bqt.blender_applications.BlenderApplication":
+def _instantiate_q_application() -> bqt.blender_applications.BlenderApplication:
     _enable_dpi_scale()
     app = _load_os_module()
     _apply_stylesheet()
     return app
 
 
-def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
+def _load_os_module() -> bqt.blender_applications.BlenderApplication:
     """Loads the correct OS platform Application Class"""
     operating_system = sys.platform
     logger.debug(f"loading OS module for '{operating_system}'")
@@ -76,7 +82,7 @@ def _load_os_module() -> "bqt.blender_applications.BlenderApplication":
 
 
 @bpy.app.handlers.persistent
-def _create_global_app():
+def _create_global_app() -> None:
     """
     Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
@@ -92,7 +98,7 @@ def _create_global_app():
     bpy.app.handlers.save_post.append(qapp.update_window_title_post_save)  # mark clean after save
 
 
-def setup_logger():
+def setup_logger() -> None:
     """setup logger, using BQT_LOG_LEVEL env var"""
     log_level_name = os.getenv("BQT_LOG_LEVEL", -1)
     if log_level_name == -1:
@@ -107,7 +113,7 @@ def setup_logger():
     logging.basicConfig(encoding='utf-8')
 
 
-def register():
+def register() -> None:
     """
     Runs on enabling the add-on.
     setup bqt, wrap blender in qt, register operators
@@ -124,7 +130,7 @@ def register():
     _create_global_app()
 
 
-def unregister():
+def unregister() -> None:
     """
     Runs on disabling the add-on.
     """

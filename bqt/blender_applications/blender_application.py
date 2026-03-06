@@ -3,6 +3,8 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+from __future__ import annotations
+
 import os
 import logging
 from pathlib import Path
@@ -36,7 +38,7 @@ class BlenderApplication(QApplication):
     Base Implementation for QT Blender Window Container
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
@@ -47,23 +49,23 @@ class BlenderApplication(QApplication):
         # QApplication.setWindowIcon(self._get_application_icon())
 
         # Blender Window
-        self.window_container: QWidget = None
+        self.window_container: QWidget | None = None
         self._hwnd = None
         if os.getenv("BQT_DISABLE_WRAP") != "1":
             logger.debug("wrapping enabled, getting blender hwnd")
             self._hwnd = self._get_blender_hwnd()
         else:
             logger.debug("wrapping disabled, not getting blender hwnd")
-        failed_to_get_handle = self._hwnd is None
-        if failed_to_get_handle:
+
+        if self._hwnd is None:  # Failed to get handle
             logger.warning("failed to get blender hwnd, creating new window")
-            self._blender_window = QWindow()
-            self.blender_widget = QWidget.createWindowContainer(self._blender_window)
+            self._blender_window: QWindow = QWindow()
+            self.blender_widget: QWidget = QWidget.createWindowContainer(self._blender_window)
         else:
             logger.debug(f"successfully got blender hwnd '{self._hwnd}', wrapping window in QMainWindow")
-            self.blender_widget = QMainWindow()
+            self.blender_widget: QMainWindow = QMainWindow()
             self.blender_widget.setWindowTitle(WINDOW_TITLE)
-            self._blender_window = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
+            self._blender_window: QWindow = QWindow.fromWinId(self._hwnd)  # also sets flag to Qt.ForeignWindow
             self.window_container = QMainWindow.createWindowContainer(self._blender_window)
             self.blender_widget.setCentralWidget(self.window_container)
 
@@ -81,7 +83,7 @@ class BlenderApplication(QApplication):
         logger.debug("successfully initialized BlenderApplication")
 
     @staticmethod
-    def _title(check_dirty = True):
+    def _title(check_dirty: bool = True) -> str:
         # Standard title is like "Blender Qt 5.10"
         title = f"{WINDOW_TITLE} {bpy.app.version_string}"
         if not bpy.data.is_saved:
@@ -97,18 +99,18 @@ class BlenderApplication(QApplication):
         return title
 
     @persistent
-    def update_window_title(self, *_):
+    def update_window_title(self, *_) -> None:
         title = self._title()
         self.blender_widget.setWindowTitle(title)
 
     @persistent
-    def update_window_title_post_save(self, *_):
+    def update_window_title_post_save(self, *_) -> None:
         # It seems like the `is_dirty` flag is clear AFTER the post save handler.
         # This is only used in the post save, it shouldn't have unsaved changes.
         title = self._title(check_dirty=False)
         self.blender_widget.setWindowTitle(title)
 
-    def on_update(self):
+    def on_update(self) -> None:
         """qt event loop"""
         # we only need foreground managing if blender is not wrapped
         if os.getenv("BQT_DISABLE_WRAP") == "1" and os.getenv("BQT_MANAGE_FOREGROUND", "1") == "1" and self.blender_focus_toggled():
@@ -118,7 +120,7 @@ class BlenderApplication(QApplication):
         if os.getenv("BQT_AUTO_ADD", "1") == "1":
             bqt.manager.parent_orphan_widgets(exclude=[self.blender_widget, self._blender_window, self.window_container])  # auto parent any orphaned widgets
 
-    def blender_focus_toggled(self):
+    def blender_focus_toggled(self) -> bool:
         """returns true the first frame the blender window is focussed or unfoccused"""
         current_active_hwnd = self._get_active_window_handle()
         handle_changed = self._active_window_hwnd != current_active_hwnd
@@ -133,16 +135,16 @@ class BlenderApplication(QApplication):
 
 
     @staticmethod
-    def _get_active_window_handle():
+    def _get_active_window_handle() -> int:
         # override this method to get the active window handle
         return 0
 
     @staticmethod
-    def _focus_window():
+    def _focus_window(hwnd: int) -> None:
         pass
 
     @abstractstaticmethod
-    def _get_blender_hwnd() -> int:
+    def _get_blender_hwnd() -> int | None:
         """Get the handler window ID for the blender application window"""
         return -1
 
@@ -182,7 +184,7 @@ class BlenderApplication(QApplication):
         return QRect(x, y, widht, height)
 
 
-    def _set_window_geometry(self):
+    def _set_window_geometry(self) -> None:
         """
         Loads stored window geometry preferences and applies them to the QWindow.
         .setGeometry() sets the size of the window minus the window frame.
@@ -237,7 +239,7 @@ class BlenderApplication(QApplication):
 
         return super().notify(receiver, event)
 
-    def store_window_geometry(self):
+    def store_window_geometry(self) -> None:
         """
         Stores the current window geometry for the QWindow
         The .geometry() method on QWindow includes the size of the application minus the window frame.

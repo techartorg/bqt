@@ -5,11 +5,12 @@ not being able to use blender on refocus
 
 this module fixes the bug by sending a key release event to the window
 """
+from __future__ import annotations
 
 import ctypes
 
 
-def _detect_keyboard(hwnd=None):
+def _detect_keyboard(hwnd=None) -> None:
     """
     force a release of 'stuck' keys
     """

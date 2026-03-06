@@ -3,6 +3,7 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+from __future__ import annotations
 
 from contextlib import suppress
 from pathlib import Path
@@ -18,8 +19,10 @@ import bpy
 from PySide6.QtCore import QObject
 from PySide6.QtGui import QIcon
 
-from bqt.blender_applications.blender_application import BlenderApplication
 import bqt.focus
+from bqt.blender_applications.blender_application import BlenderApplication
+
+
 logger = logging.getLogger("bqt")
 
 
@@ -28,13 +31,13 @@ class DarwinBlenderApplication(BlenderApplication):
     Darwin (MACOS) Implementation of BlenderApplication
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         # OSX Specific - Needs to initialize first
         self._ns_window = self._get_application_window() or None  # todo not needed when we disable wrapping
 
         super().__init__(*args, **kwargs)
 
-    def _get_blender_hwnd(self) -> int:
+    def _get_blender_hwnd(self) -> int | None:
         """
         This finds the blender application window and collects the
         handler window ID
@@ -81,7 +84,7 @@ class DarwinBlenderApplication(BlenderApplication):
         ns_window.setSharingType_(AppKit.NSWindowSharingReadWrite)
         return ns_window
 
-    def _on_focus_object_changed(self, focus_object: QObject):
+    def _on_focus_object_changed(self, focus_object: QObject) -> None:
         """
         Args:
             focus_object: Object to track focus event

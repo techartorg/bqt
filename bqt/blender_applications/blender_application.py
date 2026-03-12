@@ -8,7 +8,6 @@ from __future__ import annotations
 import os
 import logging
 from pathlib import Path
-from abc import abstractmethod, abstractstaticmethod, ABCMeta
 
 from PySide6.QtCore import QEvent, QObject, QRect, QSettings, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
@@ -39,7 +38,6 @@ class BlenderApplication(QApplication):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        __metaclass__ = ABCMeta
         super().__init__(*args, **kwargs)
 
         logger.debug("initializing BlenderApplication")
@@ -143,10 +141,10 @@ class BlenderApplication(QApplication):
     def _focus_window(hwnd: int) -> None:
         pass
 
-    @abstractstaticmethod
+    @staticmethod
     def _get_blender_hwnd() -> int | None:
         """Get the handler window ID for the blender application window"""
-        return -1
+        raise NotImplementedError
 
     @staticmethod
     def _get_application_icon() -> QIcon:
@@ -156,16 +154,14 @@ class BlenderApplication(QApplication):
 
         Returns QIcon: Application Icon
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def _on_focus_object_changed(self, focus_object: QObject):
         """
         Args:
             focus_object: Object to track focus event
         """
-
-        pass
+        raise NotImplementedError
 
     def _unwrapped_window_geometry(self) -> QRect:
         """

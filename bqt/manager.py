@@ -4,25 +4,36 @@ widget manager to register your widgets with bqt
 - parent widget to blender window (blender_widget)
 - keep widget in front of Blender window only, even when bqt is not wrapped in qt
 """
+from __future__ import annotations
+
 import logging
 import os
+from weakref import WeakSet
+from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QApplication, QDockWidget
 from PySide6.QtCore import Qt
 
+
+if TYPE_CHECKING:
+    from typing import Iterator
+    from PySide6.QtWidgets import QWidget
+    from PySide6.QtGui import QWindow
+
+
 logger = logging.getLogger("bqt")
 
-__widgets = []
-__excluded_widgets = []
+__widgets: list[WidgetData] = []
+__excluded_widgets: WeakSet[QWindow | QWidget | None] = WeakSet()
 
 
-class WidgetData():
-    def __init__(self, widget, visible):
+class WidgetData:
+    def __init__(self, widget, visible) -> None:
         self.widget = widget
         self.visible = visible
 
 
-def make_widget_dockable(widget):
+def make_widget_dockable(widget) -> QWidget:
     """wrap widget in QDockWidget if not already"""
     if not isinstance(widget, QDockWidget):
         logger.debug("wrapping widget in QDockWidget")
@@ -49,7 +60,13 @@ def make_widget_dockable(widget):
     return widget
 
 
-def register(widget, exclude=None, parent=True, manage=True, unique=True):
+def register(
+        widget: QWidget,
+        exclude: list[QWindow | QWidget | None] | None = None,
+        parent: bool = True,
+        manage: bool = True,
+        unique: bool = True
+) -> None:
     """
     parent widget to blender window
     Args:
@@ -89,7 +106,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
             old_widget.show()
             old_widget.activateWindow()
             widget.deleteLater()  # delete duplicate widget, todo dangerous?
-            __excluded_widgets.append(widget)
+            __excluded_widgets.add(widget)
             return
 
     if widget in exclude:
@@ -116,7 +133,7 @@ def register(widget, exclude=None, parent=True, manage=True, unique=True):
             widget.setVisible(vis)
 
 
-def iter_widget_data():
+def iter_widget_data() -> Iterator[WidgetData]:
     """iterate over all registered widgets, remove widgets that have been removed"""
     cleanup = []
     for widget_data in __widgets:
@@ -135,7 +152,7 @@ def iter_widget_data():
         __widgets.remove(widget_data)
 
 
-def _blender_window_change(hwnd: int):
+def _blender_window_change(hwnd: int) -> None:
     """
     hide widgets when blender is not focussed,
     keep widgets in front of the Blender window when Blender is focussed
@@ -167,25 +184,26 @@ def _blender_window_change(hwnd: int):
     #  e.g. the preferences window, ideally we handle this
 
 
-def _orphan_toplevel_widgets():
+def _orphan_toplevel_widgets() -> list[QWidget]:
     return [widget for widget in QApplication.instance().topLevelWidgets() if
             not widget.parent()
             and widget not in __widgets
             and widget not in __excluded_widgets]
 
 
-def parent_orphan_widgets(exclude=None):
+def parent_orphan_widgets(exclude: list[QWindow | QWidget | None] | None = None) -> None:
     """Find and parent orphan widgets to the blender widget"""
     # this runs every frame, don't print or log in this method
     exclude = exclude or []
-    __excluded_widgets.extend(exclude)
+    for w in exclude:
+        __excluded_widgets.add(w)
     for widget in _orphan_toplevel_widgets():
         if widget.windowType() in (Qt.WindowType.ToolTip, ):
-            __excluded_widgets.append(widget)
+            __excluded_widgets.add(widget)
             continue
         elif widget.windowType() not in (Qt.WindowType.Window, Qt.WindowType.Dialog, ):
             logger.warning(f"skipping widget: '{widget}' not window type but {widget.windowType()}")
-            __excluded_widgets.append(widget)
+            __excluded_widgets.add(widget)
             continue
         # todo test with various widgets, we likely exclude some valid widgets
         #  this should fail with a combobox (dropdown) and menu

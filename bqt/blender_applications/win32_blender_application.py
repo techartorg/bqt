@@ -129,6 +129,12 @@ class Win32BlenderApplication(BlenderApplication):
         hwnd = get_blender_window()
         return hwnd
 
+    def _is_native_window_maximized(self) -> bool:
+        if self._hwnd and ctypes.windll.user32.IsZoomed(self._hwnd):
+            return True
+
+        return super()._is_native_window_maximized()
+
     def _on_focus_object_changed(self, focus_object: QObject) -> None:
         """
         Args:

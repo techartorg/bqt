@@ -169,20 +169,79 @@ class BlenderApplication(QApplication):
 
     def _unwrapped_window_geometry(self) -> QRect:
         """
-        Get the window geometry from the Blender window before it was wrapped in a QWidgetContainer
-        Run this before wrapping the window in a QWidgetContainer
-        Returns QRect(x, y, width, height)
+        Get the window geometry from the Blender window before it was wrapped in a QWidgetContainer.
+        Blender reports coordinates in physical pixels; this method converts them to Qt logical pixels.
+        Returns QRect(x, y, width, height) in Qt logical pixels.
         """
         window = bqt.utils.main_blender_window()
-        height, widht = window.height, window.width
-        x = window.x
-        y = window.y  # blender y relative from bottom of screen to bottom of Blender window
-        # convert y to be relative from the top
-        current_screen_rect = self.primaryScreen().availableGeometry()
-        y = current_screen_rect.height() - y - height
-        y += 56  # title bar offset
-        return QRect(x, y, widht, height)
+        width_phys, height_phys = window.width, window.height
+        x_phys = window.x
+        y_blender_phys = window.y  # blender y relative from bottom of screen
 
+        # Convert physical pixels to logical pixels using the screen's DPI scale
+        screen = self._screen_for_physical_x(x_phys) or self.primaryScreen()
+        dpr = screen.devicePixelRatio()
+
+        x = int(x_phys / dpr)
+        width = int(width_phys / dpr)
+        height = int(height_phys / dpr)
+        y_blender = int(y_blender_phys / dpr)
+
+        # Convert y from bottom-relative to top-relative
+        screen_rect = screen.availableGeometry()
+        y = screen_rect.height() + screen_rect.y() - y_blender - height
+
+        return QRect(x, y, width, height)
+
+    def _screen_for_physical_x(self, x_phys: int):
+        """Find the screen whose physical x range contains x_phys."""
+        for screen in self.screens():
+            geo = screen.geometry()
+            dpr = screen.devicePixelRatio()
+            phys_left = int(geo.x() * dpr)
+            phys_right = int((geo.x() + geo.width()) * dpr)
+            if phys_left <= x_phys < phys_right:
+                return screen
+        return None
+
+    def _is_geometry_visible(self, geometry: QRect) -> bool:
+        """Check if at least a reasonable portion of the window is visible on any screen."""
+        min_visible = 100  # pixels - at least this much must be on-screen
+        for screen in self.screens():
+            intersection = screen.availableGeometry().intersected(geometry)
+            if intersection.width() >= min_visible and intersection.height() >= min_visible:
+                return True
+        return False
+
+    def _is_native_window_maximized(self) -> bool:
+        """Check if the native Blender window is maximized by checking
+        whether the window covers most of a screen's physical area."""
+        window = bqt.utils.main_blender_window()
+        w_phys, h_phys = window.width, window.height
+        for screen in self.screens():
+            dpr = screen.devicePixelRatio()
+            screen_w = int(screen.geometry().width() * dpr)
+            screen_h = int(screen.geometry().height() * dpr)
+            coverage = (w_phys * h_phys) / max(screen_w * screen_h, 1)
+            if coverage >= 0.90:
+                return True
+
+        return False
+
+    def _default_normal_geometry(self) -> QRect:
+        """Return a sensible 80%-of-screen centered geometry for the restore/normal state."""
+        screen_rect = self.primaryScreen().availableGeometry()
+        w = int(screen_rect.width() * 0.8)
+        h = int(screen_rect.height() * 0.8)
+        x = screen_rect.x() + (screen_rect.width() - w) // 2
+        y = screen_rect.y() + (screen_rect.height() - h) // 2
+        return QRect(x, y, w, h)
+
+    def _show_maximized_with_normal_geometry(self) -> None:
+        """Maximize the window, but first set a sensible normal geometry
+        so that restoring from maximized gives a usable window size."""
+        self.blender_widget.setGeometry(self._default_normal_geometry())
+        self.blender_widget.showMaximized()
 
     def _set_window_geometry(self) -> None:
         """
@@ -198,17 +257,24 @@ class BlenderApplication(QApplication):
         settings.endGroup()
 
         if fullscreen:
+            self._show_maximized_with_normal_geometry()
             self.blender_widget.showFullScreen()
             return
 
-        if maximized:
-            self.blender_widget.showMaximized()
+        # Check saved maximized flag, or detect if native Blender window is maximized
+        if maximized or (saved_geometry is None and self._is_native_window_maximized()):
+            self._show_maximized_with_normal_geometry()
             return
 
+        unwrapped_geometry = self._unwrapped_window_geometry()
+        geometry = saved_geometry or unwrapped_geometry
 
-        unwrapped_geometry = self._unwrapped_window_geometry()  # maintain unwrapped window size & pos
-        geometry = saved_geometry or unwrapped_geometry  # if no saved geometry, use previous blender window size
-        self.blender_widget.setGeometry(geometry)  # setGeometry is relative to its parent
+        # Validate that the geometry is visible on at least one screen.
+        # If not (e.g. monitor was disconnected, DPI changed), fall back to maximized.
+        if self._is_geometry_visible(geometry):
+            self.blender_widget.setGeometry(geometry)
+        else:
+            self._show_maximized_with_normal_geometry()
 
 
     def notify(self, receiver: QObject, event: QEvent) -> bool:

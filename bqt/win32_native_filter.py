@@ -6,8 +6,9 @@ window, Windows stops delivering WM_ACTIVATE to the GHOST HWND (only
 top-level windows get it). Blender's GHOST tracks its internal "active
 window" via WM_ACTIVATE, so without this forward GHOST's view of which
 Blender window is active gets stuck on whatever secondary GHOST window
-was opened last. This for example causes modifier keys main viewport stop
-working.
+was opened last.
+This for example causes modifier keys in the main viewport to stop
+working if additional Blender windows have been opened since.
 """
 
 from __future__ import annotations
@@ -48,6 +49,9 @@ def _is_ancestor_of(ancestor: int, descendant: int) -> bool:
 
 
 class _ActivateForwarder(QAbstractNativeEventFilter):
+    """Re-sends WM_ACTIVATE from any Qt top-level ancestor of the wrapped
+    GHOST HWND down to GHOST itself."""
+
     def __init__(self, blender_hwnd_getter: Callable[[], int]):
         super().__init__()
         self._get_hwnd = blender_hwnd_getter
@@ -68,6 +72,8 @@ _filter: _ActivateForwarder | None = None
 
 
 def install(app: QApplication, blender_hwnd_getter: Callable[[], int]) -> None:
+    """Install the WM_ACTIVATE forwarder. The getter is called per event so
+    the HWND isn't captured stale if bqt ever re-wraps."""
     global _filter
     if _filter is not None:
         return

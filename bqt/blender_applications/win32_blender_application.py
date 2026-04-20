@@ -128,6 +128,10 @@ class Win32BlenderApplication(BlenderApplication):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        # Forward WM_ACTIVATE from our Qt top-level down to the wrapped GHOST
+        # HWND (now a child), so Blender's own active-window tracking stays
+        # correct when a secondary Blender window is open.
+        # See #163 for more info
         win32_native_filter.install(self, lambda: self._hwnd or 0)
 
     @staticmethod
@@ -138,6 +142,13 @@ class Win32BlenderApplication(BlenderApplication):
 
     def _on_focus_object_changed(self, focus_object: QObject) -> None:
         """
+        Route OS-level keyboard focus to the wrapped GHOST HWND whenever Qt's
+        focus lands on the blender_widget container.
+
+        Without this, Qt focus events can leave OS focus on the Qt container
+        HWND rather than on its GHOST child, and any WM_KEYDOWNs afterwards
+        would never reach Blender.
+
         Args:
             QObject focus_object: Object to track focus change
         """

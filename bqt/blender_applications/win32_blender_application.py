@@ -3,15 +3,17 @@ This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
+
 from __future__ import annotations
 
 import ctypes
-from ctypes import wintypes
-from collections import namedtuple
 import os
+from collections import namedtuple
+from ctypes import wintypes
 
-import bqt.focus
 from PySide6.QtCore import QObject
+
+from bqt import win32_native_filter
 
 from .blender_application import BlenderApplication
 
@@ -20,6 +22,7 @@ user32 = ctypes.windll.user32
 
 def get_class_name(hwnd):
     # returns "GHOST_WindowClass" for Blender and BlenderWindows (e.g. Preferences),
+    # ref: https://github.com/blender/blender/blob/v5.1.1/intern/ghost/intern/GHOST_WindowWin32.cc#L46
     # returns "PseudoConsoleWindow" for the terminal window
     buf_len = 256
     buf = ctypes.create_unicode_buffer(buf_len)
@@ -100,19 +103,22 @@ def get_process_hwnds():
 
 def get_blender_window() -> None | int:
     process_windows = get_process_hwnds()
-    if process_windows:
-        # filter for main Blender window if we more than 1 window
-        # e.g. The Preferences-window or system-console is open
-        if len(process_windows) > 1:
-            for win in process_windows:
-                # to get the main window, get the one with no parent window (parent_hwnd == 0)
-                parent_hwnd = ctypes.windll.user32.GetParent(win.hwnd)
-                if parent_hwnd == 0:
-                    process_windows = [win]
-                    break
+    if not process_windows:
+        return None
 
-        return process_windows[0].hwnd
-    return None
+    # GHOST creates each Blender viewport/preferences window as its own
+    # top-level Win32 window, so filtering on GetParent()==0 alone is ambiguous
+    # when multiple are open. Require class "GHOST_WindowClass" and confirm the
+    # window is its own root via GetAncestor(GA_ROOT).
+    GA_ROOT = 2
+    for win in process_windows:
+        if get_class_name(win.hwnd) != "GHOST_WindowClass":
+            continue
+        if ctypes.windll.user32.GetAncestor(win.hwnd, GA_ROOT) != win.hwnd:
+            continue
+        return win.hwnd
+
+    return process_windows[0].hwnd
 
 
 class Win32BlenderApplication(BlenderApplication):
@@ -122,6 +128,11 @@ class Win32BlenderApplication(BlenderApplication):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        # Forward WM_ACTIVATE from our Qt top-level down to the wrapped GHOST
+        # HWND (now a child), so Blender's own active-window tracking stays
+        # correct when a secondary Blender window is open.
+        # See #163 for more info
+        win32_native_filter.install(self, lambda: self._hwnd or 0)
 
     @staticmethod
     def _get_blender_hwnd() -> int | None:
@@ -131,12 +142,18 @@ class Win32BlenderApplication(BlenderApplication):
 
     def _on_focus_object_changed(self, focus_object: QObject) -> None:
         """
+        Route OS-level keyboard focus to the wrapped GHOST HWND whenever Qt's
+        focus lands on the blender_widget container.
+
+        Without this, Qt focus events can leave OS focus on the Qt container
+        HWND rather than on its GHOST child, and any WM_KEYDOWNs afterwards
+        would never reach Blender.
+
         Args:
             QObject focus_object: Object to track focus change
         """
         if focus_object is self.blender_widget:
             ctypes.windll.user32.SetFocus(self._hwnd)
-            bqt.focus._detect_keyboard(self._hwnd)
 
     @staticmethod
     def _get_active_window_handle() -> int:

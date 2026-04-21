@@ -20,7 +20,6 @@ current_dir = str(Path(__file__).parent.parent)
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-import bqt.focus
 import bqt.manager
 
 

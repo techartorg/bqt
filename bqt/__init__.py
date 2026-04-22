@@ -10,6 +10,7 @@ import sys
 from typing import TYPE_CHECKING
 from pathlib import Path
 import logging
+import functools
 
 import bpy
 from PySide6.QtWidgets import QApplication
@@ -21,6 +22,7 @@ if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 import bqt.manager
+import bqt.ui.patches.menu
 
 
 if TYPE_CHECKING:
@@ -80,13 +82,18 @@ def _load_os_module() -> bqt.blender_applications.BlenderApplication:
         raise OSError(f"OS module for '{operating_system}' not found")
 
 
+@functools.cache
+def get_application() -> "bqt.blender_applications.BlenderApplication":
+    return _instantiate_q_application()
+
+
 @bpy.app.handlers.persistent
 def _create_global_app() -> None:
     """
     Create a global QApplication instance, that's maintained between Blender sessions.
     Runs after Blender finished startup.
     """
-    qapp = _instantiate_q_application()
+    qapp = get_application()
     # save a reference to the C++ window in a global var, to prevent the parent being garbage collected
     # for some reason this works here, but not in the blender_applications init as a class attribute (self),
     # and saving it in a global in blender_applications.py causes blender to crash on startup
@@ -119,6 +126,11 @@ def register() -> None:
     """
     setup_logger()
     logger.debug("registering bqt add-on")
+
+    if os.getenv("BQT_DISABLE_WRAP", None) != "1":
+        # Patch the gui if we are wrapping
+        bqt.ui.patches.menu.register()
+
     # hacky way to check if we already are waiting on bqt setup, or bqt is already setup
     if QApplication.instance():
         logger.warning("QApplication already exists, skipping bqt registration")

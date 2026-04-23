@@ -5,6 +5,10 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 """
 from __future__ import annotations
 
+import bqt.__pyside_compatibility
+# Apply patches immediately before any Qt/PySide imports
+bqt.__pyside_compatibility.apply_bpy_app_patches()
+
 import os
 import sys
 from typing import TYPE_CHECKING

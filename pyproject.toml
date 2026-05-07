@@ -26,6 +26,7 @@ license-files = ["LICEN[CS]E*"]
 dependencies = [
     "PySide6",
     "blender-qt-stylesheet",
+    "PyObjC;platform_system=='Darwin'",
 ]
 
 [project.urls]

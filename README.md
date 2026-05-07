@@ -19,8 +19,6 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 ## Requirements
 - Blender 4.2 (`bqt` aim to support the earliest LTS version still under support)
 - Windows or Mac
-- PySide6
-- `PyObjC` & `iterm2` (Mac only)
 
 ## How to use
 1. Install & enable the bqt addon (see [installation docs](https://github.com/techartorg/bqt/wiki/Installation))

@@ -19,7 +19,6 @@ import bpy
 from PySide6.QtCore import QObject
 from PySide6.QtGui import QIcon
 
-import bqt.focus
 from bqt.blender_applications.blender_application import BlenderApplication
 
 
@@ -93,4 +92,3 @@ class DarwinBlenderApplication(BlenderApplication):
         if focus_object is self.blender_widget:
             if self._ns_window:
                 self._ns_window.makeKey()
-            bqt.focus._detect_keyboard(self._hwnd)

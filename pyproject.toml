@@ -25,7 +25,6 @@ license = "MPL-2.0"
 license-files = ["LICEN[CS]E*"]
 dependencies = [
     "PySide6",
-    "blender-qt-stylesheet",
 ]
 
 [project.urls]

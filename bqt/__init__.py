@@ -31,13 +31,13 @@ logger = logging.getLogger("bqt")
 add = bqt.manager.register
 
 
-def _apply_stylesheet(qapp=None) -> None:
-    """Styles the QApplication"""
-    try:
-        import blender_stylesheet
-        blender_stylesheet.setup(qapp)
-    except ImportError:
-        logger.warning("blender-qt-stylesheet not found, using default style")
+def _apply_palette() -> None:
+    """Style the QApplication with a palette derived from Blender's theme."""
+    from bqt.palette import build_blender_palette
+
+    app = QApplication.instance()
+
+    app.setPalette(build_blender_palette())
 
 
 def _enable_dpi_scale() -> None:
@@ -49,10 +49,7 @@ def _enable_dpi_scale() -> None:
 def _instantiate_q_application() -> bqt.blender_applications.BlenderApplication:
     _enable_dpi_scale()
     app = _load_os_module()
-    if os.getenv("BQT_NO_STYLESHEET", "0") == "1":
-        logger.info("BQT_NO_STYLESHEET set, skipping stylesheet.")
-    else:
-        _apply_stylesheet(app)
+    _apply_palette()
     return app
 
 

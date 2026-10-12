@@ -13,7 +13,7 @@ Add QT support to Blender, letting you create custom UI for your addons with PyS
 | fully custom UI    | Instead of feeling limited by N-Panel only UI. Do whatever you want.                                                                                   |
 | cross app          | Qt widgets run natively in Krita, 3ds Max, Maya, … and are great to use in cross dcc pipelines                                                         |
 | existing community | hundreds of QT widgets on GitHub you can reuse, and lots of stack exchange questions answered regarding qt.                                            |
-| Themed             | BQt applies the [blender-qt-stylesheet](https://github.com/hannesdelbeke/blender-qt-stylesheet) so qt widgets will by default look similar to Blender. |
+| Themed             | BQt derives a Qt palette from Blender's current theme, so qt widgets look similar to Blender and follow the user's chosen theme.                         |
 
 
 ## Requirements
